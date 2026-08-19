@@ -90,7 +90,7 @@ public class TestConfigurationFixture : IDisposable
                 $"Configuration key '{key}' was not found or is empty. " +
                 $"Set the environment variable {key.Replace(":", "__")} or add it to appsettings.local.json.");
         }
-        return value;
+        return value!;
     }
 
     public void Dispose() { }

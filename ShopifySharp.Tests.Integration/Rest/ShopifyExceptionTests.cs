@@ -17,7 +17,7 @@ namespace ShopifySharp.Tests.Integration.Rest;
 [TestSubject(typeof(ShopifyException)), TestSubject(typeof(ShopifyRateLimitException))]
 public class ShopifyExceptionTests
 {
-    private HttpRequestMessage PrepareRequest(HttpMethod method, string path, HttpContent content = null)
+    private HttpRequestMessage PrepareRequest(HttpMethod method, string path, HttpContent content = null!)
     {
         var ub = new UriBuilder(Utils.MyShopifyUrl)
         {
@@ -47,7 +47,7 @@ public class ShopifyExceptionTests
         };
         res.Content.Headers.ContentType = MediaTypeHeaderValue.Parse("application/json");
 
-        ShopifyHttpException ex = null;
+        ShopifyHttpException ex = null!;
 
         try
         {
@@ -70,7 +70,7 @@ public class ShopifyExceptionTests
     {
         HttpResponseMessage response;
         string rawBody;
-        ShopifyHttpException ex = null;
+        ShopifyHttpException ex = null!;
 
         using (var client = new HttpClient())
         {
@@ -116,7 +116,7 @@ public class ShopifyExceptionTests
     {
         HttpResponseMessage response;
         string rawBody;
-        ShopifyHttpException ex = null;
+        ShopifyHttpException ex = null!;
 
         using (var client = new HttpClient())
         {
@@ -198,7 +198,7 @@ public class ShopifyExceptionTests
         };
         HttpResponseMessage response;
         string rawBody;
-        ShopifyHttpException ex = null;
+        ShopifyHttpException ex = null!;
 
         using (var client = new HttpClient())
         {
@@ -249,7 +249,7 @@ public class ShopifyExceptionTests
     {
         bool thrown = false;
         int requestCount = 60;
-        IEnumerable<ListResult<Order>> list = null;
+        IEnumerable<ListResult<Order>> list = null!;
         var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         service.SetExecutionPolicy(new RetryExecutionPolicy());
 
@@ -276,7 +276,7 @@ public class ShopifyExceptionTests
     {
         bool thrown = false;
         int requestCount = 60;
-        IEnumerable<ListResult<Order>> list = null;
+        IEnumerable<ListResult<Order>> list = null!;
         var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
         service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
@@ -305,7 +305,7 @@ public class ShopifyExceptionTests
 
         int requestCount = 60;
         var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        ShopifyRateLimitException ex = null;
+        ShopifyRateLimitException ex = null!;
 
         try
         {
@@ -337,7 +337,7 @@ public class ShopifyExceptionTests
 
         int requestCount = 60;
         var service = new OrderService(Utils.MyShopifyUrl, Utils.AccessToken);
-        ShopifyRateLimitException ex = null;
+        ShopifyRateLimitException ex = null!;
 
         try
         {

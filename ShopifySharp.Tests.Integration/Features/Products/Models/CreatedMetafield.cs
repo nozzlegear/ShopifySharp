@@ -7,12 +7,13 @@ public record CreatedMetafield(string Id, string Key, string? Namespace, string 
     public static CreatedMetafield FromGraph(GraphQL.Metafield? metafield)
     {
         ArgumentNullException.ThrowIfNull(metafield, nameof(metafield));
+        var m = metafield!;
 
         return new CreatedMetafield(
-            metafield.id ?? "",
-            metafield.key ?? "",
-            metafield.@namespace,
-            metafield.value ?? ""
+            m.id ?? "",
+            m.key ?? "",
+            m.@namespace ?? "",
+            m.value ?? ""
         );
     }
 }

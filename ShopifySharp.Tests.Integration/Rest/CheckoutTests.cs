@@ -33,30 +33,30 @@ public class CheckoutTests
     [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
     public Task Creates_Checkouts()
     {
-        return default;
+        return Task.CompletedTask;
     }
 
     [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
     public Task Completes_Checkouts()
     {
-        return default;
+        return Task.CompletedTask;
     }
 
     [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
     public Task Gets_Checkouts()
     {
-        return default;
+        return Task.CompletedTask;
     }
 
     [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
     public Task Updates_Checkouts()
     {
-        return default;
+        return Task.CompletedTask;
     }
 
     [Fact(Skip = "The Checkout API can only be used by Sales Channel apps.")]
     public Task Lists_Checkout_Shipping_Rates()
     {
-        return default;
+        return Task.CompletedTask;
     }
 }

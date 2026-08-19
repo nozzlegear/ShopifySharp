@@ -33,7 +33,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
     [Fact]
     public async Task Gets_Blogs()
     {
-        var id = Fixture.Created.First().Id.Value;
+        var id = Fixture.Created.First().Id!.Value;
         var blog = await Fixture.Service.GetAsync(id, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(blog.Id.HasValue);
@@ -75,7 +75,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
     public async Task Updates_Blogs()
     {
         var created = await Fixture.Create();
-        long id = created.Id.Value;
+        long id = created.Id!.Value;
 
         created.Commentable = "yes";
         created.Id = null;
@@ -119,7 +119,7 @@ public class BlogTestsFixture : IAsyncLifetime
             {
                 if (ex.HttpStatusCode != HttpStatusCode.NotFound)
                 {
-                    Console.WriteLine($"Failed to delete created Blog with id {obj.Id.Value}. {ex.Message}");
+                    Console.WriteLine($"Failed to delete created Blog with id {obj.Id!.Value}. {ex.Message}");
                 }
             }
         }

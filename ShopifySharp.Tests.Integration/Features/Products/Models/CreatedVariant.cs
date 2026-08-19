@@ -13,11 +13,12 @@ public record CreatedVariant(
     {
         ArgumentNullException.ThrowIfNull(variant, nameof(variant));
 
+        var v = variant!;
         return new CreatedVariant(
-            variant.id ?? "",
-            variant.displayName ?? "",
-            variant.title ?? "",
-            variant.selectedOptions?.Select(SelectedOption.FromGraph).ToArray() ?? []
+            v.id ?? "",
+            v.displayName ?? "",
+            v.title ?? "",
+            v.selectedOptions?.Select(SelectedOption.FromGraph).ToArray() ?? []
         );
     }
 }

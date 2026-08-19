@@ -11,6 +11,7 @@ public record SelectedOption(
     {
         ArgumentNullException.ThrowIfNull(option, nameof(option));
 
-        return new SelectedOption(option.name ?? "", option.value ?? "");
+        var o = option!;
+        return new SelectedOption(o.name ?? "", o.value ?? "");
     }
 }
