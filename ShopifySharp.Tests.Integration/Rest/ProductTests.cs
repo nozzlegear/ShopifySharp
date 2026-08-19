@@ -19,7 +19,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
     [Fact]
     public async Task Counts_Products()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -27,7 +27,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
     [Fact]
     public async Task Lists_Products_NoFilter()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Any());
         if (list.LinkHeader != null)
@@ -45,13 +45,13 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
         {
             SinceId = 0,
             Limit = 2
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(list.Items.Count() == 2);
         Assert.NotNull(list.LinkHeader.NextLink);
         Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
         Assert.NotNull(list.LinkHeader.NextLink.Url);
 
-        var nextPageViaCursor = await Fixture.Service.ListAsync(list.GetNextPageFilter(2));
+        var nextPageViaCursor = await Fixture.Service.ListAsync(list.GetNextPageFilter(2), cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(list.Items.Count() == 2);
         Assert.NotNull(list.LinkHeader.NextLink);
         Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
@@ -61,7 +61,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
         {
             SinceId = list.Items.Last().Id.Value,
             Limit = 2
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(list.Items.Count() == 2);
         Assert.NotNull(list.LinkHeader.NextLink);
         Assert.NotNull(list.LinkHeader.NextLink.PageInfo);
@@ -75,13 +75,12 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
     public async Task Lists_Products_PageAll()
     {
         var svc = Fixture.Service;
-        var list = await svc.ListAsync(new ProductListFilter { Limit = 5 });
+        var list = await svc.ListAsync(new ProductListFilter { Limit = 5 }, cancellationToken: TestContext.Current.CancellationToken);
 
         while (true)
         {
             Assert.True(list.Items.Any());
-            list = await svc.ListAsync(list.GetNextPageFilter());
-            if (!list.HasNextPage)
+            list = await svc.ListAsync(list.GetNextPageFilter(), cancellationToken: TestContext.Current.CancellationToken);
                 break;
         }
     }
@@ -90,20 +89,19 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
     public async Task List_Products_By_Status()
     {
         var svc = Fixture.Service;
-        var list = await svc.ListAsync(new ProductListFilter { Limit = 5 });
-        Assert.True(list.Items.Any()); //if we get something here, then...
+        var list = await svc.ListAsync(new ProductListFilter { Limit = 5 }, cancellationToken: TestContext.Current.CancellationToken);; //if we get something here, then...
 
-        list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "active" });
+        list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "active" }, cancellationToken: TestContext.Current.CancellationToken);
         bool anyActive = list.Items.Any();
         if (anyActive)
             Assert.True(list.Items.All(x => x.Status == "active"));
             
-        list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "draft" });
+        list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "draft" }, cancellationToken: TestContext.Current.CancellationToken);
         bool anyDraft = list.Items.Any();
         if (anyDraft)
             Assert.True(list.Items.All(x => x.Status == "draft"));
 
-        list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "archived" });
+        list = await svc.ListAsync(new ProductListFilter { Limit = 5, Status = "archived" }, cancellationToken: TestContext.Current.CancellationToken);
         bool anyArchive = list.Items.Any();
         if (anyDraft)
             Assert.True(list.Items.All(x => x.Status == "archived"));
@@ -119,7 +117,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -134,7 +132,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
     [Fact]
     public async Task Gets_Products()
     {
-        var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+        var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(obj);
         Assert.True(obj.Id.HasValue);
@@ -178,7 +176,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
         created.Title = title;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -193,7 +191,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
         {
             Published = false
         });
-        var published = await Fixture.Service.PublishAsync(created.Id.Value);
+        var published = await Fixture.Service.PublishAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(published.PublishedAt.HasValue);
     }
@@ -205,7 +203,7 @@ public class ProductTests : IClassFixture<ProductTestsFixture>
         {
             Published = true
         });
-        var unpublished = await Fixture.Service.UnpublishAsync(created.Id.Value);
+        var unpublished = await Fixture.Service.UnpublishAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(unpublished.PublishedAt.HasValue);
     }
@@ -254,7 +252,7 @@ public class ProductTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<Product> Create(bool skipAddToCreateList = false, ProductCreateOptions options = null)
+    public async Task<Product> Create(bool skipAddToCreateList = false, ProductCreateOptions options = null!)
     {
         var obj = await Service.CreateAsync(new Product()
         {

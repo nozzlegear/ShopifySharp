@@ -21,14 +21,14 @@ public class InventoryItemTests : IClassFixture<InventoryItemTestsFixture>
     [Fact]
     public async Task Lists_Items()
     {
-        var list = await Fixture.Service.ListAsync(new InventoryItemListFilter { Ids = new[] { Fixture.Created.First().InventoryItemId.Value } });
+        var list = await Fixture.Service.ListAsync(new InventoryItemListFilter { Ids = new[] { Fixture.Created.First().InventoryItemId.Value } }, TestContext.Current.CancellationToken);
         Assert.True(list.Items.Count() > 0);
     }
 
     [Fact]
     public async Task Gets_Item()
     {
-        var created = await Fixture.Service.GetAsync(Fixture.Created.First().InventoryItemId.Value);
+        var created = await Fixture.Service.GetAsync(Fixture.Created.First().InventoryItemId.Value, TestContext.Current.CancellationToken);
         Assert.NotNull(created);
         Assert.True(created.Id.HasValue);
     }
@@ -36,7 +36,7 @@ public class InventoryItemTests : IClassFixture<InventoryItemTestsFixture>
     [Fact]
     public async Task Updates_Item()
     {
-        var created = await Fixture.Service.GetAsync(Fixture.Created.First().InventoryItemId.Value);
+        var created = await Fixture.Service.GetAsync(Fixture.Created.First().InventoryItemId.Value, TestContext.Current.CancellationToken);
         long id = created.Id.Value;
         string sku = "Some Updated sku";
         decimal cost = 42.42m;
@@ -44,7 +44,7 @@ public class InventoryItemTests : IClassFixture<InventoryItemTestsFixture>
         created.SKU = sku;
         created.Cost = cost;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, TestContext.Current.CancellationToken);
 
         Assert.Equal(sku, updated.SKU);
         Assert.Equal(cost, updated.Cost);
@@ -109,7 +109,7 @@ public class InventoryItemTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<ProductVariant> Create(string option1 = null, bool skipAddToCreatedList = false)
+    public async Task<ProductVariant> Create(string option1 = null!, bool skipAddToCreatedList = false)
     {
         var obj = await VariantService.CreateAsync(ProductId, new ProductVariant()
         {

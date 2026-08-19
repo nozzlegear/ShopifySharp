@@ -16,7 +16,7 @@ public class CheckoutTests
     [Fact]
     public async Task Lists_Checkouts()
     {
-        var list = await Service.ListAsync();
+        var list = await Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.NotNull(list);
         Assert.NotNull(list.Items);
@@ -25,7 +25,7 @@ public class CheckoutTests
     [Fact]
     public async Task Counts_Checkouts()
     {
-        var count = await Service.CountAsync();
+        var count = await Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.True(count >= 0);
     }

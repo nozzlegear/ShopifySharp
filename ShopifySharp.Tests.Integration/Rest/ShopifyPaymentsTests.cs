@@ -23,9 +23,9 @@ public class ShopifyPaymentsTests
     [Fact]
     public async Task GetBalance()
     {
-        if (await Service.IsShopifyPaymentApiEnabledAsync())
+        if (await Service.IsShopifyPaymentApiEnabledAsync(cancellationToken: TestContext.Current.CancellationToken))
         {
-            var balances = await Service.GetBalanceAsync();
+            var balances = await Service.GetBalanceAsync(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(balances);
         }
     }
@@ -33,9 +33,9 @@ public class ShopifyPaymentsTests
     [Fact]
     public async Task GetPayouts()
     {
-        if (await Service.IsShopifyPaymentApiEnabledAsync())
+        if (await Service.IsShopifyPaymentApiEnabledAsync(cancellationToken: TestContext.Current.CancellationToken))
         {
-            var payouts = await Service.ListPayoutsAsync();
+            var payouts = await Service.ListPayoutsAsync(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(payouts);
         }
     }
@@ -43,24 +43,24 @@ public class ShopifyPaymentsTests
     [Fact]
     public async Task GetDisputes()
     {
-        if (await Service.IsShopifyPaymentApiEnabledAsync())
+        if (await Service.IsShopifyPaymentApiEnabledAsync(cancellationToken: TestContext.Current.CancellationToken))
         {
-            var disputes = await Service.ListDisputesAsync();
+            var disputes = await Service.ListDisputesAsync(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(disputes);
         }
     }
     [Fact]
     public async Task GetDisputedEvidence()
     {
-        if (await Service.IsShopifyPaymentApiEnabledAsync())
+        if (await Service.IsShopifyPaymentApiEnabledAsync(cancellationToken: TestContext.Current.CancellationToken))
         {
-            var disputes = await Service.ListDisputesAsync();
+            var disputes = await Service.ListDisputesAsync(cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.True((disputes?.Items?.Count() > 0), "There are no disputes to get dispute evidence from.");
 
             _testOutputHelper.WriteLine($"Getting evidence for dispute id '{disputes.Items.First().Id.Value}'.");
 
-            var disputedEvidence = await Service.GetDisputeEvidenceAsync(disputes.Items.First().Id.Value);
+            var disputedEvidence = await Service.GetDisputeEvidenceAsync(disputes.Items.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(disputedEvidence);
         }
@@ -69,9 +69,9 @@ public class ShopifyPaymentsTests
     [Fact]
     public async Task PutDisputedEvidence()
     {
-        if (await Service.IsShopifyPaymentApiEnabledAsync())
+        if (await Service.IsShopifyPaymentApiEnabledAsync(cancellationToken: TestContext.Current.CancellationToken))
         {
-            var disputes = await Service.ListDisputesAsync();
+            var disputes = await Service.ListDisputesAsync(cancellationToken: TestContext.Current.CancellationToken);
             Assert.True((disputes?.Items?.Count() > 0), "There are no disputes available to add evidence to.");
 
             _testOutputHelper.WriteLine($"Updating evidence for dispute Id: '{disputes.Items.First().Id.Value}'.");
@@ -85,7 +85,7 @@ public class ShopifyPaymentsTests
             update.AccessActivityLog = "Email sent detailing return policy.";
             update.UncategorizedText = "You are trying to do something not allowed.";
 
-            var disputedEvidence = await Service.UpdateDisputeEvidenceAsync(disputes.Items.First().Id.Value, update);
+            var disputedEvidence = await Service.UpdateDisputeEvidenceAsync(disputes.Items.First().Id.Value, update, cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(disputedEvidence);
         }
     }
@@ -93,9 +93,9 @@ public class ShopifyPaymentsTests
     [Fact]
     public async Task GetTransactions()
     {
-        if (await Service.IsShopifyPaymentApiEnabledAsync())
+        if (await Service.IsShopifyPaymentApiEnabledAsync(cancellationToken: TestContext.Current.CancellationToken))
         {
-            var transactions = await Service.ListTransactionsAsync();
+            var transactions = await Service.ListTransactionsAsync(cancellationToken: TestContext.Current.CancellationToken);
             Assert.NotNull(transactions);
         }
     }

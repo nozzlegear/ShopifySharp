@@ -35,7 +35,11 @@ public class GraphHttpContentSerializerTests
             Query = Query,
             Variables = variables,
         });
+#if NET472
         var jsonStr = await result.ReadAsStringAsync();
+#else
+        var jsonStr = await result.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
         // Assert
         jsonStr.Should().Be($$$"""{"query":"{{{Query}}}","variables":{"baz":"bat","hello":"world"}}""");
@@ -112,7 +116,12 @@ public class GraphHttpContentSerializerTests
             EstimatedQueryCost = 123,
             UserErrorHandling = GraphRequestUserErrorHandling.DoNotThrow
         });
+#if NET472
         var jsonStr = await result.ReadAsStringAsync();
+#else
+        var jsonStr = await result.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
+
 
         // Assert
         jsonStr.Should().Be(expectedJson);

@@ -29,12 +29,12 @@ public class CheckoutSalesChannelTests: IClassFixture<CheckoutSalesChannelFixtur
     public async Task Completes_Checkouts()
     {
         var checkout = await Fixture.Create();
-        var shippingRates = await Fixture.Service.ListShippingRatesAsync(checkout.Token);
+        var shippingRates = await Fixture.Service.ListShippingRatesAsync(checkout.Token, cancellationToken: TestContext.Current.CancellationToken);
 
         checkout.ShippingLine = shippingRates.First();
-        checkout = await Fixture.Service.UpdateAsync(checkout.Token, checkout);
+        checkout = await Fixture.Service.UpdateAsync(checkout.Token, checkout, cancellationToken: TestContext.Current.CancellationToken);
 
-        checkout = await Fixture.Service.CompleteAsync(checkout.Token);
+        checkout = await Fixture.Service.CompleteAsync(checkout.Token, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(checkout);
     }
@@ -43,7 +43,7 @@ public class CheckoutSalesChannelTests: IClassFixture<CheckoutSalesChannelFixtur
     public async Task Gets_Checkouts()
     {
         var checkout = await Fixture.Create();
-        checkout = await Fixture.Service.GetAsync(checkout.Token);
+        checkout = await Fixture.Service.GetAsync(checkout.Token, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(checkout);
     }
@@ -52,10 +52,10 @@ public class CheckoutSalesChannelTests: IClassFixture<CheckoutSalesChannelFixtur
     public async Task Updates_Checkouts()
     {
         var checkout = await Fixture.Create();
-        var shippingRates = await Fixture.Service.ListShippingRatesAsync(checkout.Token);
+        var shippingRates = await Fixture.Service.ListShippingRatesAsync(checkout.Token, cancellationToken: TestContext.Current.CancellationToken);
         checkout.ShippingLine = shippingRates.First();
 
-        checkout = await Fixture.Service.UpdateAsync(checkout.Token, checkout);
+        checkout = await Fixture.Service.UpdateAsync(checkout.Token, checkout, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(checkout.ShippingLine);
     }
@@ -64,7 +64,7 @@ public class CheckoutSalesChannelTests: IClassFixture<CheckoutSalesChannelFixtur
     public async Task Lists_Checkout_Shipping_Rates()
     {
         var checkout = await Fixture.Create();
-        var shippingRates = await Fixture.Service.ListShippingRatesAsync(checkout.Token);
+        var shippingRates = await Fixture.Service.ListShippingRatesAsync(checkout.Token, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(shippingRates);
     }
@@ -81,7 +81,7 @@ public class CheckoutSalesChannelTests: IClassFixture<CheckoutSalesChannelFixtur
             Number = 4242424242424242,
             VerificationValue = 123
         };
-        var cardVault = await Fixture.Service.StoreCreditCard(card);
+        var cardVault = await Fixture.Service.StoreCreditCard(card, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(cardVault);
     }

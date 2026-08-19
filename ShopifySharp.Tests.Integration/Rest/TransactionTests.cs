@@ -11,7 +11,7 @@ public class TransactionTests(TransactionTestsFixture fixture) : IClassFixture<T
     [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Counts_Transactions()
     {
-        var count = await Fixture.Service.CountAsync(Fixture.Created.First().OrderId.Value);
+        var count = await Fixture.Service.CountAsync(Fixture.Created.First().OrderId.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -19,7 +19,7 @@ public class TransactionTests(TransactionTestsFixture fixture) : IClassFixture<T
     [Fact(Skip = "Transaction tests are flaky and often throw 409 Conflict errors with empty bodies")]
     public async Task Lists_Transactions()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.Created.First().OrderId.Value);
+        var list = await Fixture.Service.ListAsync(Fixture.Created.First().OrderId.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Count() > 0);
     }
@@ -29,7 +29,7 @@ public class TransactionTests(TransactionTestsFixture fixture) : IClassFixture<T
     {
         var order = await Fixture.CreateOrder();
         var created = await Fixture.Create(order.Id.Value, currency: order.Currency);
-        var obj = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
+        var obj = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(obj);
         Assert.True(obj.Id.HasValue);

@@ -18,7 +18,7 @@ public class GiftCardAdjustmentTests : IClassFixture<GiftCardAdjustmentTestsFixt
     [Fact(Skip = "Cannot run without a Shopify Plus account and without permissions set on gift card adjustments.")]
     public async Task Lists_GiftCardAdjustments()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.GiftCardId);
+        var list = await Fixture.Service.ListAsync(Fixture.GiftCardId, TestContext.Current.CancellationToken);
 
         Assert.True(list.Count() > 0);
     }
@@ -26,7 +26,7 @@ public class GiftCardAdjustmentTests : IClassFixture<GiftCardAdjustmentTestsFixt
     [Fact(Skip = "Cannot run without a Shopify Plus account and without permissions set on gift card adjustments.")]
     public async Task Gets_GiftCardAdjustments()
     {
-        var obj = await Fixture.Service.GetAsync(Fixture.GiftCardId, Fixture.Created.FirstOrDefault().Id.Value);
+        var obj = await Fixture.Service.GetAsync(Fixture.GiftCardId, Fixture.Created.FirstOrDefault()!.Id.Value, TestContext.Current.CancellationToken);
 
         Assert.NotNull(obj);
         Assert.True(obj.Id.HasValue);

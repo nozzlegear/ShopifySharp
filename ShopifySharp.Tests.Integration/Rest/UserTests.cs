@@ -2,7 +2,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using ShopifySharp.Filters;
 using Xunit;
-using System.Threading;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -20,7 +19,7 @@ public class UserTests : IClassFixture<UserTestsFixture>
     [Fact(Skip = "Cannot run without a Shopify Plus account.")]
     public async Task Lists_Users()
     {
-        var result = await Fixture.Service.ListAsync();
+        var result = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         var list = result.Items;
 
         Assert.True(list.Any());
@@ -31,9 +30,9 @@ public class UserTests : IClassFixture<UserTestsFixture>
     public async Task Gets_Users()
     {
         // Find an id 
-        var result = await Fixture.Service.ListAsync();
+        var result = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         var list = result.Items;
-        var user = await Fixture.Service.GetAsync(list.First().Id.Value);
+        var user = await Fixture.Service.GetAsync(list.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(user);
         Assert.Equal(user.Id, list.First().Id);
@@ -45,14 +44,11 @@ public class UserTests : IClassFixture<UserTestsFixture>
         // This test simply ensures each of the three ListAsync methods can be called without an ambiguous call error
         var userFilter = new UserListFilter();
         var listFilter = userFilter.AsListFilter();
-        var cancellationToken = new CancellationTokenSource().Token;
             
-        var result = await Fixture.Service.ListAsync();
-        result = await Fixture.Service.ListAsync(cancellationToken: cancellationToken);
-        result = await Fixture.Service.ListAsync(userFilter);
-        result = await Fixture.Service.ListAsync(userFilter, cancellationToken);
-        result = await Fixture.Service.ListAsync(listFilter);
-        result = await Fixture.Service.ListAsync(listFilter, cancellationToken);
+        var result = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
+        result = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
+        result = await Fixture.Service.ListAsync(userFilter, cancellationToken: TestContext.Current.CancellationToken);
+        result = await Fixture.Service.ListAsync(listFilter, cancellationToken: TestContext.Current.CancellationToken);
     }
 }
 

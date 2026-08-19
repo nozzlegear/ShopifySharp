@@ -16,7 +16,7 @@ public class FulfillmentServiceTests : IClassFixture<FulfillmentServiceTestsFixt
     [Fact]
     public async Task Lists_FulfillmentServices()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Count() > 0);
     }
@@ -27,7 +27,7 @@ public class FulfillmentServiceTests : IClassFixture<FulfillmentServiceTestsFixt
         var list = await Fixture.Service.ListAsync(new FulfillmentServiceListFilter
         {
             Scope = "all"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(list.Count() > 0);
     }
 
@@ -36,7 +36,7 @@ public class FulfillmentServiceTests : IClassFixture<FulfillmentServiceTestsFixt
     {
         // Find an id 
         var created = Fixture.Created.First();
-        var fulfillmentServiceEntity = await Fixture.Service.GetAsync(created.Id.Value);
+        var fulfillmentServiceEntity = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(fulfillmentServiceEntity);
     }

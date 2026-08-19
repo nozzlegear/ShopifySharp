@@ -279,7 +279,7 @@ public class ShopifyOauthUtilityTests
         HttpRequestMessage? capturedRequest = null;
         string? requestContent = null;
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Invokes(async call => {
                 capturedRequest = call.GetArgument<HttpRequestMessage>(0);
                 requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
@@ -294,7 +294,7 @@ public class ShopifyOauthUtilityTests
             ClientId = ClientId,
             ClientSecret = "some-secret",
             RequestExpiringOfflineToken = true
-        });
+        }, TestContext.Current.CancellationToken);
 
         // Assert
         capturedRequest.Should().NotBeNull();
@@ -318,7 +318,7 @@ public class ShopifyOauthUtilityTests
         const string json = $$"""{ "error": "{{expectedErrorMessage}}" }""";
         var result = Utils.MakeHttpResponseMessage(json, x => x.StatusCode = expectedStatusCode);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -354,7 +354,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -394,7 +394,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -465,7 +465,7 @@ public class ShopifyOauthUtilityTests
 
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -516,7 +516,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -591,7 +591,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -624,7 +624,7 @@ public class ShopifyOauthUtilityTests
         const string json = $$"""{ "error": "{{expectedErrorMessage}}" }""";
         var result = Utils.MakeHttpResponseMessage(json, x => x.StatusCode = expectedStatusCode);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -666,7 +666,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -706,7 +706,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -765,7 +765,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -814,7 +814,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None));
+        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken));
         callToClient.Returns(result);
 
         // Act
@@ -895,7 +895,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -946,11 +946,11 @@ public class ShopifyOauthUtilityTests
             AccessTokenExpiresAtUtc = currentAuthorizationResult.AccessTokenExpiresAtUtc,
             RefreshTokenExpiresAtUtc = currentAuthorizationResult.RefreshTokenExpiresAtUtc,
             RefreshBeforeExpiry = TimeSpan.FromMinutes(1)
-        });
+        }, TestContext.Current.CancellationToken);
 
         // Assert
         authorizationResult.Should().BeSameAs(currentAuthorizationResult);
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .MustNotHaveHappened();
     }
 
@@ -987,7 +987,7 @@ public class ShopifyOauthUtilityTests
         HttpRequestMessage? capturedRequest = null;
         string? requestContent = null;
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Invokes(async call => {
                 capturedRequest = call.GetArgument<HttpRequestMessage>(0);
                 requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
@@ -1003,7 +1003,7 @@ public class ShopifyOauthUtilityTests
             RefreshToken = currentAuthorizationResult.RefreshToken!,
             AccessTokenExpiresAtUtc = currentAuthorizationResult.AccessTokenExpiresAtUtc,
             RefreshTokenExpiresAtUtc = currentAuthorizationResult.RefreshTokenExpiresAtUtc
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         authorizationResult.AccessToken.Should().Be(refreshedAccessToken);
@@ -1043,7 +1043,7 @@ public class ShopifyOauthUtilityTests
         // Assert
         await act.Should().ThrowAsync<ShopifyInvalidRefreshTokenException>()
             .WithMessage("*refresh token has expired*");
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .MustNotHaveHappened();
     }
 
@@ -1064,7 +1064,7 @@ public class ShopifyOauthUtilityTests
             }
             """;
 
-        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None));
+        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken));
         // Create a new HttpResponseMessage, as it'll be disposed on each request
         callToClient.ReturnsLazily(() => Utils.MakeHttpResponseMessage(json));
 
@@ -1121,7 +1121,7 @@ public class ShopifyOauthUtilityTests
         // Setup
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -1156,7 +1156,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -1190,7 +1190,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -1224,7 +1224,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -1258,7 +1258,7 @@ public class ShopifyOauthUtilityTests
               """;
         var result = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(result);
 
         // Act
@@ -1377,11 +1377,11 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .MustNotHaveHappened();
     }
 
@@ -1409,7 +1409,7 @@ public class ShopifyOauthUtilityTests
         HttpRequestMessage? capturedRequest = null;
         string? requestContent = null;
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Invokes(async call => {
                 capturedRequest = call.GetArgument<HttpRequestMessage>(0);
                 requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
@@ -1429,7 +1429,7 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -1465,7 +1465,7 @@ public class ShopifyOauthUtilityTests
         // Assert
         await act.Should().ThrowAsync<ShopifyInvalidRefreshTokenException>()
             .WithMessage("*refresh token has expired*");
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .MustNotHaveHappened();
     }
 
@@ -1486,11 +1486,11 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeNull();
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .MustNotHaveHappened();
     }
 
@@ -1516,7 +1516,7 @@ public class ShopifyOauthUtilityTests
               """;
         var response = Utils.MakeHttpResponseMessage(json);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Returns(response);
 
         var now = _fakeTimeProvider.GetUtcNow();
@@ -1532,7 +1532,7 @@ public class ShopifyOauthUtilityTests
         };
 
         // Act
-        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options);
+        var result = await _sut.RefreshOfflineAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();

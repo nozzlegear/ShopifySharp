@@ -19,7 +19,7 @@ public class ShopTests
     [Fact]
     public async Task Gets_Shops()
     {
-        var shop = await Service.GetAsync();
+        var shop = await Service.GetAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(shop);
         EmptyAssert.NotNullOrEmpty(shop.Name);
@@ -34,7 +34,7 @@ public class ShopTests
 
         try
         {
-            await Service.UninstallAppAsync();
+            await Service.UninstallAppAsync(cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {

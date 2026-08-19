@@ -17,7 +17,7 @@ public class AccessScopeTests : IClassFixture<AccessScopeTestsFixture>
     [Fact]
     public async Task List()
     {
-        var scopes = await Fixture.Service.ListAsync();
+        var scopes = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(scopes.Count() > 0);
     }
 }

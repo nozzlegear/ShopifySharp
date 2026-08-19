@@ -24,7 +24,7 @@ public class ProductVariantTests : IClassFixture<ProductVariantTestsFixture>
     [Fact]
     public async Task Counts_Variants()
     {
-        var count = await Fixture.Service.CountAsync(Fixture.ProductId);
+        var count = await Fixture.Service.CountAsync(Fixture.ProductId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -32,7 +32,7 @@ public class ProductVariantTests : IClassFixture<ProductVariantTestsFixture>
     [Fact]
     public async Task Lists_Variants()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.ProductId);
+        var list = await Fixture.Service.ListAsync(Fixture.ProductId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -45,7 +45,7 @@ public class ProductVariantTests : IClassFixture<ProductVariantTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(Fixture.ProductId, created.Id.Value);
+            await Fixture.Service.DeleteAsync(Fixture.ProductId, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -61,7 +61,7 @@ public class ProductVariantTests : IClassFixture<ProductVariantTestsFixture>
     public async Task Gets_Variants()
     {
         var created = await Fixture.Create();
-        created = await Fixture.Service.GetAsync(created.Id.Value);
+        created = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
         Assert.True(created.Id.HasValue);
@@ -92,7 +92,7 @@ public class ProductVariantTests : IClassFixture<ProductVariantTestsFixture>
         // Must set variant.InventoryQuantity to null as it is now read-only. Sending the quantity accidentally will result in an exception.
         created.InventoryQuantity = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -156,7 +156,7 @@ public class ProductVariantTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<ProductVariant> Create(string option1 = null, bool skipAddToCreatedList = false)
+    public async Task<ProductVariant> Create(string option1 = null!, bool skipAddToCreatedList = false)
     {
         var obj = await Service.CreateAsync(ProductId, new ProductVariant()
         {

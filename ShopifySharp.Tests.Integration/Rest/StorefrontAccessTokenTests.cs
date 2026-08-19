@@ -20,7 +20,7 @@ public class StorefrontAccessTokenTests : IClassFixture<StorefrontAccessTokenTes
     public async Task Creates_Storefront_Access_Tokens()
     {
         var title = $"Test-Access-Token-For-ShopifySharp-{Guid.NewGuid()}";
-        var createdToken = await Fixture.Service.CreateAsync(title);
+        var createdToken = await Fixture.Service.CreateAsync(title, cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.Equal(title, createdToken.Title);
         Assert.NotNull(createdToken.Id);
@@ -33,17 +33,17 @@ public class StorefrontAccessTokenTests : IClassFixture<StorefrontAccessTokenTes
     public async Task Deletes_Storefront_Access_Tokens()
     {
         var title = $"Test-Access-Token-For-ShopifySharp-{Guid.NewGuid()}";
-        var createdToken = await Fixture.Service.CreateAsync(title);
+        var createdToken = await Fixture.Service.CreateAsync(title, cancellationToken: TestContext.Current.CancellationToken);
 
-        await Fixture.Service.DeleteAsync(createdToken.Id.Value);
+        await Fixture.Service.DeleteAsync(createdToken.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     [Fact(Skip = "Cannot run with private app, returns \"(403 Forbidden) App must be extendable to create a storefront access token\".")]
     public async Task Lists_Storefront_Access_Tokens()
     {
         var title = $"Test-Access-Token-For-ShopifySharp-{Guid.NewGuid()}";
-        var createdToken = await Fixture.Service.CreateAsync(title);
-        var list = await Fixture.Service.ListAsync();
+        var createdToken = await Fixture.Service.CreateAsync(title, cancellationToken: TestContext.Current.CancellationToken);
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.NotEmpty(list);
         Assert.Contains(list, item => item.Title == title);

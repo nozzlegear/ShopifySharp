@@ -126,12 +126,16 @@ public class SystemJsonSerializerTests
 
         // Act
         _sut.Serialize(writer, item, typeof(SystemJsonTestObject));
-        await baseWriter.FlushAsync();
+        await baseWriter.FlushAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         stream.Position = 0;
         using var streamReader = new StreamReader(stream);
+#if NET472
         var json = await streamReader.ReadToEndAsync();
+#else
+        var json = await streamReader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
         json.Should().Be(expectedJson);
     }
@@ -155,12 +159,16 @@ public class SystemJsonSerializerTests
 
         // Act
         _sut.Serialize(writer, item, typeof(SystemJsonTestObject));
-        await baseWriter.FlushAsync();
+        await baseWriter.FlushAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         stream.Position = 0;
         using var streamReader = new StreamReader(stream);
+#if NET472
         var json = await streamReader.ReadToEndAsync();
+#else
+        var json = await streamReader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
         json.Should().Be(expectedJson);
     }
@@ -181,13 +189,17 @@ public class SystemJsonSerializerTests
         #endif
 
         // Act
-        await _sut.SerializeAsync(stream, item);
+        await _sut.SerializeAsync(stream, item, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         stream.Should().HavePosition(0, "the method should have reset the stream position to 0");
 
         using var streamReader = new StreamReader(stream);
+#if NET472
         var json = await streamReader.ReadToEndAsync();
+#else
+        var json = await streamReader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
         json.Should().Be(expectedJson);
     }
@@ -207,13 +219,17 @@ public class SystemJsonSerializerTests
         #endif
 
         // Act
-        await _sut.SerializeAsync(stream, item);
+        await _sut.SerializeAsync(stream, item, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         stream.Should().HavePosition(0, "the method should have reset the stream position to 0");
 
         using var streamReader = new StreamReader(stream);
+#if NET472
         var json = await streamReader.ReadToEndAsync();
+#else
+        var json = await streamReader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
         json.Should().Be(expectedJson);
     }
@@ -393,7 +409,7 @@ public class SystemJsonSerializerTests
         IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var deserializedObject = await _sut.DeserializeAsync(element, typeof(SystemJsonTestObject));
+        var deserializedObject = await _sut.DeserializeAsync(element, typeof(SystemJsonTestObject), cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         deserializedObject.Should()
@@ -419,7 +435,7 @@ public class SystemJsonSerializerTests
         IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var act = async () => await _sut.DeserializeAsync(element, type);
+        var act = async () => await _sut.DeserializeAsync(element, type, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         if (shouldThrow)
@@ -443,7 +459,7 @@ public class SystemJsonSerializerTests
         var fakeNode = A.Fake<IJsonElement>();
 
         // Act
-        var act = async () => await _sut.DeserializeAsync(fakeNode, typeof(SystemJsonTestObject));
+        var act = async () => await _sut.DeserializeAsync(fakeNode, typeof(SystemJsonTestObject), cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -463,7 +479,7 @@ public class SystemJsonSerializerTests
         IJsonElement element = new SystemJsonElement(JsonDocument.Parse($$"""{"foo": "{{expectedFooValue}}"}"""));
 
         // Act
-        var deserializedObject = await _sut.DeserializeAsync<SystemJsonTestObject>(element);
+        var deserializedObject = await _sut.DeserializeAsync<SystemJsonTestObject>(element, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         deserializedObject.Should()
@@ -491,12 +507,12 @@ public class SystemJsonSerializerTests
         // Act
         Func<Task<object?>> act = type switch
         {
-            GenericTargetType.Int => async () => await _sut.DeserializeAsync<int>(element),
-            GenericTargetType.Bool => async () => await _sut.DeserializeAsync<bool>(element),
-            GenericTargetType.String => async () => await _sut.DeserializeAsync<string>(element),
-            GenericTargetType.StringArray => async () => await _sut.DeserializeAsync<string[]>(element),
-            GenericTargetType.Object => async () => await _sut.DeserializeAsync<object>(element),
-            GenericTargetType.Product => async () => await _sut.DeserializeAsync<Product>(element),
+            GenericTargetType.Int => async () => await _sut.DeserializeAsync<int>(element, cancellationToken: TestContext.Current.CancellationToken),
+            GenericTargetType.Bool => async () => await _sut.DeserializeAsync<bool>(element, cancellationToken: TestContext.Current.CancellationToken),
+            GenericTargetType.String => async () => await _sut.DeserializeAsync<string>(element, cancellationToken: TestContext.Current.CancellationToken),
+            GenericTargetType.StringArray => async () => await _sut.DeserializeAsync<string[]>(element, cancellationToken: TestContext.Current.CancellationToken),
+            GenericTargetType.Object => async () => await _sut.DeserializeAsync<object>(element, cancellationToken: TestContext.Current.CancellationToken),
+            GenericTargetType.Product => async () => await _sut.DeserializeAsync<Product>(element, cancellationToken: TestContext.Current.CancellationToken),
             _ => throw new ArgumentOutOfRangeException(nameof(type), type, null)
         };
 
@@ -522,7 +538,7 @@ public class SystemJsonSerializerTests
         var fakeNode = A.Fake<IJsonElement>();
 
         // Act
-        var act = async () => await _sut.DeserializeAsync<SystemJsonTestObject>(fakeNode);
+        var act = async () => await _sut.DeserializeAsync<SystemJsonTestObject>(fakeNode, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()

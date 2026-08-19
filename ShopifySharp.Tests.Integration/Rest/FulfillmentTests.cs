@@ -21,7 +21,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
     public async Task Counts_Fulfillments()
     {
         long orderId = Fixture.Created.First().OrderId.Value;
-        var count = await Fixture.Service.CountAsync(orderId);
+        var count = await Fixture.Service.CountAsync(orderId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -34,7 +34,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
         var count = await Fixture.Service.CountAsync(orderId, new FulfillmentCountFilter()
         {
             CreatedAtMin = fromDate
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -43,7 +43,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
     public async Task Lists_Fulfillments()
     {
         long orderId = Fixture.Created.First().OrderId.Value;
-        var list = await Fixture.Service.ListAsync(orderId);
+        var list = await Fixture.Service.ListAsync(orderId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -56,7 +56,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
         var list = await Fixture.Service.ListAsync(orderId, new FulfillmentListFilter
         {
             CreatedAtMin = fromDate
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -67,7 +67,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
         long orderId = Fixture.Created.First().OrderId.Value;
         var fulfillmentOrder = await Fixture.GetFulfillmentOrder(orderId);
         long fulfillmentOrderId = fulfillmentOrder.Id.Value;
-        var list = await Fixture.Service.ListForFulfillmentOrderAsync(fulfillmentOrderId);
+        var list = await Fixture.Service.ListForFulfillmentOrderAsync(fulfillmentOrderId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Any());
     }
@@ -77,7 +77,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
     {
         // Find an id 
         var created = Fixture.Created.First();
-        var fulfillment = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value);
+        var fulfillment = await Fixture.Service.GetAsync(created.OrderId.Value, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(fulfillment);
     }
@@ -159,7 +159,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
             }
         };
 
-        var updated = await Fixture.Service.UpdateTrackingAsync(id, update);
+        var updated = await Fixture.Service.UpdateTrackingAsync(id, update, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(company, updated.TrackingCompany);
         Assert.Equal(trackingNum, updated.TrackingNumber);
@@ -175,7 +175,7 @@ public class FulfillmentTests : IClassFixture<FulfillmentTestsFixture>
     {
         var order = await Fixture.CreateOrder();
         var created = await Fixture.Create(order.Id.Value);
-        var cancelled = await Fixture.Service.CancelAsync(created.Id.Value);
+        var cancelled = await Fixture.Service.CancelAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal("cancelled", cancelled.Status);
     }

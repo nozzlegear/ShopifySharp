@@ -30,16 +30,16 @@ public class FulfillmentEventsTests : IClassFixture<FulfillmentEventsTestsFixtur
             FulfillmentId = fulfillmentId,
             Status = "confirmed"
         };
-        @event = await Fixture.FulfillmentEventService.CreateAsync(orderId, fulfillmentId, @event);
+        @event = await Fixture.FulfillmentEventService.CreateAsync(orderId, fulfillmentId, @event, TestContext.Current.CancellationToken);
 
         try
         {
-            var list = await Fixture.FulfillmentEventService.ListAsync(orderId, fulfillmentId);
-            Assert.True(list.Any(e => e.Id == @event.Id));
+            var list = await Fixture.FulfillmentEventService.ListAsync(orderId, fulfillmentId, TestContext.Current.CancellationToken);
+            Assert.Contains(list, e => e.Id == @event.Id);
         }
         finally
         {
-            await Fixture.FulfillmentEventService.DeleteAsync(orderId, fulfillmentId, @event.Id.Value);
+            await Fixture.FulfillmentEventService.DeleteAsync(orderId, fulfillmentId, @event.Id.Value, TestContext.Current.CancellationToken);
         }
     }
 
@@ -54,7 +54,7 @@ public class FulfillmentEventsTests : IClassFixture<FulfillmentEventsTestsFixtur
         Assert.True(@event.Id.HasValue);
         Assert.Equal("confirmed", @event.Status);
 
-        await Fixture.FulfillmentEventService.DeleteAsync(orderId, fulfillmentId, @event.Id.Value);
+        await Fixture.FulfillmentEventService.DeleteAsync(orderId, fulfillmentId, @event.Id.Value, TestContext.Current.CancellationToken);
     }
 }
 

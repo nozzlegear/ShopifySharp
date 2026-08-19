@@ -82,7 +82,7 @@ public class ShopifyGraphqlUtilityTest
         };
         Uri? capturedUri = null;
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
             .Invokes(call =>
             {
                 capturedUri = call.GetArgument<HttpRequestMessage>(0)?.RequestUri;
@@ -90,7 +90,7 @@ public class ShopifyGraphqlUtilityTest
             .Returns(Utils.MakeHttpResponseMessage(json));
 
         // Act
-        var jsonSchema = await _sut.GetSchemaAsJsonStringAsync(_credentials, ApiVersion);
+        var jsonSchema = await _sut.GetSchemaAsJsonStringAsync(_credentials, ApiVersion, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         jsonSchema.Should().Be(json);

@@ -22,7 +22,7 @@ public class ApplicationCreditTests
             Description = "Refund for Foo",
             Amount = 10.00m,
             Test = true,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(credit);
         Assert.True(credit.Id.HasValue);

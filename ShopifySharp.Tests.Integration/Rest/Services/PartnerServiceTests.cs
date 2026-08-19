@@ -11,7 +11,7 @@ namespace ShopifySharp.Tests.Integration.Rest.Services;
 [TestSubject(typeof(PartnerService))]
 public class PartnerServiceTests
 {
-    private async Task<JToken> Query(string query, IRequestExecutionPolicy policy = null)
+    private async Task<JToken> Query(string query, IRequestExecutionPolicy policy = null!)
     {
         var svc = new PartnerService(Utils.OrganizationId, Utils.OrganizationToken);
 
@@ -21,7 +21,7 @@ public class PartnerServiceTests
         return await svc.PostAsync(query);
     }
 
-    private async Task<JToken> QueryTransactions(IRequestExecutionPolicy policy = null)
+    private async Task<JToken> QueryTransactions(IRequestExecutionPolicy policy = null!)
     {
         const string query = """
                              {

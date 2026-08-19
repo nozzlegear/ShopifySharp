@@ -30,7 +30,7 @@ public class AssetTests : IClassFixture<AssetTestsFixture>
         Assert.Equal(Fixture.ThemeId, created.ThemeId);
 
         // Value is not returned when creating or updating. Must get the asset to check it.
-        var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+        var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(Fixture.AssetValue, asset.Value);
     }
@@ -43,12 +43,12 @@ public class AssetTests : IClassFixture<AssetTestsFixture>
         var created = await Fixture.Create(key);
         created.Value = newValue;
 
-        await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, created);
+        await Fixture.Service.CreateOrUpdateAsync(Fixture.ThemeId, created, cancellationToken: TestContext.Current.CancellationToken);
         // In 2024-07, there seems to be a small delay between when an asset is updated and when the new value is available
-        await Task.Delay(TimeSpan.FromSeconds(2));
+        await Task.Delay(TimeSpan.FromSeconds(2), TestContext.Current.CancellationToken);
 
         // Value is not returned when creating or updating. Must get the asset to check it.
-        var updated = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+        var updated = await Fixture.Service.GetAsync(Fixture.ThemeId, key, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(newValue, updated.Value);
     }
@@ -57,7 +57,7 @@ public class AssetTests : IClassFixture<AssetTestsFixture>
     public async Task Gets_Assets()
     {
         string key = Fixture.Created.First().Key;
-        var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key);
+        var asset = await Fixture.Service.GetAsync(Fixture.ThemeId, key, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(asset);
         Assert.Equal(asset.Key, key);
@@ -73,7 +73,7 @@ public class AssetTests : IClassFixture<AssetTestsFixture>
         {
             Key = key,
             SourceKey = original.Key,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(asset);
         Assert.Equal(asset.Key, key);
@@ -85,7 +85,7 @@ public class AssetTests : IClassFixture<AssetTestsFixture>
     [Fact]
     public async Task Lists_Assets()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.ThemeId);
+        var list = await Fixture.Service.ListAsync(Fixture.ThemeId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Count() > 0);
     }
@@ -99,7 +99,7 @@ public class AssetTests : IClassFixture<AssetTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(Fixture.ThemeId, key);
+            await Fixture.Service.DeleteAsync(Fixture.ThemeId, key, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -131,7 +131,7 @@ public class AssetTestsFixture : IAsyncLifetime
         Service.SetExecutionPolicy(policy);
         ThemeService.SetExecutionPolicy(policy);
 
-        var themes = await ThemeService.ListAsync();
+        var themes = await ThemeService.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         ThemeId = themes.First().Id.Value;
     }
@@ -142,7 +142,7 @@ public class AssetTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(ThemeId, asset.Key);
+                await Service.DeleteAsync(ThemeId, asset.Key, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -164,7 +164,7 @@ public class AssetTestsFixture : IAsyncLifetime
             ContentType = "text/x-liquid",
             Value = AssetValue,
             Key = key
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         if (!skipAddToCreatedList)
         {

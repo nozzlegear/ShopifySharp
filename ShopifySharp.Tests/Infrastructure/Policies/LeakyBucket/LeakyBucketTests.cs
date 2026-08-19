@@ -20,13 +20,13 @@ public class LeakyBucketTests
         var b = new Bucket(40, 2, () => _now);
         Assert.Equal(40, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(1).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(1, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(39, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(1).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(1, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(38, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(1).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(1, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(37, b.ComputedCurrentlyAvailable);
 
         _now = _now.AddSeconds(1);
@@ -41,13 +41,13 @@ public class LeakyBucketTests
         var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(9).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(9, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
 
-        Assert.False(b.WaitForAvailableAsync(4).IsCompleted);
+        Assert.False(b.WaitForAvailableAsync(4, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
 
-        Assert.False(b.WaitForAvailableAsync(5).IsCompleted);
+        Assert.False(b.WaitForAvailableAsync(5, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
     }
 
@@ -59,7 +59,7 @@ public class LeakyBucketTests
         var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(5).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(5, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(5, b.ComputedCurrentlyAvailable);
 
         _now = _now.AddSeconds(1);
@@ -90,13 +90,13 @@ public class LeakyBucketTests
         var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(5).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(5, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(5, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(4).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(4, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
 
-        Task task = b.WaitForAvailableAsync(3);
+        Task task = b.WaitForAvailableAsync(3, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(task.IsCompleted);
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
 
@@ -113,16 +113,16 @@ public class LeakyBucketTests
         var b = new Bucket(10, 2, () => _now);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(9).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(9, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
 
-        var task1 = b.WaitForAvailableAsync(3);
+        var task1 = b.WaitForAvailableAsync(3, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(task1.IsCompleted);
 
-        var task2 = b.WaitForAvailableAsync(3);
+        var task2 = b.WaitForAvailableAsync(3, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(task2.IsCompleted);
 
-        var task3 = b.WaitForAvailableAsync(3);
+        var task3 = b.WaitForAvailableAsync(3, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(task3.IsCompleted);
 
         Assert.Equal(1, b.ComputedCurrentlyAvailable);
@@ -145,13 +145,13 @@ public class LeakyBucketTests
         _now = _now.AddSeconds(5);
         Assert.Equal(10, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(4).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(4, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(6, b.ComputedCurrentlyAvailable);
 
-        Assert.True(b.WaitForAvailableAsync(4).IsCompleted);
+        Assert.True(b.WaitForAvailableAsync(4, cancellationToken: TestContext.Current.CancellationToken).IsCompleted);
         Assert.Equal(2, b.ComputedCurrentlyAvailable);
 
-        var task4 = b.WaitForAvailableAsync(4);
+        var task4 = b.WaitForAvailableAsync(4, cancellationToken: TestContext.Current.CancellationToken);
         Assert.False(task4.IsCompleted);
         Assert.Equal(2, b.ComputedCurrentlyAvailable);
 
@@ -163,6 +163,6 @@ public class LeakyBucketTests
     private async Task PassSeconds(int seconds)
     {
         _now = _now.AddSeconds(seconds);
-        await Task.Delay(TimeSpan.FromSeconds(seconds * 1.2));
+        await Task.Delay(TimeSpan.FromSeconds(seconds * 1.2), TestContext.Current.CancellationToken);
     }
 }

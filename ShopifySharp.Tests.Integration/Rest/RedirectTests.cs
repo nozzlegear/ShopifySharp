@@ -23,7 +23,7 @@ public class RedirectTests : IClassFixture<RedirectTestsFixture>
     [Fact]
     public async Task Counts_Redirects()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -31,7 +31,7 @@ public class RedirectTests : IClassFixture<RedirectTestsFixture>
     [Fact]
     public async Task Lists_Redirects()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -44,7 +44,7 @@ public class RedirectTests : IClassFixture<RedirectTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -60,7 +60,7 @@ public class RedirectTests : IClassFixture<RedirectTestsFixture>
     public async Task Gets_Redirects()
     {
         var created = await Fixture.Create();
-        var obj = await Fixture.Service.GetAsync(created.Id.Value);
+        var obj = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(obj);
         Assert.True(obj.Id.HasValue);
@@ -89,7 +89,7 @@ public class RedirectTests : IClassFixture<RedirectTestsFixture>
         created.Target = newVal;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;

@@ -41,7 +41,7 @@ public class ShopifyDomainUtilityTest
     public async Task IsValidShopDomainAsync_ReturnsTrueForShopifyDomains()
     {
         // Act
-        var isValid = await _utility.IsValidShopDomainAsync("example.myshopify.com");
+        var isValid = await _utility.IsValidShopDomainAsync("example.myshopify.com", cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         isValid.Should().BeTrue();
@@ -53,7 +53,7 @@ public class ShopifyDomainUtilityTest
     public async Task IsValidShopDomainAsync_ReturnsFalseForNonShopifyDomains(string shopDomain)
     {
         // Act
-        var isValid = await _utility.IsValidShopDomainAsync(shopDomain);
+        var isValid = await _utility.IsValidShopDomainAsync(shopDomain, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         isValid.Should().BeFalse();
@@ -90,7 +90,7 @@ public class ShopifyDomainUtilityTest
         var sut = new ShopifyDomainUtility(serviceProvider);
 
         // Act
-        var isValid = await sut.IsValidShopDomainAsync("example.myshopify.com");
+        var isValid = await sut.IsValidShopDomainAsync("example.myshopify.com", cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         isValid.Should().BeTrue();
@@ -125,7 +125,7 @@ public class ShopifyDomainUtilityTest
         var sut = new ShopifyDomainUtility(serviceProvider);
 
         // Act
-        var isValid = await sut.IsValidShopDomainAsync("example.myshopify.com");
+        var isValid = await sut.IsValidShopDomainAsync("example.myshopify.com", cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         isValid.Should().Be(shouldPass, "the header value {0} is {1}", headerValue, shouldPass ? "valid" : "not valid");

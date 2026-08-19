@@ -16,7 +16,7 @@ public class ShippingZoneTests
     [Fact]
     public async Task Lists_ShippingZones()
     {
-        var shippingZones = await Service.ListAsync();
+        var shippingZones = await Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(shippingZones);
 

@@ -17,7 +17,7 @@ public class LocationTests
     [Fact(Skip = "read_locations scope is required as of 2024-10")]
     public async Task Lists_Locations()
     {
-        var list = await Service.ListAsync();
+        var list = await Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(list);
     }
@@ -25,13 +25,13 @@ public class LocationTests
     [Fact(Skip = "read_locations scope is required as of 2024-10")]
     public async Task Gets_Locations()
     {
-        var list = await Service.ListAsync();
+        var list = await Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Not all shops have a location.
         if (list.Items.Count() > 0)
         {
             long id = list.Items.First().Id.Value;
-            var location = await Service.GetAsync(id);
+            var location = await Service.GetAsync(id, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(location.Address1);
             Assert.True(location.Id.HasValue);

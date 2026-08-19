@@ -20,7 +20,7 @@ public class CollectionTests : IClassFixture<CollectionTestsFixture>
     [Fact]
     public async Task Gets_Collects()
     {
-        var collect = await this.Fixture.Service.GetAsync(this.Fixture.CollectionId);
+        var collect = await this.Fixture.Service.GetAsync(this.Fixture.CollectionId, cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.NotNull(collect);
         Assert.Equal("Things", collect.Title);
@@ -34,7 +34,7 @@ public class CollectionTests : IClassFixture<CollectionTestsFixture>
     [Fact]
     public async Task Lists_Products_Belonging_To_Collection()
     {
-        var products = await this.Fixture.Service.ListProductsAsync(this.Fixture.CollectionId);
+        var products = await this.Fixture.Service.ListProductsAsync(this.Fixture.CollectionId, cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.NotNull(products);
         Assert.False(products.HasNextPage);
@@ -82,7 +82,7 @@ public class CollectionTestsFixture : IAsyncLifetime
         CustomCollectionService.SetExecutionPolicy(policy);
 
         // Create a custom collection to use with these tests.
-        var collection = await CustomCollectionService.CreateAsync(new CustomCollection()
+        var collection = await CustomCollectionService.CreateAsync(new CustomCollection
         {
             Title = "Things",
             Published = false,
@@ -91,7 +91,7 @@ public class CollectionTestsFixture : IAsyncLifetime
             {
                 Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
             }
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         CollectionId = collection.Id.Value;
 
@@ -105,8 +105,8 @@ public class CollectionTestsFixture : IAsyncLifetime
         {
             try
             {
-                await CollectService.DeleteAsync(obj.Id.Value);
-                await ProductService.DeleteAsync(obj.ProductId.Value);
+                await CollectService.DeleteAsync(obj.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
+                await ProductService.DeleteAsync(obj.ProductId.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -120,7 +120,7 @@ public class CollectionTestsFixture : IAsyncLifetime
         // Delete the collection
         if (CollectionId != 0)
         {
-            await CustomCollectionService.DeleteAsync(CollectionId);
+            await CustomCollectionService.DeleteAsync(CollectionId, cancellationToken: TestContext.Current.CancellationToken);
         }
     }
 
@@ -130,7 +130,7 @@ public class CollectionTestsFixture : IAsyncLifetime
     public async Task<Collect> Create(bool skipAddToCreatedList = false)
     {
         // Create a product to use with these tests.
-        var product = await ProductService.CreateAsync(new ShopifySharp.Product()
+        var product = await ProductService.CreateAsync(new ShopifySharp.Product
         {
             CreatedAt = DateTime.UtcNow,
             Title = "Burton Custom Freestlye 151",
@@ -140,12 +140,12 @@ public class CollectionTestsFixture : IAsyncLifetime
             Handle = Guid.NewGuid().ToString(),
             Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
             PublishedScope = "published"
-        });
-        var obj = await CollectService.CreateAsync(new Collect()
+        }, cancellationToken: TestContext.Current.CancellationToken);
+        var obj = await CollectService.CreateAsync(new Collect
         {
             CollectionId = CollectionId,
             ProductId = product.Id.Value,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         if (!skipAddToCreatedList)
         {

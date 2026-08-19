@@ -19,7 +19,7 @@ public class TenderTransactionTests : IClassFixture<TenderTransactionTestsFixtur
     [Fact]
     public async Task Lists_TenderTransactions()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.True(list.Items.Any());
     }
@@ -30,7 +30,7 @@ public class TenderTransactionTests : IClassFixture<TenderTransactionTestsFixtur
         var list = await Fixture.Service.ListAsync(new TenderTransactionListFilter
         {
             ProcessedAtMin = DateTime.Now.AddDays(30)
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(!list.Items.Any());
     }

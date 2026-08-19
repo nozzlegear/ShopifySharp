@@ -22,7 +22,7 @@ public class PriceRuleTests : IClassFixture<PriceRuleTestsFixture>
     [Fact]
     public async Task Lists_PriceRules()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -36,7 +36,7 @@ public class PriceRuleTests : IClassFixture<PriceRuleTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -53,7 +53,7 @@ public class PriceRuleTests : IClassFixture<PriceRuleTestsFixture>
     {
         string suffix = Guid.NewGuid().ToString();
         var created = await Fixture.Create(suffix);
-        var rule = await Fixture.Service.GetAsync(created.Id.Value);
+        var rule = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(rule);
         Assert.Equal(Fixture.ValueType, rule.ValueType);
@@ -88,7 +88,7 @@ public class PriceRuleTests : IClassFixture<PriceRuleTestsFixture>
         created.Value = -5.0m;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;

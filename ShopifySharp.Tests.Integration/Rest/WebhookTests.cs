@@ -22,7 +22,7 @@ public class WebhookTests : IClassFixture<WebhookTestsFixture>
     [Fact]
     public async Task Counts_Webhooks()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -30,7 +30,7 @@ public class WebhookTests : IClassFixture<WebhookTestsFixture>
     [Fact]
     public async Task Lists_Webhooks()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -43,7 +43,7 @@ public class WebhookTests : IClassFixture<WebhookTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -58,7 +58,7 @@ public class WebhookTests : IClassFixture<WebhookTestsFixture>
     [Fact]
     public async Task Gets_Webhooks()
     {
-        var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+        var obj = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(obj);
         Assert.True(obj.Id.HasValue);
@@ -87,7 +87,7 @@ public class WebhookTests : IClassFixture<WebhookTestsFixture>
         created.Address = newValue;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;

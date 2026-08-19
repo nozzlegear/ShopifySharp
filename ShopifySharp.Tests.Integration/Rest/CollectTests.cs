@@ -23,7 +23,7 @@ public class CollectTests : IClassFixture<CollectTestsFixture>
     [Fact]
     public async Task Counts_Collects()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count >= 0);
     }
@@ -31,7 +31,7 @@ public class CollectTests : IClassFixture<CollectTestsFixture>
     [Fact]
     public async Task Lists_Collects()
     {
-        var collects = await Fixture.Service.ListAsync();
+        var collects = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(collects.Items.Any());
     }
@@ -43,7 +43,7 @@ public class CollectTests : IClassFixture<CollectTestsFixture>
         var collects = await Fixture.Service.ListAsync(new CollectListFilter()
         {
             ProductId = productId,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(collects.Items.Any());
         Assert.All(collects.Items, collect => Assert.True(collect.ProductId > 0));
@@ -52,7 +52,7 @@ public class CollectTests : IClassFixture<CollectTestsFixture>
     [Fact]
     public async Task Gets_Collects()
     {
-        var collect = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+        var collect = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(collect);
         Assert.True(collect.Id.HasValue);
@@ -63,12 +63,12 @@ public class CollectTests : IClassFixture<CollectTestsFixture>
     [Fact]
     public async Task Deletes_Collects()
     {
-        var created = await Fixture.Create(true);
+        var created = await Fixture.Create(true, cancellationToken: TestContext.Current.CancellationToken);
         bool thrown = false;
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -83,7 +83,7 @@ public class CollectTests : IClassFixture<CollectTestsFixture>
     [Fact]
     public async Task Creates_Collects()
     {
-        var collect = await Fixture.Create();
+        var collect = await Fixture.Create(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(collect);
         Assert.True(collect.Id.HasValue);
@@ -126,12 +126,12 @@ public class CollectTestsFixture : IAsyncLifetime
             {
                 Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw=="
             }
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         CollectionId = collection.Id.Value;
 
         // Create a collection to use with get, list, count, etc. tests.
-        await Create();
+        await Create(cancellationToken: TestContext.Current.CancellationToken);
     }
 
     public async System.Threading.Tasks.ValueTask DisposeAsync()
@@ -140,8 +140,8 @@ public class CollectTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(obj.Id.Value);
-                await ProductService.DeleteAsync(obj.ProductId.Value);
+                await Service.DeleteAsync(obj.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
+                await ProductService.DeleteAsync(obj.ProductId.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -155,7 +155,7 @@ public class CollectTestsFixture : IAsyncLifetime
         // Delete the collection
         try
         {
-            await CustomCollectionService.DeleteAsync(CollectionId);
+            await CustomCollectionService.DeleteAsync(CollectionId, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyHttpException ex) when ((int)ex.HttpStatusCode == 404)
         {
@@ -166,7 +166,7 @@ public class CollectTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<Collect> Create(bool skipAddToCreatedList = false)
+    public async Task<Collect> Create(bool skipAddToCreatedList = false, System.Threading.CancellationToken cancellationToken = default)
     {
         // Create a product to use with these tests.
         var product = await ProductService.CreateAsync(new ShopifySharp.Product()
@@ -179,12 +179,12 @@ public class CollectTestsFixture : IAsyncLifetime
             Handle = Guid.NewGuid().ToString(),
             Images = new List<ProductImage> { new ProductImage { Attachment = "R0lGODlhAQABAIAAAAAAAAAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" } },
             PublishedScope = "published"
-        });
+        }, cancellationToken: cancellationToken);
         var obj = await Service.CreateAsync(new Collect()
         {
             CollectionId = CollectionId,
             ProductId = product.Id.Value,
-        });
+        }, cancellationToken: cancellationToken);
 
         if (!skipAddToCreatedList)
         {

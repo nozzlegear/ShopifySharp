@@ -21,7 +21,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
         await fixture.Create(orderId);
 
         // Act
-        var list = await fixture.Service.ListAsync(orderId);
+        var list = await fixture.Service.ListAsync(orderId, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         list.Items.Should().NotBeEmpty();
@@ -35,7 +35,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
         var created = await fixture.Create(orderId, true);
 
         // Act
-        var act = async () => await fixture.Service.DeleteAsync(orderId, created.Id!.Value);
+        var act = async () => await fixture.Service.DeleteAsync(orderId, created.Id!.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().NotThrowAsync("the service should delete order risk with id {0}", created.Id);
@@ -49,7 +49,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
         var created = await fixture.Create(orderId);
 
         // Act
-        var risk = await fixture.Service.GetAsync(orderId, created.Id!.Value);
+        var risk = await fixture.Service.GetAsync(orderId, created.Id!.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         risk.Should().NotBeNull();
@@ -93,7 +93,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
         created.Id = null;
 
         // Act
-        var updated = await fixture.Service.UpdateAsync(orderId, createdId, created);
+        var updated = await fixture.Service.UpdateAsync(orderId, createdId, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = createdId;

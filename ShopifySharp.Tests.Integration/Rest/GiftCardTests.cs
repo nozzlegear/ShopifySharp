@@ -21,21 +21,21 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
     [Fact(Skip = "Cannot run without a Shopify Plus account.")]
     public async Task Counts_GiftCards()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(count > 0);
     }
 
     [Fact(Skip = "Cannot run without a Shopify Plus account.")]
     public async Task Counts_GiftCards_With_A_Filter()
     {
-        var enabledCount = await Fixture.Service.CountAsync(new GiftCardCountFilter { Status = "enabled" });
+        var enabledCount = await Fixture.Service.CountAsync(new GiftCardCountFilter { Status = "enabled" }, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(enabledCount > 0);
     }
 
     [Fact(Skip = "Cannot run without a Shopify Plus account.")]
     public async Task Lists_GiftCards()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Any());
     }
@@ -46,7 +46,7 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
         var list = await Fixture.Service.ListAsync(new GiftCardListFilter()
         {
             Status = "enabled"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Any());
     }
@@ -56,7 +56,7 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
     {
         // Find an id 
         var created = Fixture.Created.First();
-        var giftCard = await Fixture.Service.GetAsync(created.Id.Value);
+        var giftCard = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(giftCard);
         Assert.Equal(GiftCardValue, giftCard.InitialValue);
@@ -93,7 +93,7 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
         created.ExpiresOn = date;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -111,7 +111,7 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
         created.Note = note;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -124,7 +124,7 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
     public async Task Disable_GiftCards()
     {
         var created = await Fixture.Create(GiftCardValue);
-        var disabled = await Fixture.Service.DisableAsync(created.Id.Value);
+        var disabled = await Fixture.Service.DisableAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(disabled.DisabledAt.HasValue);
     }
@@ -136,7 +136,7 @@ public class GiftCardTests : IClassFixture<GiftCardTestsFixture>
         var customCode = Guid.NewGuid().ToString();
         customCode = customCode.Substring(customCode.Length - 20);
         await Fixture.Create(GiftCardValue, customCode);
-        var search = await Fixture.Service.SearchAsync(new GiftCardSearchFilter { Query = "initial_value:" + GiftCardValue });
+        var search = await Fixture.Service.SearchAsync(new GiftCardSearchFilter { Query = "initial_value:" + GiftCardValue }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(search.Items.Any());
     }
@@ -170,7 +170,7 @@ public class GiftCardTestsFixture : IAsyncLifetime
             }
         }
     }
-    public async Task<GiftCard> Create(decimal value, string code = null)
+    public async Task<GiftCard> Create(decimal value, string code = null!)
     {
         var giftCardRequest = new GiftCard() { InitialValue = value };
         if (!string.IsNullOrEmpty(code))

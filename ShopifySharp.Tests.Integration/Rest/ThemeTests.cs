@@ -22,7 +22,7 @@ public class ThemeTests : IClassFixture<ThemeTestsFixture>
     [Fact]
     public async Task Lists_Themes()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Count() > 0);
     }
@@ -35,7 +35,7 @@ public class ThemeTests : IClassFixture<ThemeTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -51,7 +51,7 @@ public class ThemeTests : IClassFixture<ThemeTestsFixture>
     public async Task Gets_Themes()
     {
         var created = await Fixture.Create();
-        var obj = await Fixture.Service.GetAsync(created.Id.Value);
+        var obj = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(obj);
         Assert.True(obj.Id.HasValue);
@@ -91,7 +91,7 @@ public class ThemeTests : IClassFixture<ThemeTestsFixture>
         created.Name = newValue;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;

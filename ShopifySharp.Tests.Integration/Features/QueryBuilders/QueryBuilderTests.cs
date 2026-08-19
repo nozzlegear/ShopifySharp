@@ -24,7 +24,7 @@ public class QueryBuilderTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var request = GraphRequest.FromQueryBuilder(query);
 
         // Act
-        var result = await _sut.PostAsync(request);
+        var result = await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();
@@ -86,7 +86,7 @@ public class QueryBuilderTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var request = GraphRequest.FromQueryBuilder(query);
 
         // Act
-        var result = await _sut.PostAsync(request);
+        var result = await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();
@@ -104,7 +104,7 @@ public class QueryBuilderTests(VerifyFixture verifyFixture, GraphServiceFixture 
         firstPageQuery.PageInfo(pageInfo => pageInfo.HasNextPage().EndCursor());
 
         var firstPageRequest = GraphRequest.FromQueryBuilder(firstPageQuery);
-        var firstPageResult = await _sut.PostAsync(firstPageRequest);
+        var firstPageResult = await _sut.PostAsync(firstPageRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Fail if there's no next page
         if (firstPageResult.Data.pageInfo?.hasNextPage != true)
@@ -121,7 +121,7 @@ public class QueryBuilderTests(VerifyFixture verifyFixture, GraphServiceFixture 
         var secondPageRequest = GraphRequest.FromQueryBuilder(secondPageQuery);
 
         // Act
-        var secondPageResult = await _sut.PostAsync(secondPageRequest);
+        var secondPageResult = await _sut.PostAsync(secondPageRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         secondPageResult.Data.Should().NotBeNull();

@@ -79,9 +79,13 @@ public class ShopifyExceptionTests
                 // This request will return a response which looks like { errors: "some error message"}
                 using (var msg = PrepareRequest(HttpMethod.Get, "api_permissions/current.json"))
                 {
-                    var req = client.SendAsync(msg);
+                    var req = client.SendAsync(msg, cancellationToken: TestContext.Current.CancellationToken);
                     response = await req;
+#if NET472
                     rawBody = await response.Content.ReadAsStringAsync();
+#else
+                    rawBody = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
                     try
                     {
@@ -121,9 +125,13 @@ public class ShopifyExceptionTests
                 // This request will return a response which looks like { errors: { "order" : "some error message" } }
                 using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new { })))
                 {
-                    var req = client.SendAsync(msg);
+                    var req = client.SendAsync(msg, cancellationToken: TestContext.Current.CancellationToken);
                     response = await req;
+#if NET472
                     rawBody = await response.Content.ReadAsStringAsync();
+#else
+                    rawBody = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
                     try
                     {
@@ -199,9 +207,13 @@ public class ShopifyExceptionTests
                 // This request will return a response which looks like { errors: { "order" : [ "some error message" ] } }
                 using (var msg = PrepareRequest(HttpMethod.Post, "orders.json", new JsonContent(new { order })))
                 {
-                    var req = client.SendAsync(msg);
+                    var req = client.SendAsync(msg, cancellationToken: TestContext.Current.CancellationToken);
                     response = await req;
+#if NET472
                     rawBody = await response.Content.ReadAsStringAsync();
+#else
+                    rawBody = await response.Content.ReadAsStringAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
                     try
                     {

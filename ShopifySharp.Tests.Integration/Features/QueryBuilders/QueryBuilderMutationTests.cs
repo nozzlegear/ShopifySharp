@@ -41,7 +41,7 @@ public class QueryBuilderMutationTests(GraphServiceFixture graphServiceFixture, 
         try
         {
             // Act
-            var result = await _sut.PostAsync(request);
+            var result = await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
             // Assert
             result.Data.userErrors.Should().BeNullOrEmpty("article creation should not have errors");
@@ -89,7 +89,7 @@ public class QueryBuilderMutationTests(GraphServiceFixture graphServiceFixture, 
         try
         {
             // Act
-            var result = await _sut.PostAsync(request);
+            var result = await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
             // Assert
             result.Data.userErrors.Should().BeNullOrEmpty("article update should not have errors");
@@ -119,7 +119,7 @@ public class QueryBuilderMutationTests(GraphServiceFixture graphServiceFixture, 
         var request = GraphRequest.FromQueryBuilder(query);
 
         // Act
-        var result = await _sut.PostAsync(request);
+        var result = await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.userErrors.Should().BeNullOrEmpty("article deletion should not have errors");
@@ -144,7 +144,7 @@ public class QueryBuilderMutationTests(GraphServiceFixture graphServiceFixture, 
         query.UserErrors(errors => errors.Message());
 
         var request = GraphRequest.FromQueryBuilder(query);
-        var result = await _sut.PostAsync(request);
+        var result = await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         result.Data.article.Should().NotBeNull();
         return result.Data.article!.id!;
@@ -157,6 +157,6 @@ public class QueryBuilderMutationTests(GraphServiceFixture graphServiceFixture, 
         query.DeletedArticleId();
 
         var request = GraphRequest.FromQueryBuilder(query);
-        await _sut.PostAsync(request);
+        await _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
     }
 }

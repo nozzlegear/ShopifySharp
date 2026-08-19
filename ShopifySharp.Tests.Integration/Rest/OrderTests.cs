@@ -19,7 +19,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
     [Fact]
     public async Task Counts_Orders()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -27,7 +27,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
     [Fact]
     public async Task Lists_Orders()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -40,7 +40,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
         var list = await Fixture.Service.ListAsync(new OrderListFilter()
         {
             Ids = ids
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.All(list.Items, o => Assert.Contains(o.Id.Value, ids));
     }
@@ -53,7 +53,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -68,7 +68,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
     [Fact]
     public async Task Gets_Orders()
     {
-        var order = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+        var order = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(order);
         Assert.Equal(Fixture.Note, order.Note);
@@ -95,7 +95,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
         created.Note = note;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -107,8 +107,8 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
     public async Task Opens_Orders()
     {
         // Close an order before opening it.
-        var closed = await Fixture.Service.CloseAsync(Fixture.Created.First().Id.Value);
-        var opened = await Fixture.Service.OpenAsync(closed.Id.Value);
+        var closed = await Fixture.Service.CloseAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
+        var opened = await Fixture.Service.OpenAsync(closed.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(opened.ClosedAt.HasValue);
     }
@@ -116,7 +116,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
     [Fact]
     public async Task Closes_Orders()
     {
-        var closed = await Fixture.Service.CloseAsync(Fixture.Created.Last().Id.Value);
+        var closed = await Fixture.Service.CloseAsync(Fixture.Created.Last().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(closed.ClosedAt.HasValue);
     }
@@ -129,7 +129,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
 
         try
         {
-            await Fixture.Service.CancelAsync(order.Id.Value);
+            await Fixture.Service.CancelAsync(order.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -152,7 +152,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
             await Fixture.Service.CancelAsync(order.Id.Value, new OrderCancelOptions()
             {
                 Reason = "customer"
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -172,7 +172,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
 
         try
         {
-            await Fixture.Service.GetMetaFieldsAsync(order.Id.Value);
+            await Fixture.Service.GetMetaFieldsAsync(order.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -192,7 +192,7 @@ public class OrderTests : IClassFixture<OrderTestsFixture>
         var updated = await Fixture.Service.UpdateAsync(created.Id.Value, new Order()
         {
             Note = newNote
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(created.Id, updated.Id);
         Assert.Equal(newNote, updated.Note);

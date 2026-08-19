@@ -33,7 +33,7 @@ public class ExecuteRequestCancellationTests
             return base.ExecuteGetAsync<T>(path, resultRootElt, fields, cancellationToken);
         }
 
-        public Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null, CancellationToken cancellationToken = default)
+        public Task<T> ExecuteGetAsync<T>(string path, string resultRootElt, Parameterizable queryParams = null!, CancellationToken cancellationToken = default)
         {
             Thread.Sleep(_delay);
             return base.ExecuteGetAsync<T>(path, resultRootElt, queryParams, cancellationToken);
@@ -45,13 +45,13 @@ public class ExecuteRequestCancellationTests
             return base.ExecuteGetListAsync(path, resultRootElt, filter, cancellationToken);
         }
             
-        public Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
+        public Task<T> ExecutePostAsync<T>(string path, string resultRootElt, object jsonContent = null!, CancellationToken cancellationToken = default)
         {
             Thread.Sleep(_delay);
             return base.ExecutePostAsync<T>(path, resultRootElt, cancellationToken, jsonContent);
         }
 
-        public Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null, CancellationToken cancellationToken = default)
+        public Task<T> ExecutePutAsync<T>(string path, string resultRootElt, object jsonContent = null!, CancellationToken cancellationToken = default)
         {
             Thread.Sleep(_delay);
             return base.ExecutePutAsync<T>(path, resultRootElt, cancellationToken, jsonContent);
@@ -63,7 +63,7 @@ public class ExecuteRequestCancellationTests
             return base.ExecuteDeleteAsync(path, cancellationToken);
         }
 
-        public Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null, CancellationToken cancellationToken = default)
+        public Task<RequestResult<JToken>> ExecuteRequestAsync(RequestUri uri, HttpMethod method, HttpContent content = null!, CancellationToken cancellationToken = default)
         {
             Thread.Sleep(_delay);
             return base.ExecuteRequestAsync(uri, method, cancellationToken, content);
@@ -78,7 +78,7 @@ public class ExecuteRequestCancellationTests
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
         {
-            var task = service.ExecuteGetListAsync<object>(string.Empty, string.Empty, null, cts.Token);
+            var task = service.ExecuteGetListAsync<object>(string.Empty, string.Empty, null!, cts.Token);
 
             cts.Cancel();
 
@@ -126,7 +126,7 @@ public class ExecuteRequestCancellationTests
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
         {
-            var task = service.ExecutePutAsync<object>(string.Empty, string.Empty, null, cts.Token);
+            var task = service.ExecutePutAsync<object>(string.Empty, string.Empty, null!, cts.Token);
 
             cts.Cancel();
 
@@ -142,7 +142,7 @@ public class ExecuteRequestCancellationTests
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
         {
-            var task = service.ExecutePostAsync<object>(string.Empty, string.Empty, null, cts.Token);
+            var task = service.ExecutePostAsync<object>(string.Empty, string.Empty, null!, cts.Token);
 
             cts.Cancel();
 
@@ -174,7 +174,7 @@ public class ExecuteRequestCancellationTests
 
         await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
         {
-            var task = service.ExecuteRequestAsync(new RequestUri(new Uri("http://unreachable")), HttpMethod.Get, null, cts.Token);
+            var task = service.ExecuteRequestAsync(new RequestUri(new Uri("http://unreachable")), HttpMethod.Get, null!, cts.Token);
 
             cts.Cancel();
 

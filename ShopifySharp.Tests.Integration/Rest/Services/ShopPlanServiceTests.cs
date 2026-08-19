@@ -56,7 +56,7 @@ public class ShopPlanServiceTests
     public async Task GetShopPlanAsync_ShouldGetThePlanAsync()
     {
         // Act
-        var result = await _sut.GetShopPlanAsync();
+        var result = await _sut.GetShopPlanAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();
@@ -69,7 +69,7 @@ public class ShopPlanServiceTests
     public async Task IsPartnerDevelopmentPlanAsync_ShouldCheckIfTheShopIsOnADevPlan()
     {
         // Act
-        var result = await _sut.IsPartnerDevelopmentShopAsync();
+        var result = await _sut.IsPartnerDevelopmentShopAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().BeTrue();

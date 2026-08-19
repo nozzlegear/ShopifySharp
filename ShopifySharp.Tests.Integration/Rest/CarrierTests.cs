@@ -22,7 +22,7 @@ public class CarrierTests : IClassFixture<CarrierTestsFixture>
     [Fact(Skip = "Shopify won't let us create more than one random carrier.")]
     public async Task Lists_Carriers()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Count() >= 0);
     }
@@ -31,8 +31,8 @@ public class CarrierTests : IClassFixture<CarrierTestsFixture>
     public async Task Gets_Carriers()
     {
         var created = await Fixture.Create();
-        var carrier = await Fixture.Service.GetAsync(created.Id.Value);
-        await Fixture.Service.DeleteAsync(created.Id.Value);
+        var carrier = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
+        await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(carrier);
         Assert.True(carrier.Id.HasValue);
@@ -47,7 +47,7 @@ public class CarrierTests : IClassFixture<CarrierTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -64,7 +64,7 @@ public class CarrierTests : IClassFixture<CarrierTestsFixture>
     public async Task Creates_Carriers()
     {
         var carrier = await Fixture.Create();
-        await Fixture.Service.DeleteAsync(carrier.Id.Value);
+        await Fixture.Service.DeleteAsync(carrier.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(carrier);
         Assert.True(carrier.Id.HasValue);
@@ -81,8 +81,8 @@ public class CarrierTests : IClassFixture<CarrierTestsFixture>
         created.CallbackUrl = newCallbackUrl;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
-        await Fixture.Service.DeleteAsync(updated.Id.Value);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
+        await Fixture.Service.DeleteAsync(updated.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(newCallbackUrl, updated.CallbackUrl);
     }
@@ -110,7 +110,7 @@ public class CarrierTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(obj.Id.Value);
+                await Service.DeleteAsync(obj.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -131,7 +131,7 @@ public class CarrierTestsFixture : IAsyncLifetime
         string name = $"DERP DERP {uid}";
         string cb = $"{CallbackUrl}{uid}";
 
-        var obj = await Service.CreateAsync(new Carrier()
+var obj = await Service.CreateAsync(new Carrier()
         {
             Name = name,
             Active = false,
@@ -139,7 +139,7 @@ public class CarrierTestsFixture : IAsyncLifetime
             CarrierServiceType = "api",
             ServiceDiscovery = true,
             Format = "json"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         return obj;
     }

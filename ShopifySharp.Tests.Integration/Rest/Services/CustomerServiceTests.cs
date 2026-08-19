@@ -22,7 +22,7 @@ public class CustomerServiceTests(
     [Fact]
     public async Task Counts_Customers()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -30,7 +30,7 @@ public class CustomerServiceTests(
     [Fact]
     public async Task Lists_Customers()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -43,7 +43,7 @@ public class CustomerServiceTests(
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -58,7 +58,7 @@ public class CustomerServiceTests(
     [Fact]
     public async Task Gets_Customers()
     {
-        var customer = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+        var customer = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(customer);
         Assert.Equal(Fixture.FirstName, customer.FirstName);
@@ -71,7 +71,7 @@ public class CustomerServiceTests(
     [Fact]
     public async Task Gets_Customers_With_Options()
     {
-        var customer = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, "first_name,last_name");
+        var customer = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, "first_name,last_name", cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(customer);
         Assert.Equal(Fixture.FirstName, customer.FirstName);
@@ -122,7 +122,7 @@ public class CustomerServiceTests(
         created.FirstName = firstName;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -144,7 +144,7 @@ public class CustomerServiceTests(
         {
             Password = "loktarogar",
             PasswordConfirmation = "loktarogar"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -165,14 +165,14 @@ public class CustomerServiceTests(
         };
 
         // Act
-        var search = await Fixture.Service.SearchAsync(filter);
+        var search = await Fixture.Service.SearchAsync(filter, cancellationToken: TestContext.Current.CancellationToken);
 
         while (!search.Items.Any() && searchTry < 4)
         {
             // The search index has a bit of a delay to it. Try up to 4 times before asserting.
             searchTry++;
-            await Task.Delay(1000);
-            search = await Fixture.Service.SearchAsync(filter);
+            await Task.Delay(1000, TestContext.Current.CancellationToken);
+            search = await Fixture.Service.SearchAsync(filter, cancellationToken: TestContext.Current.CancellationToken);
         }
 
         // Assert
@@ -194,7 +194,7 @@ public class CustomerServiceTests(
         {
             FirstName = newFirstName,
             LastName = newLastName
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Equal(created.Id, updated.Id);
         Assert.Equal(newFirstName, updated.FirstName);
@@ -209,7 +209,7 @@ public class CustomerServiceTests(
     public async Task SendInvite_Customers_Default()
     {
         var created = await Fixture.Create();
-        var invite = await Fixture.Service.SendInviteAsync(created.Id.Value);
+        var invite = await Fixture.Service.SendInviteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(invite);
     }
@@ -224,7 +224,7 @@ public class CustomerServiceTests(
             CustomMessage = "Custom Message courtesy of ShopifySharp"
         };
 
-        var invite = await Fixture.Service.SendInviteAsync(created.Id.Value, options);
+        var invite = await Fixture.Service.SendInviteAsync(created.Id.Value, options, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(invite);
         Assert.Equal(options.Subject, invite.Subject);
@@ -235,7 +235,7 @@ public class CustomerServiceTests(
     public async Task GetAccountActivationUrl_Customers()
     {
         var created = await Fixture.Create();
-        var url = await Fixture.Service.GetAccountActivationUrl(created.Id.Value);
+        var url = await Fixture.Service.GetAccountActivationUrl(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(url);
         Assert.Contains("account/activate", url);
@@ -252,7 +252,7 @@ public class CustomerServiceTests(
         var orders = await Fixture.Service.ListOrdersForCustomerAsync(created.Id.Value, new CustomerOrderListFilter
         {
             Status = "any"
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         orders
@@ -324,7 +324,7 @@ public class CustomerServiceTestsFixture : IAsyncLifetime
         }
     }
 
-    public async Task<Customer> Create(bool skipAddToCreatedList = false, CustomerCreateOptions options = null)
+    public async Task<Customer> Create(bool skipAddToCreatedList = false, CustomerCreateOptions options = null!)
     {
         var obj = await Service.CreateAsync(new Customer()
         {

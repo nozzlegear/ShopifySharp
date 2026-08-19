@@ -22,7 +22,7 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     [Fact]
     public async Task Lists_Addresses()
     {
-        var Addresss = await Fixture.Service.ListAsync(Fixture.CustomerId.Value);
+        var Addresss = await Fixture.Service.ListAsync(Fixture.CustomerId.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(Addresss.Items.Count() > 0);
     }
@@ -30,12 +30,12 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     [Fact]
     public async Task Deletes_Addresses()
     {
-        var created = await Fixture.Create(Fixture.RandomStreetAddress(), true);
+        var created = await Fixture.Create(Fixture.RandomStreetAddress(), true, cancellationToken: TestContext.Current.CancellationToken);
         var threw = false;
 
         try
         {
-            await Fixture.Service.DeleteAsync(Fixture.CustomerId.Value, created.Id.Value);
+            await Fixture.Service.DeleteAsync(Fixture.CustomerId.Value, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -51,8 +51,8 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     public async Task Gets_Addresses()
     {
         var streetAddress = Fixture.RandomStreetAddress();
-        var created = await Fixture.Create(streetAddress);
-        var address = await Fixture.Service.GetAsync(Fixture.CustomerId.Value, created.Id.Value);
+        var created = await Fixture.Create(streetAddress, cancellationToken: TestContext.Current.CancellationToken);
+        var address = await Fixture.Service.GetAsync(Fixture.CustomerId.Value, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(address);
         Assert.Equal(streetAddress, address.Address1);
@@ -64,7 +64,7 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     public async Task Creates_Addresses()
     {
         var streetAddress = Fixture.RandomStreetAddress();
-        var created = await Fixture.Create(streetAddress);
+        var created = await Fixture.Create(streetAddress, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
         Assert.Equal(streetAddress, created.Address1);
@@ -77,7 +77,7 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
     {
         const string firstName = "Jane";
         const string lastName = "Doe";
-        var created = await Fixture.Create(Fixture.RandomStreetAddress());
+        var created = await Fixture.Create(Fixture.RandomStreetAddress(), cancellationToken: TestContext.Current.CancellationToken);
         var id = created.Id.Value;
 
         created.FirstName = firstName;
@@ -85,7 +85,7 @@ public class CustomerAddressTests : IClassFixture<CustomerAddressTestsFixture>
         created.Name = null;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(Fixture.CustomerId.Value, id, created);
+        var updated = await Fixture.Service.UpdateAsync(Fixture.CustomerId.Value, id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -119,7 +119,7 @@ public class CustomerAddressTestsFixture : IAsyncLifetime
         Service.SetExecutionPolicy(policy);
         CustomerService.SetExecutionPolicy(policy);
 
-        var customers = await CustomerService.ListAsync();
+        var customers = await CustomerService.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         CustomerId = customers.Items.First().Id;
 
@@ -133,7 +133,7 @@ public class CustomerAddressTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(CustomerId.Value, Address.Id.Value);
+                await Service.DeleteAsync(CustomerId.Value, Address.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -148,7 +148,7 @@ public class CustomerAddressTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Gets an object from the list of already created objects, or creates the object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<Address> Create(string streetAddress, bool skipAddToDeleteList = false)
+    public async Task<Address> Create(string streetAddress, bool skipAddToDeleteList = false, System.Threading.CancellationToken cancellationToken = default)
     {
         var obj = await Service.CreateAsync(CustomerId.Value, new Address()
         {
@@ -163,7 +163,7 @@ public class CustomerAddressTestsFixture : IAsyncLifetime
             Company = "Tomorrow Corporation",
             Country = "United States",
             CountryCode = "US",
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         if (!skipAddToDeleteList)
         {

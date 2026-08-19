@@ -63,7 +63,7 @@ public class MetaObjectQueryTests(VerifyFixture verifyFixture, GraphServiceFixtu
         };
 
         // Act
-        var result = await _sut.PostAsync<MutationResponse<MetaobjectUpsertPayload>>(graphRequest);
+        var result = await _sut.PostAsync<MutationResponse<MetaobjectUpsertPayload>>(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         await Verify(result.Data, _verifySettings);

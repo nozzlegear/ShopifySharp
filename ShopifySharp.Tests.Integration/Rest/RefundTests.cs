@@ -29,22 +29,23 @@ public class RefundTests : IClassFixture<RefundTestsFixture>
     public async Task Get_Refund_And_List()
     {
         //CalculateAsync
-        var order = await Fixture.OrderService.GetAsync(Fixture.Created.First().Id.Value);
+        //CalculateAsync
+        var order = await Fixture.OrderService.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         var requestedRefund = Prepare_Calculate(order);
-        var calculateResponse = await Fixture.Service.CalculateAsync(order.Id.Value, requestedRefund);
+        var calculateResponse = await Fixture.Service.CalculateAsync(order.Id.Value, requestedRefund, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(calculateResponse.Transactions.Count<Transaction>() > 0, "No transactions for order!"); //Perhaps something is unexpected with the order, or call/response was malformed."
 
         //RefundAsync
         var fullRefundForAnOrder = Prepare_Refund(calculateResponse);
-        var refundResponse = await Fixture.Service.RefundAsync(order.Id.Value, fullRefundForAnOrder);
+        var refundResponse = await Fixture.Service.RefundAsync(order.Id.Value, fullRefundForAnOrder, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(refundResponse.ProcessedAt.HasValue && refundResponse.ProcessedAt > DateTime.UtcNow.AddDays(-1), "Refund was not processed"); //Order was not processed, thus was not successfully refunded"
 
         //ListForOrderAsync
-        var getRefundsForOrder = await Fixture.Service.ListForOrderAsync(order.Id.Value);
+        var getRefundsForOrder = await Fixture.Service.ListForOrderAsync(order.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(getRefundsForOrder.Items.First().Id.HasValue, "No refunds received!"); //Likely the creation of a refund or the retrieval of refunds weren't successful"
 
         //GetAsync
-        var getSpecificRefund = await Fixture.Service.GetAsync(order.Id.Value, getRefundsForOrder.Items.First().Id.Value);
+        var getSpecificRefund = await Fixture.Service.GetAsync(order.Id.Value, getRefundsForOrder.Items.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         Assert.True(getSpecificRefund.Id.HasValue, "No refund received!"); //Either refund wasn't successful or Refund Id may be incorrect."
     }
 

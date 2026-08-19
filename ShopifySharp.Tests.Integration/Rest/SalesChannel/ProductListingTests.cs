@@ -20,7 +20,7 @@ public class ProductListingTests : IClassFixture<ProductListingTestsFixture>
     [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
     public async Task Counts_Products()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -28,7 +28,7 @@ public class ProductListingTests : IClassFixture<ProductListingTestsFixture>
     [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
     public async Task Lists_Products_NoFilter()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Any());
         if (list.LinkHeader != null)
@@ -85,7 +85,7 @@ public class ProductListingTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<Product> Create(bool skipAddToCreateList = false, ProductCreateOptions options = null)
+    public async Task<Product> Create(bool skipAddToCreateList = false, ProductCreateOptions options = null!)
     {
         var obj = await ProductService.CreateAsync(new Product()
         {

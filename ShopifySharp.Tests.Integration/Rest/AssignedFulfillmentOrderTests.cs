@@ -19,7 +19,7 @@ public class AssignedFulfillmentOrderTests : IClassFixture<AssignedFulfillmentOr
     [Fact]
     public async Task ListsCancellationRequests_AssignedFulfillmentOrders()
     {
-        var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter(){AssignmentStatus = "cancellation_requested" });
+        var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter(){AssignmentStatus = "cancellation_requested" }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(result);
     }
@@ -27,7 +27,7 @@ public class AssignedFulfillmentOrderTests : IClassFixture<AssignedFulfillmentOr
     [Fact]
     public async Task ListsRequests_AssignedFulfillmentOrders()
     {
-        var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_requested" });
+        var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_requested" }, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(result);
         }
@@ -35,7 +35,7 @@ public class AssignedFulfillmentOrderTests : IClassFixture<AssignedFulfillmentOr
         [Fact]
         public async Task ListsAcceptedRequests_AssignedFulfillmentOrders()
         {
-            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_accepted" });
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_accepted" }, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(result);
         }
@@ -43,7 +43,7 @@ public class AssignedFulfillmentOrderTests : IClassFixture<AssignedFulfillmentOr
         [Fact]
         public async Task ListsUnsubmittedFulfillmentOrders_AssignedFulfillmentOrders()
         {
-            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_unsubmitted", Limit = 1 });
+            var result = await Fixture.Service.ListAsync(new AssignedFulfillmentOrderFilter() { AssignmentStatus = "fulfillment_unsubmitted", Limit = 1 }, cancellationToken: TestContext.Current.CancellationToken);
 
             Assert.NotNull(result);
         }

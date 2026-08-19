@@ -93,7 +93,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -148,7 +148,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -181,7 +181,7 @@ public class GraphServicePostAsyncTests
             .Throws(expectedInnerException);
 
         // Act
-        var act= async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act= async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -217,16 +217,16 @@ public class GraphServicePostAsyncTests
             if (childIsProblematic)
             {
                 if (isAbstract)
-                    await _sut.PostAsync<InvalidDeserializationTestWithInvalidChild<TestFooBase>>(graphRequest);
+                    await _sut.PostAsync<InvalidDeserializationTestWithInvalidChild<TestFooBase>>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
                 else
-                    await _sut.PostAsync<InvalidDeserializationTestWithInvalidChild<ITestFoo>>(graphRequest);
+                    await _sut.PostAsync<InvalidDeserializationTestWithInvalidChild<ITestFoo>>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
             }
             else
             {
                 if (isAbstract)
-                    await _sut.PostAsync<InvalidDeserializationTestRecord>(graphRequest);
+                    await _sut.PostAsync<InvalidDeserializationTestRecord>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
                 else
-                    await _sut.PostAsync<IInvalidDeserializationTestInterface>(graphRequest);
+                    await _sut.PostAsync<IInvalidDeserializationTestInterface>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
             }
         };
 
@@ -259,7 +259,7 @@ public class GraphServicePostAsyncTests
             .Throws(new NotSupportedException(exceptionMessage));
 
         // Act
-        var act = async () => await _sut.PostAsync<IInvalidDeserializationTestInterface>(graphRequest);
+        var act = async () => await _sut.PostAsync<IInvalidDeserializationTestInterface>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         const string expectedJsonPath = "data"; // JsonPath falls back to "data" when GetOffendingPathFromMessage() returns null
@@ -328,7 +328,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -376,7 +376,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
@@ -408,7 +408,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -447,7 +447,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest);
+        var act = async () => await _sut.PostAsync<TestGraphOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -482,7 +482,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson));
 
         // Act
-        var result = await _sut.PostAsync<BulkOperation>(graphRequest);
+        var result = await _sut.PostAsync<BulkOperation>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();
@@ -511,7 +511,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson));
 
         // Act
-        var result = await _sut.PostAsync<BulkOperation>(new GraphRequest { Query = "..." });
+        var result = await _sut.PostAsync<BulkOperation>(new GraphRequest { Query = "..." }, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();
@@ -541,7 +541,7 @@ public class GraphServicePostAsyncTests
 
         // Act
         // Using a wrapper class even though the query contains a single property
-        var result = await _sut.PostAsync<BulkOperationWrapper>(graphRequest);
+        var result = await _sut.PostAsync<BulkOperationWrapper>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         // Should deserialize to the wrapper type
@@ -570,7 +570,7 @@ public class GraphServicePostAsyncTests
         // Act
         // Deserialize using a wrapper class because the query contains more than one property
         var graphRequest = new GraphRequest { Query = "query { bulkOperation { id } shop { name } }" };
-        var result = await _sut.PostAsync<MultiWrapper>(graphRequest);
+        var result = await _sut.PostAsync<MultiWrapper>(graphRequest, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         // Should deserialize to the wrapper class
@@ -628,7 +628,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -685,7 +685,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -718,7 +718,7 @@ public class GraphServicePostAsyncTests
             .Throws(expectedInnerException);
 
         // Act
-        var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -745,7 +745,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act= async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -814,7 +814,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -861,7 +861,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
@@ -894,7 +894,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -942,7 +942,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<ShopifyJsonParseException>()
@@ -974,7 +974,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType);
+        var act = async () => await _sut.PostAsync(graphRequest, expectedReturnType, TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -999,7 +999,7 @@ public class GraphServicePostAsyncTests
         var graphRequest = graphRequestIsNull ? null : new GraphRequest<GraphQL.Shop> { Query = null };
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest!);
+        var act = async () => await _sut.PostAsync(graphRequest!, TestContext.Current.CancellationToken);
 
         // Assert
         var parameterName = graphRequestIsNull ? "graphRequest" : "Query";
@@ -1041,7 +1041,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var result = await _sut.PostAsync(graphRequest);
+        var result = await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();
@@ -1113,7 +1113,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest);
+        var act = async () => await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should()
@@ -1158,7 +1158,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest);
+        var act = async () => await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         if (userErrorHandling == GraphRequestUserErrorHandling.Throw)
@@ -1198,7 +1198,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest);
+        var act = async () => await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -1242,7 +1242,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest);
+        var act = async () => await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -1288,7 +1288,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var result = await _sut.PostAsync(graphRequest);
+        var result = await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Should().NotBeNull();
@@ -1328,7 +1328,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var act = async () => await _sut.PostAsync(graphRequest);
+        var act = async () => await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         var exn = await act.Should()
@@ -1372,7 +1372,7 @@ public class GraphServicePostAsyncTests
             .Returns(Utils.MakeRequestResult(responseJson, x => x.RequestId = expectedRequestId));
 
         // Act
-        var result = await _sut.PostAsync(graphRequest);
+        var result = await _sut.PostAsync(graphRequest, TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();

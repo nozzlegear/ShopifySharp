@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
 
@@ -22,7 +17,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
     [Fact]
     public async Task Counts_Blogs()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -30,7 +25,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
     [Fact]
     public async Task Lists_Blogs()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -39,7 +34,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
     public async Task Gets_Blogs()
     {
         var id = Fixture.Created.First().Id.Value;
-        var blog = await Fixture.Service.GetAsync(id);
+        var blog = await Fixture.Service.GetAsync(id, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(blog.Id.HasValue);
         Assert.StartsWith(Fixture.Title, blog.Title);
@@ -54,7 +49,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id!.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -85,7 +80,7 @@ public class BlogTests : IClassFixture<BlogTestsFixture>
         created.Commentable = "yes";
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -104,7 +99,7 @@ public class BlogTestsFixture : IAsyncLifetime
 
     public string Commentable => "moderate";
 
-    public async System.Threading.Tasks.ValueTask InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
 
@@ -112,13 +107,13 @@ public class BlogTestsFixture : IAsyncLifetime
         await Create();
     }
 
-    public async System.Threading.Tasks.ValueTask DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         foreach (var obj in Created)
         {
             try
             {
-                await Service.DeleteAsync(obj.Id.Value);
+                await Service.DeleteAsync(obj.Id!.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -139,7 +134,7 @@ public class BlogTestsFixture : IAsyncLifetime
         {
             Title = $"{Title} #{Guid.NewGuid()}",
             Commentable = Commentable,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         if (!skipAddToCreatedList)
         {

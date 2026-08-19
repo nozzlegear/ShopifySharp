@@ -40,7 +40,7 @@ public class DiscountCodeTests : IClassFixture<DiscountCodesTestsFixture>
         var list = await Fixture.DiscountCodeService.ListAsync(priceRuleId, new PriceRuleDiscountCodeListFilter
         {
             Limit = 5
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotEmpty(list.Items);
     }
@@ -50,7 +50,7 @@ public class DiscountCodeTests : IClassFixture<DiscountCodesTestsFixture>
     {
         var code = UniqueCode("UNIT_TEST_GET");
         var created = await Fixture.Create(code);
-        var discount = await Fixture.DiscountCodeService.GetAsync(created.PriceRuleId.Value, created.Id.Value);
+        var discount = await Fixture.DiscountCodeService.GetAsync(created.PriceRuleId.Value, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(discount);
         Assert.Equal(code, discount.Code);
@@ -61,7 +61,7 @@ public class DiscountCodeTests : IClassFixture<DiscountCodesTestsFixture>
     {
         var code = UniqueCode("UNIT_TEST_GET_BY_CODE");
         var created = await Fixture.Create(code);
-        var retrieved = await Fixture.DiscountCodeService.GetAsync(code);
+        var retrieved = await Fixture.DiscountCodeService.GetAsync(code, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(retrieved);
         Assert.Equal(code, retrieved.Code);
@@ -76,8 +76,7 @@ public class DiscountCodeTests : IClassFixture<DiscountCodesTestsFixture>
         var created = await Fixture.Create(oldCode);
         created.Code = newCode;
 
-        var updated = await Fixture.DiscountCodeService.UpdateAsync(created.PriceRuleId.Value, created);
-
+        var updated = await Fixture.DiscountCodeService.UpdateAsync(created.PriceRuleId.Value, created, cancellationToken: TestContext.Current.CancellationToken);
         Assert.NotNull(updated);
         Assert.Equal(newCode, updated.Code);
     }

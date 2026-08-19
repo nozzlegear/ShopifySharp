@@ -33,7 +33,7 @@ public class CloneableRequestMessageTests
         cloneableRequest.Dispose();
 
         // Act
-        var clonedRequest = async () => await cloneableRequest.CloneAsync();
+        var clonedRequest = async () => await cloneableRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await clonedRequest.Should().ThrowAsync<ObjectDisposedException>();
@@ -47,7 +47,7 @@ public class CloneableRequestMessageTests
         cloneableRequest.Headers.Add("some-key", "some-value");
 
         // Act
-        var clonedRequest = await cloneableRequest.CloneAsync();
+        var clonedRequest = await cloneableRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         clonedRequest.Should().NotBeNull();
@@ -70,7 +70,7 @@ public class CloneableRequestMessageTests
         cloneableRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
-        var clonedRequest = await cloneableRequest.CloneAsync();
+        var clonedRequest = await cloneableRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         clonedRequest.Should().NotBeNull();
@@ -105,7 +105,7 @@ public class CloneableRequestMessageTests
         cloneableRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
-        var clonedRequest = await cloneableRequest.CloneAsync();
+        var clonedRequest = await cloneableRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         clonedRequest.Should().NotBeNull();
@@ -140,7 +140,7 @@ public class CloneableRequestMessageTests
         cloneableRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
-        var clonedRequest = await cloneableRequest.CloneAsync();
+        var clonedRequest = await cloneableRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         clonedRequest.Should().NotBeNull();
@@ -175,7 +175,7 @@ public class CloneableRequestMessageTests
         baseRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
-        var clonedRequest = await baseRequest.CloneAsync();
+        var clonedRequest = await baseRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         clonedRequest.Should().NotBeNull();
@@ -211,7 +211,7 @@ public class CloneableRequestMessageTests
         baseRequest.Headers.Add("some-key-2", "some-value-2");
 
         // Act
-        var clonedRequest = await baseRequest.CloneAsync();
+        var clonedRequest = await baseRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         clonedRequest.Should().NotBeNull();
@@ -251,7 +251,7 @@ public class CloneableRequestMessageTests
         {
             for (var i = 0; i < 5; i++)
             {
-                var clonedRequest = await baseRequest.CloneAsync();
+                var clonedRequest = await baseRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
 
                 // Assert
                 clonedRequest.Should().NotBeNull();
@@ -290,7 +290,7 @@ public class CloneableRequestMessageTests
         {
             for (var i = 0; i < 3; i++)
             {
-                var clonedRequest = await baseRequest.CloneAsync();
+                var clonedRequest = await baseRequest.CloneAsync(cancellationToken: TestContext.Current.CancellationToken);
                 clonedRequest.Dispose();
             }
         };

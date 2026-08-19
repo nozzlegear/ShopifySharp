@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using EmptyAssert = ShopifySharp.Tests.Integration.Rest.Extensions.EmptyExtensions;
@@ -23,7 +24,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Counts_Metafields()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -31,7 +32,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Counts_Metafields_On_Resources()
     {
-        var count = await Fixture.Service.CountAsync(Fixture.ResourceId, Fixture.ResourceType);
+        var count = await Fixture.Service.CountAsync(Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -39,7 +40,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Counting_Metafields_On_Resources_Downcases_ResourceType()
     {
-        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.CountAsync(Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.CountAsync(Fixture.ResourceId, Fixture.ResourceType.ToUpper(), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Null(exn);
     }
@@ -47,7 +48,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Counts_Metafields_On_Resources_And_Parent()
     {
-        var count = await Fixture.Service.CountAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
+        var count = await Fixture.Service.CountAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -55,7 +56,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Counting_Metafields_On_Resources_And_Parent_Downcases_ResourceTypes()
     {
-        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.CountAsync(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.CountAsync(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper(), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Null(exn);
     }
@@ -63,7 +64,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Lists_Metafields()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
     }
@@ -71,7 +72,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Lists_Metafields_On_Resources()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType);
+        var list = await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
     }
@@ -79,7 +80,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Listing_Metafields_On_Resources_Downcases_ResourceType()
     {
-        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.ListAsync(Fixture.ResourceId, Fixture.ResourceType.ToUpper(), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Null(exn);
     }
@@ -87,7 +88,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Lists_Metafields_On_Resources_And_Parent()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
+        var list = await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.Contains(list.Items, i => i.Namespace == Fixture.Namespace && i.Description == Fixture.Description);
     }
@@ -95,7 +96,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Listing_Metafields_On_Resources_And_Parent_Downcases_ResourceTypes()
     {
-        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+        var exn = await Record.ExceptionAsync(async () => await Fixture.Service.ListAsync(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper(), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Null(exn);
     }
@@ -103,12 +104,12 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Deletes_Metafields()
     {
-        var created = await Fixture.Create(true);
+        var created = await Fixture.Create(cancellationToken: TestContext.Current.CancellationToken);
         var threw = false;
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -123,7 +124,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Creates_Metafields()
     {
-        var created = await Fixture.Create();
+        var created = await Fixture.Create(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
         Assert.Equal(Fixture.Namespace, created.Namespace);
@@ -135,7 +136,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Creates_Metafields_On_Resources()
     {
-        var created = await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType);
+        var created = await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
         Assert.Equal(Fixture.Namespace, created.Namespace);
@@ -149,7 +150,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Creating_Metafields_On_Resources_Downcases_ResourceType()
     {
-        var exn = await Record.ExceptionAsync(async () => await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+        var exn = await Record.ExceptionAsync(async () => await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType.ToUpper(), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Null(exn);
     }
@@ -157,7 +158,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Creates_Metafields_On_Resources_And_Parent()
     {
-        var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
+        var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
         Assert.Equal(Fixture.Namespace, created.Namespace);
@@ -171,7 +172,7 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     [Fact]
     public async Task Creating_Metafields_On_Resources_And_Parent_Downcases_ResourceTypes()
     {
-        var exn = await Record.ExceptionAsync(async () => await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper()));
+        var exn = await Record.ExceptionAsync(async () => await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType.ToUpper(), Fixture.ResourceId, Fixture.ResourceType.ToUpper(), cancellationToken: TestContext.Current.CancellationToken));
 
         Assert.Null(exn);
     }
@@ -180,13 +181,13 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     public async Task Updates_Metafields()
     {
         var value = "10";
-        var created = await Fixture.Create();
+        var created = await Fixture.Create(cancellationToken: TestContext.Current.CancellationToken);
         var id = created.Id.Value;
 
         created.Value = value;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -198,13 +199,13 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     public async Task Updates_Metafields_On_Resources()
     {
         var value = "10";
-        var created = await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType);
+        var created = await Fixture.Create(Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
         var id = created.Id.Value;
 
         created.Value = value;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -216,13 +217,13 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     public async Task Updates_Metafields_On_Child_Resources()
     {
         var value = "10";
-        var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType);
+        var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, cancellationToken: TestContext.Current.CancellationToken);
         var id = created.Id.Value;
 
         created.Value = value;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -234,13 +235,13 @@ public class MetaFieldTests : IClassFixture<MetaFieldTestsFixture>
     public async Task Updates_Metafields_On_Resources_And_Parent()
     {
         var value = "10";
-        var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType);
+        var created = await Fixture.Create(Fixture.ChildResourceId, Fixture.ChildResourceType, Fixture.ResourceId, Fixture.ResourceType, cancellationToken: TestContext.Current.CancellationToken);
         var id = created.Id.Value;
 
         created.Value = value;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -274,7 +275,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
         ProductService.SetExecutionPolicy(policy);
 
         // Get or create a product to add metafields to.
-        var products = await ProductService.ListAsync();
+        var products = await ProductService.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         if (products.Items.Any())
         {
             ResourceId = products.Items.First().Id.Value;
@@ -288,15 +289,15 @@ public class MetaFieldTestsFixture : IAsyncLifetime
                 Title = $"MetaField Test Product - {_uniqueId}",
                 BodyHtml = "<strong>Created for MetaFieldTests</strong>",
                 Handle = Guid.NewGuid().ToString(),
-            });
+            }, cancellationToken: TestContext.Current.CancellationToken);
             ResourceId = product.Id.Value;
             ChildResourceId = product.Variants.First().Id.Value;
         }
 
         // Create a metafield for use in count, list, get, etc. tests.
-        await Create();
-        await Create(ResourceId, ResourceType);
-        await Create(ChildResourceId, ChildResourceType, ResourceId, ResourceType);
+        await Create(cancellationToken: TestContext.Current.CancellationToken);
+        await Create(ResourceId, ResourceType, cancellationToken: TestContext.Current.CancellationToken);
+        await Create(ChildResourceId, ChildResourceType, ResourceId, ResourceType, cancellationToken: TestContext.Current.CancellationToken);
     }
 
     public async System.Threading.Tasks.ValueTask DisposeAsync()
@@ -305,7 +306,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(obj.Id.Value);
+                await Service.DeleteAsync(obj.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -320,7 +321,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<MetaField> Create(bool skipAddToCreatedList = false)
+    public async Task<MetaField> Create(bool skipAddToCreatedList = false, CancellationToken cancellationToken = default)
     {
         var obj = await Service.CreateAsync(new MetaField()
         {
@@ -329,7 +330,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
             Value = "5",
             Type = "integer",
             Description = Description,
-        });
+        }, cancellationToken: cancellationToken);
 
         if (!skipAddToCreatedList)
         {
@@ -342,7 +343,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<MetaField> Create(long targetId, string resourceType, bool skipAddToCreatedList = false)
+    public async Task<MetaField> Create(long targetId, string resourceType, bool skipAddToCreatedList = false, CancellationToken cancellationToken = default)
     {
         var obj = await Service.CreateAsync(new MetaField()
         {
@@ -351,7 +352,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
             Value = "5",
             Type = "integer",
             Description = Description,
-        }, targetId, resourceType);
+        }, targetId, resourceType, cancellationToken: cancellationToken);
 
         if (!skipAddToCreatedList)
         {
@@ -364,7 +365,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
     /// <summary>
     /// Convenience function for running tests. Creates an object and automatically adds it to the queue for deleting after tests finish.
     /// </summary>
-    public async Task<MetaField> Create(long targetId, string resourceType, long parentTargetId, string parentResourceType, bool skipAddToCreatedList = false)
+    public async Task<MetaField> Create(long targetId, string resourceType, long parentTargetId, string parentResourceType, bool skipAddToCreatedList = false, CancellationToken cancellationToken = default)
     {
         var obj = await Service.CreateAsync(new MetaField()
         {
@@ -373,7 +374,7 @@ public class MetaFieldTestsFixture : IAsyncLifetime
             Value = "5",
             Type = "integer",
             Description = Description,
-        }, targetId, resourceType, parentTargetId, parentResourceType);
+        }, targetId, resourceType, parentTargetId, parentResourceType, cancellationToken: cancellationToken);
 
         if (!skipAddToCreatedList)
         {

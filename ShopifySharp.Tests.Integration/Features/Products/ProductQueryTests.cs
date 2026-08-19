@@ -134,7 +134,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Act
-        var products = await _sut.PostAsync<GetProductsQueryResponse>(request);
+        var products = await _sut.PostAsync<GetProductsQueryResponse>(request, TestContext.Current.CancellationToken);
 
         // Assert - vendor filter should return our 2 products (may include others from partial matches)
         var foundIds = products.Data.Products.Nodes.Select(p => p.id).ToHashSet();
@@ -215,7 +215,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
        };
 
        // Act
-       var result = await _sut.PostAsync<ListProductsResult>(graphRequest);
+       var result = await _sut.PostAsync<ListProductsResult>(graphRequest, TestContext.Current.CancellationToken);
 
        // Assert - our product should be in the results (may include others from partial matches)
        var foundIds = result.Data.Products.edges.Select(e => e.node!.id).ToHashSet();
@@ -288,7 +288,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Act
-        var result = await _sut.PostAsync<CreateProductResponse>(request);
+        var result = await _sut.PostAsync<CreateProductResponse>(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Result.Product.Should().NotBeNull();
@@ -368,7 +368,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Act
-        var result = await _sut.PostAsync<UpdateProductResponse>(request);
+        var result = await _sut.PostAsync<UpdateProductResponse>(request, TestContext.Current.CancellationToken);
 
         // Assert
         result.Data.Result.Product.title.Should().Be(expectedNewTitle);
@@ -439,7 +439,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Act
-        var result = await _sut.PostAsync<UpdateProductOptionsResponse>(request);
+        var result = await _sut.PostAsync<UpdateProductOptionsResponse>(request, TestContext.Current.CancellationToken);
         var updatedProduct = result.Data.Result.Product;
         var updatedVariants = updatedProduct.Variants.Nodes;
 
@@ -523,7 +523,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Act
-        var result = await _sut.PostAsync<DeleteProductOptionsResponse>(request);
+        var result = await _sut.PostAsync<DeleteProductOptionsResponse>(request, TestContext.Current.CancellationToken);
         var updatedProduct = result.Data.Result.Product;
 
         // Assert
@@ -600,7 +600,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Assert
-        var result = await _sut.PostAsync<PublishedProductResponse>(request);
+        var result = await _sut.PostAsync<PublishedProductResponse>(request, TestContext.Current.CancellationToken);
         var statusUpdateResult = result.Data.ProductStatusUpdateResult.Product;
         var publicationResult = result.Data.PublicationResult.Product;
 
@@ -668,7 +668,7 @@ public class ProductQueryTests(VerifyFixture verifyFixture, GraphServiceFixture 
         };
 
         // Assert
-        var result = await _sut.PostAsync<PublishedProductResponse>(request);
+        var result = await _sut.PostAsync<PublishedProductResponse>(request, TestContext.Current.CancellationToken);
         var statusUpdateResult = result.Data.ProductStatusUpdateResult.Product;
         var publicationResult = result.Data.PublicationResult.Product;
 

@@ -22,7 +22,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
     [Fact]
     public async Task Counts_DraftOrders()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -30,7 +30,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
     [Fact]
     public async Task Lists_DraftOrders()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -43,7 +43,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -59,7 +59,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
     public async Task Gets_DraftOrders()
     {
         var created = await Fixture.Create();
-        created = await Fixture.Service.GetAsync(created.Id.Value);
+        created = await Fixture.Service.GetAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created);
         Assert.True(created.Id.HasValue);
@@ -102,7 +102,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
         created.Note = newNote;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -122,7 +122,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
             To = to,
             Subject = subject,
             CustomMessage = message,
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.False(String.IsNullOrEmpty(result.From), "`From` should not be null or empty");
         Assert.Equal(to, result.To);
@@ -134,7 +134,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
     public async Task Completes_DraftOrder()
     {
         var created = await Fixture.Create();
-        created = await Fixture.Service.CompleteAsync(created.Id.Value);
+        created = await Fixture.Service.CompleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created.CompletedAt);
         Assert.Equal("completed", created.Status);
@@ -144,7 +144,7 @@ public class DraftOrderTests : IClassFixture<DraftOrderTestsFixture>
     public async Task Completes_DraftOrder_With_Pending_Payment()
     {
         var created = await Fixture.Create();
-        created = await Fixture.Service.CompleteAsync(created.Id.Value, true);
+        created = await Fixture.Service.CompleteAsync(created.Id.Value, true, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(created.CompletedAt);
         Assert.Equal("completed", created.Status);

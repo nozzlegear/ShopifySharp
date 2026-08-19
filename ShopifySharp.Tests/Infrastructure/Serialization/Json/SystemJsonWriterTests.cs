@@ -40,13 +40,17 @@ public class SystemJsonWriterTests
 
         // Act
         _sut.WriteNullValue();
-        await _jsonWriter.FlushAsync();
+        await _jsonWriter.FlushAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         _stream.Position = 0;
 
         using var streamReader = new StreamReader(_stream);
+#if NET472
         var json = await streamReader.ReadToEndAsync();
+#else
+        var json = await streamReader.ReadToEndAsync(cancellationToken: TestContext.Current.CancellationToken);
+#endif
 
         json.Should().Be(expectedJson, "the writer should write the literal string \"{0}\" to the stream", expectedJson);
     }

@@ -91,7 +91,7 @@ public class GraphServiceTests
             .Throws<TestException>();
 
         // Act
-        var act = () => _sut.PostAsync(request);
+        var act = () => _sut.PostAsync(request, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         await act.Should().ThrowAsync<TestException>();
@@ -145,7 +145,7 @@ public class GraphServiceTests
         var document = JsonDocument.Parse(json);
         var element = new SystemJsonElement(document.RootElement.GetProperty("data"));
         var systemJsonSerializer = new SystemJsonSerializer(Serializer.GraphSerializerOptions);
-        var result = await systemJsonSerializer.DeserializeAsync<GetSubscriptionContractResult>(element);
+        var result = await systemJsonSerializer.DeserializeAsync<GetSubscriptionContractResult>(element, cancellationToken: TestContext.Current.CancellationToken);
 
         // Assert
         result.Should().NotBeNull();

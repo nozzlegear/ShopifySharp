@@ -20,7 +20,7 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Lists_FulfillmentOrders()
     {
         var order = Fixture.CreatedOrders.First();
-        var result = await Fixture.Service.ListAsync(order.Id.Value);
+        var result = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
             
         Assert.NotNull(result);
         Assert.NotEmpty(result);
@@ -30,10 +30,10 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Get_FulfillmentOrders()
     {
         var order = Fixture.CreatedOrders.First();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         var fulfillmentOrder = fulfillmentOrders.First();
 
-        var result = await Fixture.Service.GetAsync(fulfillmentOrder.Id.Value);
+        var result = await Fixture.Service.GetAsync(fulfillmentOrder.Id.Value, TestContext.Current.CancellationToken);
 
         Assert.Equal(fulfillmentOrder.Id.Value, result.Id.Value);
     }
@@ -42,11 +42,11 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Cancel_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         //for canceling, RequestStatus must be unsubmitted
-        var result = await Fixture.Service.CancelAsync(fulfillmentOrder.Id.Value);
+        var result = await Fixture.Service.CancelAsync(fulfillmentOrder.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("closed", result.Status);
     }
@@ -55,15 +55,15 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Close_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest() 
         {
             Message = "Testing Fulfillment Order",
-        });
-        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
-        var result = await Fixture.Service.CloseAsync(fulfillmentOrder.Id.Value, "Testing Done");
+        }, TestContext.Current.CancellationToken);
+        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing", TestContext.Current.CancellationToken);
+        var result = await Fixture.Service.CloseAsync(fulfillmentOrder.Id.Value, "Testing Done", TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("incomplete", result.Status);
     }
@@ -72,14 +72,14 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Hold_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         var result = await Fixture.Service.HoldAsync(fulfillmentOrder.Id.Value, new FulfillmentHold()
         {
             Reason = "other",
             ReasonNotes = "Testing Hold",
-        });
+        }, TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("on_hold", result.Status);
     }
@@ -88,16 +88,16 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Move_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest()
         {
             Message = "Testing Fulfillment Order",
-        });
-        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
+        }, TestContext.Current.CancellationToken);
+        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing", TestContext.Current.CancellationToken);
         Assert.Equal(Fixture.LocationId.Value, fulfillmentOrder.AssignedLocationId.Value);
-        var result = await Fixture.Service.MoveAsync(fulfillmentOrder.Id.Value,  Fixture.OtherLocationId);
+        var result = await Fixture.Service.MoveAsync(fulfillmentOrder.Id.Value,  Fixture.OtherLocationId, TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.NotNull(result.MovedFulfillmentOrder);
         Assert.Equal(Fixture.OtherLocationId, result.MovedFulfillmentOrder.AssignedLocationId.Value);
@@ -107,15 +107,15 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Open_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest()
         {
             Message = "Testing Fulfillment Order",
-        });
-        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
-        var result = await Fixture.Service.OpenAsync(fulfillmentOrder.Id.Value);
+        }, TestContext.Current.CancellationToken);
+        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing", TestContext.Current.CancellationToken);
+        var result = await Fixture.Service.OpenAsync(fulfillmentOrder.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("scheduled", result.Status);
     }
@@ -124,18 +124,18 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Release_Hold_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         fulfillmentOrder = await Fixture.Service.HoldAsync(fulfillmentOrder.Id.Value, new FulfillmentHold()
         {
             Reason = "other",
             ReasonNotes = "Testing Hold",
-        });
+        }, TestContext.Current.CancellationToken);
         Assert.NotNull(fulfillmentOrder);
         Assert.Equal("on_hold", fulfillmentOrder.Status);
 
-        var result = await Fixture.Service.ReleaseHoldAsync(fulfillmentOrder.Id.Value);
+        var result = await Fixture.Service.ReleaseHoldAsync(fulfillmentOrder.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("open", result.Status);
     }
@@ -144,15 +144,15 @@ public class FulfillmentOrderTests : IClassFixture<FulfillmentOrderTestsFixture>
     public async Task Reschedule_FulfillmentOrders()
     {
         var order = await Fixture.CreateOrder();
-        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value);
+        var fulfillmentOrders = await Fixture.Service.ListAsync(order.Id.Value, TestContext.Current.CancellationToken);
         Assert.NotEmpty(fulfillmentOrders);
         var fulfillmentOrder = fulfillmentOrders.First();
         fulfillmentOrder = await Fixture.FulfillmentRequestService.CreateAsync(fulfillmentOrder.Id.Value, new FulfillmentRequest()
         {
             Message = "Testing Fulfillment Order",
-        });
-        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing");
-        var result = await Fixture.Service.RescheduleAsync(fulfillmentOrder.Id.Value, DateTimeOffset.UtcNow.AddDays(1));
+        }, TestContext.Current.CancellationToken);
+        fulfillmentOrder = await Fixture.FulfillmentRequestService.AcceptAsync(fulfillmentOrder.Id.Value, "Testing", TestContext.Current.CancellationToken);
+        var result = await Fixture.Service.RescheduleAsync(fulfillmentOrder.Id.Value, DateTimeOffset.UtcNow.AddDays(1), TestContext.Current.CancellationToken);
         Assert.NotNull(result);
         Assert.Equal("scheduled", result.Status);
     }
@@ -309,7 +309,7 @@ public class FulfillmentOrderTestsFixture : IAsyncLifetime
         return list.First();
     }
 
-    public async Task<Fulfillment> CreateFulfillment(long fulfillmentOrderId, IEnumerable<FulfillmentOrderLineItem> items = null)
+    public async Task<Fulfillment> CreateFulfillment(long fulfillmentOrderId, IEnumerable<FulfillmentOrderLineItem> items = null!)
     {
         Fulfillment fulfillment;
 

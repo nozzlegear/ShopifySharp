@@ -22,7 +22,7 @@ public class CustomCollectionTests : IClassFixture<CustomCollectionTestsFixture>
     [Fact]
     public async Task Counts_CustomCollections()
     {
-        var count = await Fixture.Service.CountAsync();
+        var count = await Fixture.Service.CountAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -30,7 +30,7 @@ public class CustomCollectionTests : IClassFixture<CustomCollectionTestsFixture>
     [Fact]
     public async Task Lists_CustomCollections()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -38,7 +38,7 @@ public class CustomCollectionTests : IClassFixture<CustomCollectionTestsFixture>
     [Fact]
     public async Task Gets_CustomCollections()
     {
-        var collection = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value);
+        var collection = await Fixture.Service.GetAsync(Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(collection);
         Assert.True(collection.Id.HasValue);
@@ -53,7 +53,7 @@ public class CustomCollectionTests : IClassFixture<CustomCollectionTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(created.Id.Value);
+            await Fixture.Service.DeleteAsync(created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -86,7 +86,7 @@ public class CustomCollectionTests : IClassFixture<CustomCollectionTestsFixture>
         created.Title = newTitle;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(id, created);
+        var updated = await Fixture.Service.UpdateAsync(id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;
@@ -117,7 +117,7 @@ public class CustomCollectionTestsFixture : IAsyncLifetime
         {
             try
             {
-                await Service.DeleteAsync(obj.Id.Value);
+                await Service.DeleteAsync(obj.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
             }
             catch (ShopifyHttpException ex)
             {
@@ -134,11 +134,11 @@ public class CustomCollectionTestsFixture : IAsyncLifetime
     /// </summary>
     public async Task<CustomCollection> Create(bool skipAddToCreatedList = false)
     {
-        var obj = await Service.CreateAsync(new CustomCollection()
+        var obj = await Service.CreateAsync(new CustomCollection
         {
             Title = Title,
             Published = false
-        });
+        }, cancellationToken: TestContext.Current.CancellationToken);
 
         if (!skipAddToCreatedList)
         {

@@ -23,7 +23,7 @@ public class ProductImageTests : IClassFixture<ProductImageTestsFixture>
     [Fact]
     public async Task Counts_ProductImages()
     {
-        var count = await Fixture.Service.CountAsync(Fixture.ProductId);
+        var count = await Fixture.Service.CountAsync(Fixture.ProductId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(count > 0);
     }
@@ -31,7 +31,7 @@ public class ProductImageTests : IClassFixture<ProductImageTestsFixture>
     [Fact]
     public async Task Lists_ProductImages()
     {
-        var list = await Fixture.Service.ListAsync(Fixture.ProductId);
+        var list = await Fixture.Service.ListAsync(Fixture.ProductId, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Count() > 0);
     }
@@ -44,7 +44,7 @@ public class ProductImageTests : IClassFixture<ProductImageTestsFixture>
 
         try
         {
-            await Fixture.Service.DeleteAsync(Fixture.ProductId, created.Id.Value);
+            await Fixture.Service.DeleteAsync(Fixture.ProductId, created.Id.Value, cancellationToken: TestContext.Current.CancellationToken);
         }
         catch (ShopifyException ex)
         {
@@ -59,7 +59,7 @@ public class ProductImageTests : IClassFixture<ProductImageTestsFixture>
     [Fact]
     public async Task Gets_ProductImages()
     {
-        var image = await Fixture.Service.GetAsync(Fixture.ProductId, Fixture.Created.First().Id.Value);
+        var image = await Fixture.Service.GetAsync(Fixture.ProductId, Fixture.Created.First().Id.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(image);
         Assert.True(image.Id.HasValue);
@@ -86,7 +86,7 @@ public class ProductImageTests : IClassFixture<ProductImageTestsFixture>
         created.Alt = newAlt;
         created.Id = null;
 
-        var updated = await Fixture.Service.UpdateAsync(created.ProductId.Value, id, created);
+        var updated = await Fixture.Service.UpdateAsync(created.ProductId.Value, id, created, cancellationToken: TestContext.Current.CancellationToken);
 
         // Reset the id so the Fixture can properly delete this object.
         created.Id = id;

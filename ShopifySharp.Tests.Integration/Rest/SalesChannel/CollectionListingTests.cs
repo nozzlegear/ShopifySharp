@@ -17,7 +17,7 @@ public class CollectionListingTests : IClassFixture<CollectionListingTestsFixtur
     [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
     public async Task Lists_Collections_NoFilter()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.True(list.Items.Any());
         if (list.LinkHeader != null)
@@ -31,10 +31,10 @@ public class CollectionListingTests : IClassFixture<CollectionListingTestsFixtur
     [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
     public async Task Lists_Collection_ProductIds_NoFilter()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         var actual = list.Items.First();
 
-        var productIds = await Fixture.Service.ListIdsAsync(actual.CollectionId.Value);
+        var productIds = await Fixture.Service.ListIdsAsync(actual.CollectionId.Value, cancellationToken: TestContext.Current.CancellationToken);
             
         Assert.True(productIds.Items.Any());
         if (list.LinkHeader != null)
@@ -48,10 +48,10 @@ public class CollectionListingTests : IClassFixture<CollectionListingTestsFixtur
     [Fact(Skip = "Sales channel tests cannot be run with ShopifySharp's private/custom app.")]
     public async Task Retrieve_Specific_Collection()
     {
-        var list = await Fixture.Service.ListAsync();
+        var list = await Fixture.Service.ListAsync(cancellationToken: TestContext.Current.CancellationToken);
         var actual = list.Items.First();
 
-        var extected = await Fixture.Service.GetAsync(actual.CollectionId.Value);
+        var extected = await Fixture.Service.GetAsync(actual.CollectionId.Value, cancellationToken: TestContext.Current.CancellationToken);
 
         Assert.NotNull(extected);
         Assert.Equal(extected.CollectionId, actual.CollectionId);

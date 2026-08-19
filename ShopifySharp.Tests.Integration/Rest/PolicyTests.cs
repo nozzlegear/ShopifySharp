@@ -19,7 +19,7 @@ public class PolicyServiceTests
     [Fact]
     public async Task Lists_Orders()
     {
-        var list = await Service.ListAsync();
+        var list = await Service.ListAsync(TestContext.Current.CancellationToken);
 
         Assert.NotNull(list);
 
