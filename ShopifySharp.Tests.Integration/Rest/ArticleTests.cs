@@ -30,7 +30,8 @@ public class ArticleTests(ArticleTestsFixture fixture, VerifyFixture verifyFixtu
             .ScrubMember<ArticleImage>(a => a.Src)
             .ScrubMembers<Article>(
                 a => a.Title,
-                a => a.Handle
+                a => a.Handle,
+                a => a.PublishedAt
             );
 
         article.Handle.Should().NotBeEmpty();

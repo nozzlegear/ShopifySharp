@@ -1,4 +1,4 @@
-﻿{
+{
   "Author": "John Smith",
   "BlogId": "{Scrubbed}",
   "BodyHtml": "<h1>I like articles</h1>\n<p><strong>Yea</strong>, I like posting them through <span class=\"caps\">REST</span>.</p>",
@@ -8,7 +8,7 @@
     "CreatedAt": "DateTimeOffset_1",
     "Src": "{Scrubbed}"
   },
-  "PublishedAt": "DateTimeOffset_1",
+  "PublishedAt": "{Scrubbed}",
   "Tags": "Has Been Tagged, This Post",
   "Title": "{Scrubbed}",
   "UpdatedAt": "DateTimeOffset_1",

@@ -1,11 +1,8 @@
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using FluentAssertions;
-using ShopifySharp.Filters;
 using Xunit;
 
 namespace ShopifySharp.Tests.Integration.Rest;
@@ -17,7 +14,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
     public async Task Lists_Risks()
     {
         // Setup
-        var orderId = await fixture.GetOrderIdAsync();
+        var orderId = fixture.OrderId;
         await fixture.Create(orderId);
 
         // Act
@@ -31,7 +28,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
     public async Task Deletes_Risks()
     {
         // Setup
-        var orderId = await fixture.GetOrderIdAsync();
+        var orderId = fixture.OrderId;
         var created = await fixture.Create(orderId, true);
 
         // Act
@@ -45,7 +42,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
     public async Task Gets_Risks()
     {
         // Setup
-        var orderId = await fixture.GetOrderIdAsync();
+        var orderId = fixture.OrderId;
         var created = await fixture.Create(orderId);
 
         // Act
@@ -66,7 +63,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
     public async Task Creates_Risks()
     {
         // Act
-        var orderId = await fixture.GetOrderIdAsync();
+        var orderId = fixture.OrderId;
         var created = await fixture.Create(orderId);
 
         // Assert
@@ -85,7 +82,7 @@ public class OrderRiskTests(OrderRiskTestsFixture fixture) : IClassFixture<Order
     {
         // Setup
         const string message = "An updated risk message.";
-        var orderId = await fixture.GetOrderIdAsync();
+        var orderId = fixture.OrderId;
         var created = await fixture.Create(orderId);
         var createdId = created.Id!.Value;
 
@@ -109,9 +106,13 @@ public class OrderRiskTestsFixture : IAsyncLifetime
     public OrderRiskService Service { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
 #pragma warning restore CS0618 // Type or member is obsolete
 
-    private OrderService OrderService { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
+    public OrderService OrderService { get; } = new (Utils.MyShopifyUrl, Utils.AccessToken);
 
     private List<OrderRisk> Created { get; } = [];
+
+    public long OrderId { get; private set; }
+
+    private readonly List<Order> _createdOrders = [];
 
     public string Message => "This looks risky!";
 
@@ -125,16 +126,58 @@ public class OrderRiskTestsFixture : IAsyncLifetime
 
     public bool Display => true;
 
-    private readonly ConcurrentBag<long> _orderIds = [];
-
-    public System.Threading.Tasks.ValueTask InitializeAsync()
+    public async System.Threading.Tasks.ValueTask InitializeAsync()
     {
         var policy = new LeakyBucketExecutionPolicy(false);
 
         Service.SetExecutionPolicy(policy);
         OrderService.SetExecutionPolicy(policy);
 
-        return default;
+        // Create a unique order for the OrderRisk tests so we don't depend on existing orders.
+        var order = await OrderService.CreateAsync(new Order()
+        {
+            CreatedAt = DateTime.UtcNow,
+            BillingAddress = new Address()
+            {
+                Address1 = "123 4th Street",
+                City = "Minneapolis",
+                Province = "Minnesota",
+                ProvinceCode = "MN",
+                Zip = "55401",
+                Phone = "555-555-5555",
+                FirstName = "John",
+                LastName = "Doe",
+                Company = "Tomorrow Corporation",
+                Country = "United States",
+                CountryCode = "US",
+                Default = true,
+            },
+            LineItems =
+            [
+                new LineItem()
+                {
+                    Name = "Test Line Item",
+                    Title = "Test Line Item Title",
+                    Quantity = 2,
+                    Price = 5
+                },
+                new LineItem()
+                {
+                    Name = "Test Line Item 2",
+                    Title = "Test Line Item Title 2",
+                    Quantity = 2,
+                    Price = 5
+                }
+            ],
+            FinancialStatus = "paid",
+            TotalPrice = 5.00m,
+            Email = Guid.NewGuid().ToString() + "@example.com",
+            Note = "This order was created while testing OrderRisk!",
+            Test = true
+        });
+
+        _createdOrders.Add(order);
+        OrderId = order.Id!.Value;
     }
 
     public async System.Threading.Tasks.ValueTask DisposeAsync()
@@ -154,24 +197,22 @@ public class OrderRiskTestsFixture : IAsyncLifetime
                 // Ignore
             }
         }
-    }
 
-    public async Task<long> GetOrderIdAsync()
-    {
-        if (_orderIds.TryPeek(out var orderId))
-            return orderId;
-
-        var orderList = await OrderService.ListAsync(new OrderListFilter()
+        foreach (var order in _createdOrders)
         {
-            Limit = 1
-        });
-        var order = orderList.Items.FirstOrDefault();
-
-        if (order is null)
-            throw new NullReferenceException("Could not list orders for OrderRisk test setup.");
-
-        _orderIds.Add(order.Id!.Value);
-        return order.Id.Value;
+            try
+            {
+                await OrderService.DeleteAsync(order.Id!.Value);
+            }
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode != HttpStatusCode.NotFound)
+            {
+                Console.WriteLine($"Failed to delete created Order with id {order.Id!.Value}. {ex.Message}");
+            }
+            catch (ShopifyHttpException ex) when (ex.HttpStatusCode == HttpStatusCode.NotFound)
+            {
+                // Ignore
+            }
+        }
     }
 
     /// <summary>
