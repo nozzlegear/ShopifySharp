@@ -5,7 +5,7 @@ cli_project := "ShopifySharp.GraphQL.Parser.CLI"
 # Path to the generated GraphQL entitites folder
 graph_entities := "ShopifySharp/Entities/GraphQL/Generated"
 # Path to the sops-encrypted environment file used for unit tests in ci/cd
-sops_env_file := justfile_directory() + "/env.encrypted.json"
+sops_env_file := join(justfile_directory(), "env.encrypted.json")
 # Space-separated list of class names that test the GraphQL query builders
 query_builder_tests := "ProductQueryTests QueryBuilderTests QueryBuilderMutationTests GraphHttpContentSerializerTests GraphQueryBuilderTests GraphUnionTypeConverterTests UnionCasesBuilderBaseTests"
 # Build configuration
