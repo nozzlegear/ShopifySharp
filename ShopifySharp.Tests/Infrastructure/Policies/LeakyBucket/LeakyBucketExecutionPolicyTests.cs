@@ -28,7 +28,7 @@ public class LeakyBucketExecutionPolicyTests
         _cloneableRequestMessage = A.Fake<TestCloneableRequestMessage>();
 
         // Always return a completed task when the scheduler wants to delay, so no actual time is spent waiting during a test
-        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, CancellationToken.None))
+        A.CallTo(() => _taskScheduler.DelayAsync(A<TimeSpan>._, A<CancellationToken>._))
             .Returns(Task.CompletedTask);
         // Always have the test request message return itself when cloned
         A.CallTo(() => _cloneableRequestMessage.CloneAsync(A<CancellationToken>._))

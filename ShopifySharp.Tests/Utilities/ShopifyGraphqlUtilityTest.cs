@@ -82,7 +82,7 @@ public class ShopifyGraphqlUtilityTest
         };
         Uri? capturedUri = null;
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, cancellationToken: TestContext.Current.CancellationToken))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
             .Invokes(call =>
             {
                 capturedUri = call.GetArgument<HttpRequestMessage>(0)?.RequestUri;
@@ -106,7 +106,7 @@ public class ShopifyGraphqlUtilityTest
         const string json = $$"""{ "error": "{{expectedErrorMessage}}" }""";
         var result = Utils.MakeHttpResponseMessage(json, x => x.StatusCode = expectedStatusCode);
 
-        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None))
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
             .Returns(result);
 
         // Act
@@ -125,7 +125,7 @@ public class ShopifyGraphqlUtilityTest
         // Setup
         const int attempts = 3;
 
-        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, CancellationToken.None));
+        var callToClient = A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._));
         // Create a new HttpResponseMessage, as it'll be disposed on each request
         callToClient.ReturnsLazily(() => Utils.MakeHttpResponseMessage("""{"foo":"bar"}"""));
 

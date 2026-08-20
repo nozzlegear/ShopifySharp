@@ -934,7 +934,7 @@ public class GraphServicePostAsyncTests
         var graphRequest = GraphServiceTestUtils.MakeGraphRequest();
 
         var expectedDeserializeCall = A.CallTo(() =>
-            _jsonSerializer.DeserializeAsync(A<IJsonElement>._, expectedReturnType, CancellationToken.None));
+            _jsonSerializer.DeserializeAsync(A<IJsonElement>._, expectedReturnType, A<CancellationToken>._));
         expectedDeserializeCall.Throws<TestException>();
 
         A.CallTo(_policy)
