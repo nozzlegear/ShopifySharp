@@ -167,21 +167,25 @@ create-graphql-pr graphqlSchemaFile jsonSchemaFile token="":
     just _buildAndPack "ShopifySharp/ShopifySharp.csproj" "b{{runNumber}}" "{{outputDir}}"
     just _buildAndPack "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" "b{{runNumber}}" "{{outputDir}}"
 
-# Run .NET Framework unit tests
-[group("test")]
-[arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
-test-dnf useSopsEnvFile="false":
-    @echo "Testing .NET Framework tests..."
+_test-dnf useSopsEnvFile project:
+    @echo "Testing .NET Framework tests in {{project}}..."
     dotnet test \
         -c "{{config}}" \
         -f "{{netFramework}}" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=DotNetFramework.trx" \
+        --logger "trx;LogFileName=DotNetFramework.{{project}}.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
-        --filter "Category=DotNetFramework"
+        --filter "Category=DotNetFramework" \
+        {{project}}
     @echo ""
-    @echo ".NET Framework tests passed."
+    @echo ".NET Framework tests in {{project}} passed."
+
+# Run .NET Framework unit tests
+[group("test")]
+[arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+[parallel]
+test-dnf useSopsEnvFile="false": (_test-dnf useSopsEnvFile "ShopifySharp.Tests") (_test-dnf useSopsEnvFile "ShopifySharp.Tests.Integration")
 
 # Run tests on the DI project.
 [group("test")]
