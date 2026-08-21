@@ -316,3 +316,90 @@ type ParserPipelineTests() =
 
         // Assert that the compilation succeeded and type is string
         % idProp.PropertyType.Should().Be typeof<string>
+
+    [<Fact>]
+    member _.``Case 1: When a type has multiple fields returning the same interface, each gets a distinct interface-case method named by field, without duplicates``() =
+        // Schema: FontGroup { base: Font, bold: Font } where Font is an interface with two
+        // concrete types. Two fields on FontGroup both return the same interface, so both must
+        // get distinct interface-case methods (Base, Bold) — not duplicate Font methods,
+        // and no compilation error (CS0111).
+        let schema = """
+        type QueryRoot {
+          fontGroup: FontGroup!
+        }
+
+        type FontGroup {
+          base: Font
+          bold: Font
+        }
+
+        interface Font {
+          name: String
+        }
+
+        type CustomFont implements Font {
+          name: String
+          customProp: String
+        }
+
+        type ShopifyFont implements Font {
+          name: String
+        }
+        """
+
+        // Act — compileSchema will fail if the generated code has CS0111
+        let assembly = SchemaCompiler.compileSchema schema
+
+        // Assert
+        let groupBuilder = Assert.typeExists "ShopifySharp.GraphQL.QueryBuilders.Types.FontGroupQueryBuilder" assembly
+
+        // Each field should have its own interface-case method named by field
+        let baseMethod = Assert.hasMethod "Base" groupBuilder
+        let boldMethod = Assert.hasMethod "Bold" groupBuilder
+
+        // Both methods should take an Action<FontInterfaceCasesBuilder>
+        % baseMethod.GetParameters().[0].ParameterType.Name.Should().Be "Action`1"
+        % boldMethod.GetParameters().[0].ParameterType.Name.Should().Be "Action`1"
+
+        // There should be NO method named directly after the interface (Font).
+        // Interface-case methods are now named by field, not by interface.
+        let fontMethod = groupBuilder.GetMethod("Font", BindingFlags.Public ||| BindingFlags.Instance)
+        % fontMethod.Should().BeNull("Interface-case methods are named by field, not by interface")
+
+        // The interface cases builder should exist with OnCustomFont and OnShopifyFont
+        let interfaceCasesBuilder = Assert.typeExists "ShopifySharp.GraphQL.QueryBuilders.Types.FontInterfaceCasesBuilder" assembly
+        Assert.hasMethod "OnCustomFont" interfaceCasesBuilder
+        Assert.hasMethod "OnShopifyFont" interfaceCasesBuilder
+
+    [<Fact>]
+    member _.``Case 2: When a field returns an interface, the interface cases builder generates OnConcreteType methods for each implementor``() =
+        // Schema with interface Node implemented by Shop and Product, exposed via
+        // QueryRoot.node. Verifies the .OnInterfaceName(...) pattern still works.
+        let schema = """
+        type QueryRoot {
+          node(id: ID!): Node
+        }
+
+        interface Node {
+          id: ID!
+        }
+
+        type Shop implements Node {
+          id: ID!
+          name: String!
+        }
+
+        type Product implements Node {
+          id: ID!
+          title: String!
+        }
+        """
+
+        // Act — compileSchema will fail if the generated code has CS0111
+        let assembly = SchemaCompiler.compileSchema schema
+
+        // Assert — the interface cases builder for Node should exist with OnXxx methods
+        let nodeInterfaceCasesBuilder =
+            Assert.typeExists "ShopifySharp.GraphQL.QueryBuilders.Operations.NodeInterfaceCasesBuilder" assembly
+        Assert.hasMethod "OnShop" nodeInterfaceCasesBuilder
+        Assert.hasMethod "OnProduct" nodeInterfaceCasesBuilder

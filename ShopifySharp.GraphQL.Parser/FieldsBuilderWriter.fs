@@ -23,8 +23,10 @@ type FieldsBuilderWriter(type': VisitedTypes, builderClassName: string, _context
             | FieldValueType.GraphObjectType (NamedType.UnionType _) ->
                 // Handled by union case builder methods
                 ()
+            | FieldValueType.GraphObjectType (NamedType.Interface _) ->
+                // Handled by interface case builder methods
+                ()
             | FieldValueType.GraphObjectType (NamedType.Class graphObjectTypeName as namedType)
-            | FieldValueType.GraphObjectType (NamedType.Interface graphObjectTypeName as namedType)
             | FieldValueType.GraphObjectType (NamedType.InputObject graphObjectTypeName as namedType) ->
                 let pascalTypeName =
                     if namedType.IsInterface

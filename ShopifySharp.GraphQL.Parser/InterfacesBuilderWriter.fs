@@ -5,18 +5,18 @@ open ShopifySharp.GraphQL.Parser.PipeWriter
 open ShopifySharp.GraphQL.Parser.Utils
 
 type InterfacesBuilderWriter(type': VisitedTypes, context: IParsedContext) =
-    let tryBindInterfaceToWriter (interfaceRecord: Interface) =
+    let tryBindInterfaceToWriter (interfaceRecord: Interface) (fieldName: string) =
         let concreteCaseNames = context.GetInterfaceImplementationTypeNames interfaceRecord.Name
         if Array.length concreteCaseNames > 0 then
-            Some (InterfaceCasesBuilderWriter (interfaceRecord, interfaceRecord.Name, concreteCaseNames, interfaceRecord.Deprecation, context))
+            Some (InterfaceCasesBuilderWriter (interfaceRecord, fieldName, concreteCaseNames, interfaceRecord.Deprecation, context))
         else
             None
 
-    let tryBindFieldToInterfaceCasesBuilderWriter (fieldType: FieldType) =
-        match AstNodeMapper.unwrapFieldType fieldType with
+    let tryBindFieldToInterfaceCasesBuilderWriter (field: Field) =
+        match AstNodeMapper.unwrapFieldType field.ValueType with
         | FieldValueType.GraphObjectType (NamedType.Interface interfaceName) ->
             match context.TryFindGraphObjectType interfaceName with
-            | Some (Interface interfaceRecord) -> tryBindInterfaceToWriter interfaceRecord
+            | Some (Interface interfaceRecord) -> tryBindInterfaceToWriter interfaceRecord field.Name
             | _ -> None
         | _ -> None
 
@@ -29,7 +29,7 @@ type InterfacesBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             | _ -> Array.empty
 
         fields
-        |> Array.choose (fun field -> tryBindFieldToInterfaceCasesBuilderWriter field.ValueType)
+        |> Array.choose (fun field -> tryBindFieldToInterfaceCasesBuilderWriter field)
 
     let wrapWriterToArray writerOption =
         writerOption
@@ -41,8 +41,9 @@ type InterfacesBuilderWriter(type': VisitedTypes, context: IParsedContext) =
         | Interface interfaceRecord
         | Operation { ReturnType = ReturnType.VisitedType (Interface interfaceRecord) } ->
             // If the type itself or the operation's return type is an interface, create its
-            // cases writer.
-            tryBindInterfaceToWriter interfaceRecord
+            // cases writer. There is no single backing field (an interface can be returned by
+            // many fields), so the interface name is used as the field name.
+            tryBindInterfaceToWriter interfaceRecord interfaceRecord.Name
             |> wrapWriterToArray
         | Operation { ReturnType = ReturnType.VisitedType visitedType } ->
             // If the operation returns any visited type which is not an interface, collect its
@@ -50,9 +51,15 @@ type InterfacesBuilderWriter(type': VisitedTypes, context: IParsedContext) =
             collectFieldsAndMapToInterfaceCasesBuilderWriters visitedType
         | Operation { ReturnType = ReturnType.FieldType fieldType } ->
             // If the operation's return type is a FieldType definition that unwraps to an interface,
-            // create its cases writer.
-            tryBindFieldToInterfaceCasesBuilderWriter fieldType
-            |> wrapWriterToArray
+            // create its cases writer. There is no single backing field here either, so the
+            // interface name is used as the field name.
+            match AstNodeMapper.unwrapFieldType fieldType with
+            | FieldValueType.GraphObjectType (NamedType.Interface interfaceName) ->
+                match context.TryFindGraphObjectType interfaceName with
+                | Some (Interface interfaceRecord) -> tryBindInterfaceToWriter interfaceRecord interfaceRecord.Name |> wrapWriterToArray
+                | _ -> Array.empty
+            | _ ->
+                Array.empty
         | visitedType ->
             // For any other visited type, collect its fields and map them to interface case
             // writers where applicable.
