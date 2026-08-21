@@ -175,7 +175,7 @@ _test-dnf useSopsEnvFile project:
         --verbosity "{{verbosity}}" \
         --logger "trx;LogFileName=DotNetFramework.{{project}}.trx" \
         --results-directory "TestResults" \
-        {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
+        {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + quote(sops_env_file) } else { "" } }} \
         --filter "Category=DotNetFramework" \
         {{project}}
     @echo ""
