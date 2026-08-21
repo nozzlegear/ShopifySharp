@@ -106,7 +106,7 @@ download-graphql-schema version domain="" token="" output="" useSopsEnvFile="fal
 [arg("jsonSchemaFile", long="input")]
 [arg("graphqlSchemaFile", long="output")]
 convert-graphql-schema jsonSchemaFile graphqlSchemaFile:
-    npx -- graphql-json-to-sdl@0.5.0 "{{jsonSchemaFile}}" "{{graphqlSchemaFile}}"
+    npx --yes -- graphql-json-to-sdl@0.5.0 "{{jsonSchemaFile}}" "{{graphqlSchemaFile}}"
 
 # Creates a pull request containing any changes to the graphql schema file and in the generated GraphQL types folder
 [group("graphql")]
