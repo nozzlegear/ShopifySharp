@@ -184,7 +184,6 @@ _test-dnf useSopsEnvFile project:
 # Run .NET Framework unit tests
 [group("test")]
 [arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
-[parallel]
 test-dnf useSopsEnvFile="false": (_test-dnf useSopsEnvFile "ShopifySharp.Tests") (_test-dnf useSopsEnvFile "ShopifySharp.Tests.Integration")
 
 # Run tests on the DI project.
