@@ -69,12 +69,57 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public StoreCreditAccountTransactionQueryBuilder OnStoreCreditAccountCreditTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditAccountCreditTransaction>("... on StoreCreditAccountCreditTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountCreditTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public StoreCreditAccountTransactionQueryBuilder OnStoreCreditAccountDebitRevertTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountDebitRevertTransactionQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditAccountDebitRevertTransaction>("... on StoreCreditAccountDebitRevertTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountDebitRevertTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public StoreCreditAccountTransactionQueryBuilder OnStoreCreditAccountDebitTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountDebitTransactionQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditAccountDebitTransaction>("... on StoreCreditAccountDebitTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountDebitTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public StoreCreditAccountTransactionQueryBuilder OnStoreCreditAccountExpirationTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountExpirationTransactionQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditAccountExpirationTransaction>("... on StoreCreditAccountExpirationTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountExpirationTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
         public StoreCreditAccountTransactionQueryBuilder Origin(Action<StoreCreditAccountTransactionOriginUnionCasesBuilder> build)
         {
             var query = new Query<StoreCreditAccountTransactionOrigin>("origin");
             var unionBuilder = new StoreCreditAccountTransactionOriginUnionCasesBuilder(query);
             build.Invoke(unionBuilder);
             base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public StoreCreditAccountTransactionQueryBuilder StoreCreditAccountTransaction(Action<StoreCreditAccountTransactionInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IStoreCreditAccountTransaction>("storeCreditAccountTransaction");
+            var unionBuilder = new StoreCreditAccountTransactionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

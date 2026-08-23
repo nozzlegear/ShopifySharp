@@ -50,21 +50,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootStoreCreditAccountQueryBuilder Owner(Action<ShopifySharp.GraphQL.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder> build)
-        {
-            var query = new Query<IHasStoreCreditAccounts>("owner");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IHasStoreCreditAccounts>(query);
-            return this;
-        }
-
         public QueryRootStoreCreditAccountQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder> build)
         {
             var query = new Query<StoreCreditAccountTransactionConnection>("transactions");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StoreCreditAccountTransactionConnection>(query);
+            return this;
+        }
+
+        public QueryRootStoreCreditAccountQueryBuilder Owner(Action<HasStoreCreditAccountsInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IHasStoreCreditAccounts>("owner");
+            var unionBuilder = new HasStoreCreditAccountsInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

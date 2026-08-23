@@ -24,29 +24,34 @@ public record ChannelInformation : IGraphQLObject, INode
     /// The app associated with the channel.
     /// </summary>
     [JsonPropertyName("app")]
+    [Obsolete("Use [`Order.attribution`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order#field-Order.fields.attribution) for order attribution, or [`Order.app`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order#field-Order.fields.app) and [`Order.publication`](https://shopify.dev/docs/api/admin-graphql/latest/objects/Order#field-Order.fields.publication) for app and sales channel details.")]
     public App? app { get; set; } = null;
 
     /// <summary>
     /// The channel definition associated with the channel.
     /// </summary>
     [JsonPropertyName("channelDefinition")]
+    [Obsolete("Use [`QueryRoot.orderAttributionDefinitions`](https://shopify.dev/docs/api/admin-graphql/latest/queries/orderAttributionDefinitions) and select `id`, `handle`, `displayName`, and `icon` instead.")]
     public ChannelDefinition? channelDefinition { get; set; } = null;
 
     /// <summary>
     /// The unique ID for the channel.
     /// </summary>
     [JsonPropertyName("channelId")]
+    [Obsolete("Use [`Order.attribution.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.handle) instead.")]
     public string? channelId { get; set; } = null;
 
     /// <summary>
     /// The publishing destination display name or channel name.
     /// </summary>
     [JsonPropertyName("displayName")]
+    [Obsolete("Use [`Order.attribution.displayName`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.displayName) instead.")]
     public string? displayName { get; set; } = null;
 
     /// <summary>
     /// A globally-unique ID.
     /// </summary>
     [JsonPropertyName("id")]
+    [Obsolete("Use [`Order.attribution.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.handle) instead.")]
     public string? id { get; set; } = null;
 }

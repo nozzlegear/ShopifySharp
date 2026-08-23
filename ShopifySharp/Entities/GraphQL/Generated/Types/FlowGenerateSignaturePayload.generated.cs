@@ -26,6 +26,13 @@ public record FlowGenerateSignaturePayload : IGraphQLObject
     public string? signature { get; set; } = null;
 
     /// <summary>
+    /// The target URL corresponding to the requested payload schema: action runtime
+    /// URL, validation URL, or custom configuration page preview URL.
+    /// </summary>
+    [JsonPropertyName("targetUrl")]
+    public string? targetUrl { get; set; } = null;
+
+    /// <summary>
     /// The list of errors that occurred from executing the mutation.
     /// </summary>
     [JsonPropertyName("userErrors")]

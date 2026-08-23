@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public CustomerAccountPageEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageQueryBuilder> build)
+        public CustomerAccountPageEdgeQueryBuilder Node(Action<CustomerAccountPageInterfaceCasesBuilder> build)
         {
             var query = new Query<ICustomerAccountPage>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICustomerAccountPage>(query);
+            var unionBuilder = new CustomerAccountPageInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

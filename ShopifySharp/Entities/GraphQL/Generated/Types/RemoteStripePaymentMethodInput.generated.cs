@@ -20,8 +20,7 @@ public record RemoteStripePaymentMethodInput : GraphQLInputObject<RemoteStripePa
     public string? customerId { get; set; } = null;
 
     /// <summary>
-    /// The payment_method_id value from the Stripe API. Starting on 2025,
-    /// payment_method_id will become mandatory for all API versions.
+    /// The payment_method_id value from the Stripe API.
     /// </summary>
     [JsonPropertyName("paymentMethodId")]
     public string? paymentMethodId { get; set; } = null;

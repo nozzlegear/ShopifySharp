@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public DiscountApplicationEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountApplicationQueryBuilder> build)
+        public DiscountApplicationEdgeQueryBuilder Node(Action<DiscountApplicationInterfaceCasesBuilder> build)
         {
             var query = new Query<IDiscountApplication>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountApplicationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IDiscountApplication>(query);
+            var unionBuilder = new DiscountApplicationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

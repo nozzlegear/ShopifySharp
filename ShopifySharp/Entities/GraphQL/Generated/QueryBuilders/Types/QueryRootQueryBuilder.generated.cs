@@ -216,15 +216,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootQueryBuilder AvailableBackupRegions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder> build)
-        {
-            var query = new Query<IMarketRegion>("availableBackupRegions");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMarketRegion>(query);
-            return this;
-        }
-
         public QueryRootQueryBuilder AvailableCarrierServices(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryCarrierServiceAndLocationsQueryBuilder> build)
         {
             var query = new Query<DeliveryCarrierServiceAndLocations>("availableCarrierServices");
@@ -240,15 +231,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocaleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Locale>(query);
-            return this;
-        }
-
-        public QueryRootQueryBuilder BackupRegion(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder> build)
-        {
-            var query = new Query<IMarketRegion>("backupRegion");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMarketRegion>(query);
             return this;
         }
 
@@ -342,6 +324,51 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootQueryBuilder CashDrawer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerQueryBuilder> build)
+        {
+            var query = new Query<CashDrawer>("cashDrawer");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashDrawer>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashDrawers(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerConnectionQueryBuilder> build)
+        {
+            var query = new Query<CashDrawerConnection>("cashDrawers");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashDrawerConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashManagementLocationSummary(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder> build)
+        {
+            var query = new Query<CashManagementSummary>("cashManagementLocationSummary");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashManagementSummary>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashManagementReasonCodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementReasonCodeConnectionQueryBuilder> build)
+        {
+            var query = new Query<CashManagementReasonCodeConnection>("cashManagementReasonCodes");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementReasonCodeConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashManagementReasonCodeConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CashManagementShopSummary(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder> build)
+        {
+            var query = new Query<CashManagementSummary>("cashManagementShopSummary");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashManagementSummaryQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashManagementSummary>(query);
+            return this;
+        }
+
         public QueryRootQueryBuilder CashTrackingSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingSessionQueryBuilder> build)
         {
             var query = new Query<CashTrackingSession>("cashTrackingSession");
@@ -357,24 +384,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashTrackingSessionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<CashTrackingSessionConnection>(query);
-            return this;
-        }
-
-        public QueryRootQueryBuilder Catalog(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)
-        {
-            var query = new Query<ICatalog>("catalog");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICatalog>(query);
-            return this;
-        }
-
-        public QueryRootQueryBuilder CatalogOperations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourceOperationQueryBuilder> build)
-        {
-            var query = new Query<IResourceOperation>("catalogOperations");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourceOperationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IResourceOperation>(query);
             return this;
         }
 
@@ -405,12 +414,39 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootQueryBuilder ChannelByHandle(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder> build)
+        {
+            var query = new Query<Channel>("channelByHandle");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Channel>(query);
+            return this;
+        }
+
         public QueryRootQueryBuilder Channels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
         {
             var query = new Query<ChannelConnection>("channels");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ChannelConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CheckoutAndAccountsConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationQueryBuilder> build)
+        {
+            var query = new Query<CheckoutAndAccountsConfiguration>("checkoutAndAccountsConfiguration");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CheckoutAndAccountsConfiguration>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CheckoutAndAccountsConfigurations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationConnectionQueryBuilder> build)
+        {
+            var query = new Query<CheckoutAndAccountsConfigurationConnection>("checkoutAndAccountsConfigurations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutAndAccountsConfigurationConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CheckoutAndAccountsConfigurationConnection>(query);
             return this;
         }
 
@@ -501,6 +537,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Collection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CollectionConditionsSources(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionConditionsSourceConnectionQueryBuilder> build)
+        {
+            var query = new Query<CollectionConditionsSourceConnection>("collectionConditionsSources");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionConditionsSourceConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CollectionConditionsSourceConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CollectionConditionsSourcesByApp(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionConditionsSourcesByAppConnectionQueryBuilder> build)
+        {
+            var query = new Query<CollectionConditionsSourcesByAppConnection>("collectionConditionsSourcesByApp");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionConditionsSourcesByAppConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CollectionConditionsSourcesByAppConnection>(query);
             return this;
         }
 
@@ -675,15 +729,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootQueryBuilder CustomerAccountPage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageQueryBuilder> build)
-        {
-            var query = new Query<ICustomerAccountPage>("customerAccountPage");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICustomerAccountPage>(query);
-            return this;
-        }
-
         public QueryRootQueryBuilder CustomerAccountPages(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageConnectionQueryBuilder> build)
         {
             var query = new Query<CustomerAccountPageConnection>("customerAccountPages");
@@ -855,15 +900,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootQueryBuilder DeliverySettings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliverySettingQueryBuilder> build)
-        {
-            var query = new Query<DeliverySetting>("deliverySettings");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliverySettingQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<DeliverySetting>(query);
-            return this;
-        }
-
         public QueryRootQueryBuilder DiscountCodesCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("discountCodesCount");
@@ -915,6 +951,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SavedSearchConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SavedSearchConnection>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder DiscountTags(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StringConnectionQueryBuilder> build)
+        {
+            var query = new Query<StringConnection>("discountTags");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StringConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StringConnection>(query);
             return this;
         }
 
@@ -1005,15 +1050,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderTagQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<DraftOrderTag>(query);
-            return this;
-        }
-
-        public QueryRootQueryBuilder Event(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventQueryBuilder> build)
-        {
-            var query = new Query<IEvent>("event");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.EventQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IEvent>(query);
             return this;
         }
 
@@ -1194,6 +1230,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<InventoryShipment>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder InventoryShipments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentConnectionQueryBuilder> build)
+        {
+            var query = new Query<InventoryShipmentConnection>("inventoryShipments");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InventoryShipmentConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<InventoryShipmentConnection>(query);
             return this;
         }
 
@@ -1494,24 +1539,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder> build)
-        {
-            var query = new Query<INode>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<INode>(query);
-            return this;
-        }
-
-        public QueryRootQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder> build)
-        {
-            var query = new Query<INode>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<INode>(query);
-            return this;
-        }
-
         public QueryRootQueryBuilder OnlineStore(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreQueryBuilder> build)
         {
             var query = new Query<OnlineStore>("onlineStore");
@@ -1527,6 +1554,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Order>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder OrderAttributionDefinitions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderAttributionDefinitionConnectionQueryBuilder> build)
+        {
+            var query = new Query<OrderAttributionDefinitionConnection>("orderAttributionDefinitions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderAttributionDefinitionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderAttributionDefinitionConnection>(query);
             return this;
         }
 
@@ -1656,6 +1692,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootQueryBuilder PointOfSaleDevicePaymentSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionQueryBuilder> build)
+        {
+            var query = new Query<PointOfSaleDevicePaymentSession>("pointOfSaleDevicePaymentSession");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PointOfSaleDevicePaymentSession>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder PointOfSaleDevicePaymentSessions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionConnectionQueryBuilder> build)
+        {
+            var query = new Query<PointOfSaleDevicePaymentSessionConnection>("pointOfSaleDevicePaymentSessions");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PointOfSaleDevicePaymentSessionConnection>(query);
+            return this;
+        }
+
         public QueryRootQueryBuilder PriceList(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListQueryBuilder> build)
         {
             var query = new Query<PriceList>("priceList");
@@ -1743,15 +1797,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductFeedConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ProductFeedConnection>(query);
-            return this;
-        }
-
-        public QueryRootQueryBuilder ProductOperation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductOperationQueryBuilder> build)
-        {
-            var query = new Query<IProductOperation>("productOperation");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductOperationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IProductOperation>(query);
             return this;
         }
 
@@ -2079,6 +2124,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootQueryBuilder ShippingLabel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLabelQueryBuilder> build)
+        {
+            var query = new Query<ShippingLabel>("shippingLabel");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLabelQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ShippingLabel>(query);
+            return this;
+        }
+
         public QueryRootQueryBuilder Shop(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopQueryBuilder> build)
         {
             var query = new Query<Shop>("shop");
@@ -2193,6 +2247,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<StoreCreditAccount>(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder StoreCreditConfiguration(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditConfigurationQueryBuilder> build)
+        {
+            var query = new Query<StoreCreditConfiguration>("storeCreditConfiguration");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditConfigurationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<StoreCreditConfiguration>(query);
             return this;
         }
 
@@ -2455,6 +2518,96 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var unionBuilder = new MobilePlatformApplicationUnionCasesBuilder(query);
             build.Invoke(unionBuilder);
             base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder AvailableBackupRegions(Action<MarketRegionInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IMarketRegion>("availableBackupRegions");
+            var unionBuilder = new MarketRegionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder BackupRegion(Action<MarketRegionInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IMarketRegion>("backupRegion");
+            var unionBuilder = new MarketRegionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder Catalog(Action<CatalogInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICatalog>("catalog");
+            var unionBuilder = new CatalogInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CatalogOperations(Action<ResourceOperationInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IResourceOperation>("catalogOperations");
+            var unionBuilder = new ResourceOperationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CollectionConditionMetafieldDefinitions(Action<CollectionConditionMetafieldDefinitionInterfaceInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICollectionConditionMetafieldDefinitionInterface>("collectionConditionMetafieldDefinitions");
+            var unionBuilder = new CollectionConditionMetafieldDefinitionInterfaceInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder CustomerAccountPage(Action<CustomerAccountPageInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICustomerAccountPage>("customerAccountPage");
+            var unionBuilder = new CustomerAccountPageInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder Event(Action<EventInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IEvent>("event");
+            var unionBuilder = new EventInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder Node(Action<NodeInterfaceCasesBuilder> build)
+        {
+            var query = new Query<INode>("node");
+            var unionBuilder = new NodeInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder Nodes(Action<NodeInterfaceCasesBuilder> build)
+        {
+            var query = new Query<INode>("nodes");
+            var unionBuilder = new NodeInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public QueryRootQueryBuilder ProductOperation(Action<ProductOperationInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IProductOperation>("productOperation");
+            var unionBuilder = new ProductOperationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

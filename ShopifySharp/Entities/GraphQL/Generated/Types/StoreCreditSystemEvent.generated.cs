@@ -20,4 +20,5 @@ public enum StoreCreditSystemEvent
     PAYMENT_RETURNED,
     ORDER_CANCELLATION,
     TAX_FINALIZATION,
+    RECURRING_PAYMENT,
 }

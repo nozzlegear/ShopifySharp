@@ -10,19 +10,19 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Defines the available columns and relationships that can be used when creating
-/// rules for smart collections. This provides the schema for building automated
+/// rules for collections. This provides the schema for building automated
 /// collection logic based on product attributes.
 /// For example, merchants can create rules like "product type equals 'Shirts'" or
 /// "vendor contains 'Nike'" using the conditions defined in this object to
 /// automatically populate collections.
 /// Use `CollectionRuleConditions` to:
-/// - Discovering valid field options for smart collection rule interfaces
+/// - Discovering valid field options for collection rule interfaces
 /// - Understanding which conditions are available for automated collections
 /// - Exploring available product attributes for collection automation
 /// - Learning about proper field relationships for rule implementation
-/// The conditions define which product fields can be used in smart collection rules
-/// and what types of comparisons are allowed for each field.
-/// Learn more about [smart collections](https://shopify.dev/docs/api/admin-graphql/latest/objects/Collection).
+/// The conditions define which product fields can be used in collection rules and
+/// what types of comparisons are allowed for each field.
+/// Learn more about [collections with conditions](https://shopify.dev/docs/api/admin-graphql/latest/objects/Collection).
 /// </summary>
 public record CollectionRuleConditions : IGraphQLObject
 {

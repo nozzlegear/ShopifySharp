@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `CollectionSourceInclusionCondition*` and `CollectionSourceExclusionCondition*` types instead.")]
     public sealed class CollectionRulesConditionsOperationQueryBuilder : FieldsQueryBuilderBase<CollectionRuleConditions, CollectionRulesConditionsOperationQueryBuilder>, IGraphOperationQueryBuilder<CollectionRuleConditions>
     {
         public OperationType OperationType { get; } = OperationType.Query;
@@ -46,15 +47,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public CollectionRulesConditionsOperationQueryBuilder RuleType()
         {
             base.InnerQuery.AddField("ruleType");
-            return this;
-        }
-
-        public CollectionRulesConditionsOperationQueryBuilder RuleObject(Action<CollectionRuleConditionsRuleObjectUnionCasesBuilder> build)
-        {
-            var query = new Query<CollectionRuleConditionsRuleObject>("ruleObject");
-            var unionBuilder = new CollectionRuleConditionsRuleObjectUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
             return this;
         }
     }

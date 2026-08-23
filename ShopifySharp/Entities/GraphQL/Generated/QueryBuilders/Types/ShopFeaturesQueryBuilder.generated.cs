@@ -51,6 +51,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ShopFeaturesQueryBuilder BuyerExperienceDepositEnabled()
+        {
+            base.InnerQuery.AddField("buyerExperienceDepositEnabled");
+            return this;
+        }
+
         public ShopFeaturesQueryBuilder Captcha()
         {
             base.InnerQuery.AddField("captcha");
@@ -77,6 +83,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public ShopFeaturesQueryBuilder DeliveryProfiles()
         {
             base.InnerQuery.AddField("deliveryProfiles");
+            return this;
+        }
+
+        public ShopFeaturesQueryBuilder DirectConnectionCatalogAssignmentEnabled()
+        {
+            base.InnerQuery.AddField("directConnectionCatalogAssignmentEnabled");
             return this;
         }
 
@@ -143,6 +155,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ShopFeaturesQueryBuilder MarketDrivenShipping()
+        {
+            base.InnerQuery.AddField("marketDrivenShipping");
+            return this;
+        }
+
         [Obsolete("No longer supported.")]
         public ShopFeaturesQueryBuilder OnboardingVisual()
         {
@@ -184,6 +202,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public ShopFeaturesQueryBuilder Storefront()
         {
             base.InnerQuery.AddField("storefront");
+            return this;
+        }
+
+        public ShopFeaturesQueryBuilder SubCountryMarketsEnabled()
+        {
+            base.InnerQuery.AddField("subCountryMarketsEnabled");
             return this;
         }
 

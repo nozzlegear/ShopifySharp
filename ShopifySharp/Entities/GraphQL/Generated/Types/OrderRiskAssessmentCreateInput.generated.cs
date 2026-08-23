@@ -9,24 +9,24 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The input fields for an order risk assessment.
+/// The input fields for creating an order risk assessment.
 /// </summary>
 public record OrderRiskAssessmentCreateInput : GraphQLInputObject<OrderRiskAssessmentCreateInput>
 {
     /// <summary>
-    /// The list of facts used to determine the fraud assessment.
+    /// Facts to include with the risk assessment. Up to 20 facts can be provided.
     /// </summary>
     [JsonPropertyName("facts")]
     public ICollection<OrderRiskAssessmentFactInput>? facts { get; set; } = null;
 
     /// <summary>
-    /// The ID of the order receiving the fraud assessment.
+    /// The ID of the order to assess.
     /// </summary>
     [JsonPropertyName("orderId")]
     public string? orderId { get; set; } = null;
 
     /// <summary>
-    /// The risk level of the fraud assessment.
+    /// The risk level assigned to the order.
     /// </summary>
     [JsonPropertyName("riskLevel")]
     public RiskAssessmentResult? riskLevel { get; set; } = null;

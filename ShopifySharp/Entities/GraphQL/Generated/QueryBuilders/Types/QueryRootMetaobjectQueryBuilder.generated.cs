@@ -160,5 +160,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("updatedAt");
             return this;
         }
+
+        public QueryRootMetaobjectQueryBuilder Values()
+        {
+            base.InnerQuery.AddField("values");
+            return this;
+        }
     }
 }

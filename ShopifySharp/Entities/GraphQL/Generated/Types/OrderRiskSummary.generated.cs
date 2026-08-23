@@ -10,19 +10,18 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
 /// Summary of risk characteristics for an order.
-/// See the [example query "Retrieves a list of all order risks for an order"](https://shopify.dev/docs/api/admin-graphql/unstable/queries/order?example=Retrieves+a+list+of+all+order+risks+for+an+order).
+/// See the [example query "Retrieve order risk assessments"](https://shopify.dev/docs/api/admin-graphql/unstable/queries/order?example=retrieve-order-risk-assessments).
 /// </summary>
 public record OrderRiskSummary : IGraphQLObject
 {
     /// <summary>
-    /// The list of risk assessments for the order.
+    /// The risk assessments for the order.
     /// </summary>
     [JsonPropertyName("assessments")]
     public ICollection<OrderRiskAssessment>? assessments { get; set; } = null;
 
     /// <summary>
-    /// The recommendation for the order based on the results of the risk assessments.
-    /// This suggests the action the merchant should take with regards to its risk of fraud.
+    /// The recommended action for the order based on its risk assessments.
     /// </summary>
     [JsonPropertyName("recommendation")]
     public OrderRiskRecommendationResult? recommendation { get; set; } = null;

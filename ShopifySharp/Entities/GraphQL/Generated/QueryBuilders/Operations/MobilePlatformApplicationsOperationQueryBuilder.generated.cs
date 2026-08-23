@@ -57,14 +57,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<PageInfo>(query);
             return this;
         }
-
-        public MobilePlatformApplicationsOperationQueryBuilder Nodes(Action<MobilePlatformApplicationUnionCasesBuilder> build)
-        {
-            var query = new Query<MobilePlatformApplication>("nodes");
-            var unionBuilder = new MobilePlatformApplicationUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

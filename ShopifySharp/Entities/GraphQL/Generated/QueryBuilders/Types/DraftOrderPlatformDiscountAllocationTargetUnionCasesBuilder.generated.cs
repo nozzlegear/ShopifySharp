@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DraftOrderPlatformDiscountAllocationTargetUnionCasesBuilder OnCalculatedDraftOrderLineItem(Action<CalculatedDraftOrderLineItemQueryBuilder> build)
+        public DraftOrderPlatformDiscountAllocationTargetUnionCasesBuilder OnCalculatedDraftOrderLineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedDraftOrderLineItemQueryBuilder> build)
         {
             var query = new Query<CalculatedDraftOrderLineItem>("... on CalculatedDraftOrderLineItem");
-            var queryBuilder = new CalculatedDraftOrderLineItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CalculatedDraftOrderLineItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DraftOrderPlatformDiscountAllocationTargetUnionCasesBuilder OnDraftOrderLineItem(Action<DraftOrderLineItemQueryBuilder> build)
+        public DraftOrderPlatformDiscountAllocationTargetUnionCasesBuilder OnDraftOrderLineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderLineItemQueryBuilder> build)
         {
             var query = new Query<DraftOrderLineItem>("... on DraftOrderLineItem");
-            var queryBuilder = new DraftOrderLineItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderLineItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DraftOrderPlatformDiscountAllocationTargetUnionCasesBuilder OnShippingLine(Action<ShippingLineQueryBuilder> build)
+        public DraftOrderPlatformDiscountAllocationTargetUnionCasesBuilder OnShippingLine(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineQueryBuilder> build)
         {
             var query = new Query<ShippingLine>("... on ShippingLine");
-            var queryBuilder = new ShippingLineQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

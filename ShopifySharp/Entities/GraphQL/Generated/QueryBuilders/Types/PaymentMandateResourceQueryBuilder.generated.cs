@@ -30,6 +30,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public PaymentMandateResourceQueryBuilder Id()
+        {
+            base.InnerQuery.AddField("id");
+            return this;
+        }
+
         public PaymentMandateResourceQueryBuilder ResourceId()
         {
             base.InnerQuery.AddField("resourceId");

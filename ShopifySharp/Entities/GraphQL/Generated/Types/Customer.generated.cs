@@ -134,6 +134,12 @@ public record Customer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject
     public string? id { get; set; } = null;
 
     /// <summary>
+    /// The identity provider subject identifiers associated with this customer.
+    /// </summary>
+    [JsonPropertyName("identityProviderSubjects")]
+    public ICollection<IdentityProviderSubject>? identityProviderSubjects { get; set; } = null;
+
+    /// <summary>
     /// The image associated with the customer.
     /// </summary>
     [JsonPropertyName("image")]
@@ -299,6 +305,12 @@ public record Customer : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject
     /// </summary>
     [JsonPropertyName("taxExemptions")]
     public ICollection<TaxExemption>? taxExemptions { get; set; } = null;
+
+    /// <summary>
+    /// The customer's tax settings.
+    /// </summary>
+    [JsonPropertyName("taxSettings")]
+    public TaxSettings? taxSettings { get; set; } = null;
 
     /// <summary>
     /// The URL to unsubscribe the customer from the mailing list.

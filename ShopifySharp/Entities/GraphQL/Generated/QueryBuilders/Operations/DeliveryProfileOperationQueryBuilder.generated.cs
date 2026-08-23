@@ -46,6 +46,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public DeliveryProfileOperationQueryBuilder CoversAllItems()
+        {
+            base.InnerQuery.AddField("coversAllItems");
+            return this;
+        }
+
         public DeliveryProfileOperationQueryBuilder Default()
         {
             base.InnerQuery.AddField("default");
@@ -55,13 +61,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DeliveryProfileOperationQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");
-            return this;
-        }
-
-        [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
-        public DeliveryProfileOperationQueryBuilder LegacyMode()
-        {
-            base.InnerQuery.AddField("legacyMode");
             return this;
         }
 

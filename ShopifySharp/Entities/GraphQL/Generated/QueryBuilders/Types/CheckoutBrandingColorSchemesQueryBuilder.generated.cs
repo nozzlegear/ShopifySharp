@@ -65,5 +65,23 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField<CheckoutBrandingColorScheme>(query);
             return this;
         }
+
+        public CheckoutBrandingColorSchemesQueryBuilder Scheme5(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingColorSchemeQueryBuilder> build)
+        {
+            var query = new Query<CheckoutBrandingColorScheme>("scheme5");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingColorSchemeQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CheckoutBrandingColorScheme>(query);
+            return this;
+        }
+
+        public CheckoutBrandingColorSchemesQueryBuilder Scheme6(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingColorSchemeQueryBuilder> build)
+        {
+            var query = new Query<CheckoutBrandingColorScheme>("scheme6");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingColorSchemeQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CheckoutBrandingColorScheme>(query);
+            return this;
+        }
     }
 }

@@ -22,6 +22,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
+        public ProductUpdateArgumentsBuilder Identifier(ProductUpdateIdentifiers? identifier)
+        {
+            base.InnerQuery.AddArgument("identifier", identifier);
+            return this;
+        }
+
         public ProductUpdateArgumentsBuilder Media(ICollection<CreateMediaInput>? media)
         {
             base.InnerQuery.AddArgument("media", media);

@@ -74,6 +74,33 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public PrimaryMarketOperationQueryBuilder Delivery(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketDeliveryConfigurationsQueryBuilder> build)
+        {
+            var query = new Query<MarketDeliveryConfigurations>("delivery");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketDeliveryConfigurationsQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MarketDeliveryConfigurations>(query);
+            return this;
+        }
+
+        public PrimaryMarketOperationQueryBuilder Discounts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountNodeConnectionQueryBuilder> build)
+        {
+            var query = new Query<DiscountNodeConnection>("discounts");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountNodeConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<DiscountNodeConnection>(query);
+            return this;
+        }
+
+        public PrimaryMarketOperationQueryBuilder DiscountsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
+        {
+            var query = new Query<Count>("discountsCount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
         [Obsolete("Use `status` instead.")]
         public PrimaryMarketOperationQueryBuilder Enabled()
         {

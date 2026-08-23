@@ -40,6 +40,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public LocationConnectionArgumentsBuilder Last(int? last)
+        {
+            base.InnerQuery.AddArgument("last", last);
+            return this;
+        }
+
+        public LocationConnectionArgumentsBuilder Reverse(bool? reverse)
+        {
+            base.InnerQuery.AddArgument("reverse", reverse);
+            return this;
+        }
+
         public LocationConnectionArgumentsBuilder IncludeInactive(bool? includeInactive)
         {
             base.InnerQuery.AddArgument("includeInactive", includeInactive);
@@ -52,21 +64,9 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public LocationConnectionArgumentsBuilder Last(int? last)
-        {
-            base.InnerQuery.AddArgument("last", last);
-            return this;
-        }
-
         public LocationConnectionArgumentsBuilder Query(string? query)
         {
             base.InnerQuery.AddArgument("query", query);
-            return this;
-        }
-
-        public LocationConnectionArgumentsBuilder Reverse(bool? reverse)
-        {
-            base.InnerQuery.AddArgument("reverse", reverse);
             return this;
         }
 

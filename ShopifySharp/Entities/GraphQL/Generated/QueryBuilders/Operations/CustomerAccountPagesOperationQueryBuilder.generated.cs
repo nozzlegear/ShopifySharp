@@ -49,15 +49,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public CustomerAccountPagesOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageQueryBuilder> build)
-        {
-            var query = new Query<ICustomerAccountPage>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountPageQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICustomerAccountPage>(query);
-            return this;
-        }
-
         public CustomerAccountPagesOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");

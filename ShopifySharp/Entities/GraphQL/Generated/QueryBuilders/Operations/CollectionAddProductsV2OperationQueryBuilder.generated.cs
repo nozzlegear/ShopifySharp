@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `collectionUpdate` with inclusion.selectionsToAdd instead.")]
     public sealed class CollectionAddProductsV2OperationQueryBuilder : FieldsQueryBuilderBase<CollectionAddProductsV2Payload, CollectionAddProductsV2OperationQueryBuilder>, IGraphOperationQueryBuilder<CollectionAddProductsV2Payload>, IHasArguments<CollectionAddProductsV2ArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;

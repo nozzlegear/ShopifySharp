@@ -39,6 +39,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public InventoryShipmentQueryBuilder Barcode()
+        {
+            base.InnerQuery.AddField("barcode");
+            return this;
+        }
+
         public InventoryShipmentQueryBuilder DateCreated()
         {
             base.InnerQuery.AddField("dateCreated");

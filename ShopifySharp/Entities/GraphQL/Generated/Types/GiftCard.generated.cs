@@ -33,6 +33,12 @@ public record GiftCard : IGraphQLObject, INode
     public DateTimeOffset? createdAt { get; set; } = null;
 
     /// <summary>
+    /// The strategy used to convert the gift card's balance when it's redeemed in a currency other than the one it was issued in.
+    /// </summary>
+    [JsonPropertyName("crossCurrencyRedemptionStrategy")]
+    public GiftCardCrossCurrencyRedemptionStrategy? crossCurrencyRedemptionStrategy { get; set; } = null;
+
+    /// <summary>
     /// The customer who will receive the gift card.
     /// </summary>
     [JsonPropertyName("customer")]
@@ -72,10 +78,23 @@ public record GiftCard : IGraphQLObject, INode
     public MoneyV2? initialValue { get; set; } = null;
 
     /// <summary>
+    /// Whether the gift card is redeemable in any active market currency.
+    /// </summary>
+    [JsonPropertyName("isRedeemable")]
+    public bool? isRedeemable { get; set; } = null;
+
+    /// <summary>
     /// The final four characters of the gift card code.
     /// </summary>
     [JsonPropertyName("lastCharacters")]
     public string? lastCharacters { get; set; } = null;
+
+    /// <summary>
+    /// The line item from an order that initiated the creation of this gift card.
+    /// This value is `null` if the gift card was issued manually.
+    /// </summary>
+    [JsonPropertyName("lineItem")]
+    public LineItem? lineItem { get; set; } = null;
 
     /// <summary>
     /// The gift card code. Everything but the final four characters is masked.

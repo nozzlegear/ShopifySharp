@@ -96,6 +96,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public FulfillmentOrderLineItemQueryBuilder ShippingLine(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineQueryBuilder> build)
+        {
+            var query = new Query<ShippingLine>("shippingLine");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLineQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ShippingLine>(query);
+            return this;
+        }
+
         public FulfillmentOrderLineItemQueryBuilder Sku()
         {
             base.InnerQuery.AddField("sku");

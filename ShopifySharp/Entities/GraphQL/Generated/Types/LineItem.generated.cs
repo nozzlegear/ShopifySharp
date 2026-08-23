@@ -215,6 +215,14 @@ public record LineItem : IGraphQLObject, INode
     public MoneyBag? originalUnitPriceSet { get; set; } = null;
 
     /// <summary>
+    /// The total price of the line item in shop and presentment currencies,
+    /// after all discounts are applied and excluding refunded and removed quantities.
+    /// This value doesn't include taxes.
+    /// </summary>
+    [JsonPropertyName("priceAfterAllDiscountsBeforeTaxesSet")]
+    public MoneyBag? priceAfterAllDiscountsBeforeTaxesSet { get; set; } = null;
+
+    /// <summary>
     /// The Product object associated with this line item's variant.
     /// </summary>
     [JsonPropertyName("product")]
@@ -355,4 +363,10 @@ public record LineItem : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("vendor")]
     public string? vendor { get; set; } = null;
+
+    /// <summary>
+    /// The weight of a line item unit.
+    /// </summary>
+    [JsonPropertyName("weight")]
+    public Weight? weight { get; set; } = null;
 }

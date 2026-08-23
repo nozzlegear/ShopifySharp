@@ -22,9 +22,9 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public CollectionUpdateArgumentsBuilder Input(CollectionInput? input)
+        public CollectionUpdateArgumentsBuilder Collection(CollectionUpdateInput? collection)
         {
-            base.InnerQuery.AddArgument("input", input);
+            base.InnerQuery.AddArgument("collection", collection);
             return this;
         }
     }

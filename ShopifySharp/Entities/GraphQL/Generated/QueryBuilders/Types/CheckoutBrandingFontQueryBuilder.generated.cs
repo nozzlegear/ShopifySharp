@@ -41,5 +41,32 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("weight");
             return this;
         }
+
+        public CheckoutBrandingFontQueryBuilder OnCheckoutBrandingCustomFont(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingCustomFontQueryBuilder> build)
+        {
+            var query = new Query<CheckoutBrandingCustomFont>("... on CheckoutBrandingCustomFont");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingCustomFontQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public CheckoutBrandingFontQueryBuilder OnCheckoutBrandingShopifyFont(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingShopifyFontQueryBuilder> build)
+        {
+            var query = new Query<CheckoutBrandingShopifyFont>("... on CheckoutBrandingShopifyFont");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingShopifyFontQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public CheckoutBrandingFontQueryBuilder CheckoutBrandingFont(Action<CheckoutBrandingFontInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICheckoutBrandingFont>("checkoutBrandingFont");
+            var unionBuilder = new CheckoutBrandingFontInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

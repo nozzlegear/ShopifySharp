@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public GiftCardTransactionEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardTransactionQueryBuilder> build)
+        public GiftCardTransactionEdgeQueryBuilder Node(Action<GiftCardTransactionInterfaceCasesBuilder> build)
         {
             var query = new Query<IGiftCardTransaction>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardTransactionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IGiftCardTransaction>(query);
+            var unionBuilder = new GiftCardTransactionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

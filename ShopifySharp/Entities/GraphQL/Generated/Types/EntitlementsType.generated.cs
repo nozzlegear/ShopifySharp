@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record EntitlementsType : IGraphQLObject
 {
     /// <summary>
+    /// The shop's B2B entitlements.
+    /// </summary>
+    [JsonPropertyName("b2b")]
+    public B2BType? b2b { get; set; } = null;
+
+    /// <summary>
     /// Represents the markets for the shop.
     /// </summary>
     [JsonPropertyName("markets")]

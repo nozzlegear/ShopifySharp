@@ -71,6 +71,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootOrderQueryBuilder Attribution(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderAttributionQueryBuilder> build)
+        {
+            var query = new Query<OrderAttribution>("attribution");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderAttributionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderAttribution>(query);
+            return this;
+        }
+
         public QueryRootOrderQueryBuilder BillingAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder> build)
         {
             var query = new Query<MailingAddress>("billingAddress");
@@ -141,6 +150,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootOrderQueryBuilder CartToken()
+        {
+            base.InnerQuery.AddField("cartToken");
+            return this;
+        }
+
         public QueryRootOrderQueryBuilder Channel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder> build)
         {
             var query = new Query<Channel>("channel");
@@ -156,6 +171,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelInformationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ChannelInformation>(query);
+            return this;
+        }
+
+        public QueryRootOrderQueryBuilder CheckoutToken()
+        {
+            base.InnerQuery.AddField("checkoutToken");
             return this;
         }
 

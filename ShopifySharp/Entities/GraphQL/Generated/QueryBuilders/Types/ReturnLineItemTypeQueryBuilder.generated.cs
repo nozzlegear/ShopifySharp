@@ -99,5 +99,32 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("unprocessedQuantity");
             return this;
         }
+
+        public ReturnLineItemTypeQueryBuilder OnReturnLineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemQueryBuilder> build)
+        {
+            var query = new Query<ReturnLineItem>("... on ReturnLineItem");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public ReturnLineItemTypeQueryBuilder OnUnverifiedReturnLineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UnverifiedReturnLineItemQueryBuilder> build)
+        {
+            var query = new Query<UnverifiedReturnLineItem>("... on UnverifiedReturnLineItem");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UnverifiedReturnLineItemQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public ReturnLineItemTypeQueryBuilder ReturnLineItemType(Action<ReturnLineItemTypeInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IReturnLineItemType>("returnLineItemType");
+            var unionBuilder = new ReturnLineItemTypeInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

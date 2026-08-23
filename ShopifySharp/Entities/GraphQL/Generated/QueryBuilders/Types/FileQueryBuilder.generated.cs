@@ -77,5 +77,59 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("updatedAt");
             return this;
         }
+
+        public FileQueryBuilder OnExternalVideo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ExternalVideoQueryBuilder> build)
+        {
+            var query = new Query<ExternalVideo>("... on ExternalVideo");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ExternalVideoQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public FileQueryBuilder OnGenericFile(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GenericFileQueryBuilder> build)
+        {
+            var query = new Query<GenericFile>("... on GenericFile");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GenericFileQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public FileQueryBuilder OnMediaImage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaImageQueryBuilder> build)
+        {
+            var query = new Query<MediaImage>("... on MediaImage");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaImageQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public FileQueryBuilder OnModel3d(Action<ShopifySharp.GraphQL.QueryBuilders.Types.Model3dQueryBuilder> build)
+        {
+            var query = new Query<Model3d>("... on Model3d");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.Model3dQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public FileQueryBuilder OnVideo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.VideoQueryBuilder> build)
+        {
+            var query = new Query<Video>("... on Video");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.VideoQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public FileQueryBuilder File(Action<FileInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IFile>("file");
+            var unionBuilder = new FileInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

@@ -16,7 +16,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MetafieldInput : GraphQLInputObject<MetafieldInput>
 {
     /// <summary>
-    /// The unique ID of the metafield. Using `owner_id`, `namespace`, and `key` is preferred for creating and updating.
+    /// The unique ID of the metafield. Using `namespace` and `key` is preferred for creating and updating.
     /// </summary>
     [JsonPropertyName("id")]
     public string? id { get; set; } = null;
@@ -41,7 +41,7 @@ public record MetafieldInput : GraphQLInputObject<MetafieldInput>
     public string? @namespace { get; set; } = null;
 
     /// <summary>
-    /// The type of data that is stored in the metafield.
+    /// The type of data that's stored in the metafield.
     /// Refer to the list of [supported types](https://shopify.dev/apps/metafields/types).
     /// Required when creating or updating a metafield without a definition.
     /// </summary>

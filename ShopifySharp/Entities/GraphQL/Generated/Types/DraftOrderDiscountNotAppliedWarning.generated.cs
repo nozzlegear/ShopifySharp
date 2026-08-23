@@ -47,5 +47,6 @@ public record DraftOrderDiscountNotAppliedWarning : IGraphQLObject, IDraftOrderW
     /// The price rule that can't be applied.
     /// </summary>
     [JsonPropertyName("priceRule")]
+    [Obsolete("Use discountCode and discountTitle instead. This field will be removed in 2026-10.")]
     public PriceRule? priceRule { get; set; } = null;
 }

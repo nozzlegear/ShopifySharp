@@ -40,15 +40,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public BackupRegionUpdateOperationQueryBuilder BackupRegion(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder> build)
-        {
-            var query = new Query<IMarketRegion>("backupRegion");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMarketRegion>(query);
-            return this;
-        }
-
         public BackupRegionUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketUserErrorQueryBuilder> build)
         {
             var query = new Query<MarketUserError>("userErrors");

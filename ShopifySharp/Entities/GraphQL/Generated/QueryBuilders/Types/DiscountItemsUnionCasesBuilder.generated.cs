@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DiscountItemsUnionCasesBuilder OnAllDiscountItems(Action<AllDiscountItemsQueryBuilder> build)
+        public DiscountItemsUnionCasesBuilder OnAllDiscountItems(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AllDiscountItemsQueryBuilder> build)
         {
             var query = new Query<AllDiscountItems>("... on AllDiscountItems");
-            var queryBuilder = new AllDiscountItemsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AllDiscountItemsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountItemsUnionCasesBuilder OnDiscountCollections(Action<DiscountCollectionsQueryBuilder> build)
+        public DiscountItemsUnionCasesBuilder OnDiscountCollections(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCollectionsQueryBuilder> build)
         {
             var query = new Query<DiscountCollections>("... on DiscountCollections");
-            var queryBuilder = new DiscountCollectionsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCollectionsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountItemsUnionCasesBuilder OnDiscountProducts(Action<DiscountProductsQueryBuilder> build)
+        public DiscountItemsUnionCasesBuilder OnDiscountProducts(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountProductsQueryBuilder> build)
         {
             var query = new Query<DiscountProducts>("... on DiscountProducts");
-            var queryBuilder = new DiscountProductsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountProductsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

@@ -80,18 +80,6 @@ public record MarketingEngagementInput : GraphQLInputObject<MarketingEngagementI
     public int? impressionsCount { get; set; } = null;
 
     /// <summary>
-    /// Specifies how the provided metrics have been aggregated. Cumulative metrics
-    /// are aggregated from the first day of reporting up to and including
-    /// `occuredOn`. Non-cumulative metrics are aggregated over the single day
-    /// indicated in `occuredOn`. Cumulative metrics will monotonically increase in
-    /// time as each record includes the previous day's values, and so on.
-    /// Non-cumulative is strongly preferred, and support for cumulative metrics may
-    /// be deprecated in the future.
-    /// </summary>
-    [JsonPropertyName("isCumulative")]
-    public bool? isCumulative { get; set; } = null;
-
-    /// <summary>
     /// The calendar date (in the time zone offset specified by the utcOffset field)
     /// for which the metrics are being reported. For example, a shop in UTC-5 would
     /// set utcOffset="-05:00" and aggregate all engagements from 05:00:00Z up to

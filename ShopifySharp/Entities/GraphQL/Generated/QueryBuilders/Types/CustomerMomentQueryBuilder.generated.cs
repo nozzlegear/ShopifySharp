@@ -35,5 +35,23 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("occurredAt");
             return this;
         }
+
+        public CustomerMomentQueryBuilder OnCustomerVisit(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitQueryBuilder> build)
+        {
+            var query = new Query<CustomerVisit>("... on CustomerVisit");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerVisitQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public CustomerMomentQueryBuilder CustomerMoment(Action<CustomerMomentInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICustomerMoment>("customerMoment");
+            var unionBuilder = new CustomerMomentInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

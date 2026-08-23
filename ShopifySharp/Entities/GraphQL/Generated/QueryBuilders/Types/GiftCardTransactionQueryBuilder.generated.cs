@@ -83,5 +83,41 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("processedAt");
             return this;
         }
+
+        public GiftCardTransactionQueryBuilder OnGiftCardCashOutTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardCashOutTransactionQueryBuilder> build)
+        {
+            var query = new Query<GiftCardCashOutTransaction>("... on GiftCardCashOutTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardCashOutTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public GiftCardTransactionQueryBuilder OnGiftCardCreditTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardCreditTransactionQueryBuilder> build)
+        {
+            var query = new Query<GiftCardCreditTransaction>("... on GiftCardCreditTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardCreditTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public GiftCardTransactionQueryBuilder OnGiftCardDebitTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardDebitTransactionQueryBuilder> build)
+        {
+            var query = new Query<GiftCardDebitTransaction>("... on GiftCardDebitTransaction");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardDebitTransactionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public GiftCardTransactionQueryBuilder GiftCardTransaction(Action<GiftCardTransactionInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IGiftCardTransaction>("giftCardTransaction");
+            var unionBuilder = new GiftCardTransactionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

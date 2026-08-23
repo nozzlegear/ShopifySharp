@@ -45,18 +45,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public ResourcePublicationV2QueryBuilder Publishable(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublishableQueryBuilder> build)
-        {
-            var query = new Query<IPublishable>("publishable");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PublishableQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IPublishable>(query);
-            return this;
-        }
-
         public ResourcePublicationV2QueryBuilder PublishDate()
         {
             base.InnerQuery.AddField("publishDate");
+            return this;
+        }
+
+        public ResourcePublicationV2QueryBuilder Publishable(Action<PublishableInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IPublishable>("publishable");
+            var unionBuilder = new PublishableInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

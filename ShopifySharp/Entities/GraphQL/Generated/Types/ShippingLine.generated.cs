@@ -82,14 +82,18 @@ public record ShippingLine : IGraphQLUnionCase, IGraphQLObject
     public bool? isRemoved { get; set; } = null;
 
     /// <summary>
-    /// The pre-tax shipping price without any discounts applied.
+    /// The shipping price without any discounts applied. If the parent
+    /// order.taxesIncluded field is true, then this price includes taxes. Otherwise,
+    /// this field is the pre-tax price.
     /// </summary>
     [JsonPropertyName("originalPrice")]
     [Obsolete("Use `originalPriceSet` instead.")]
     public MoneyV2? originalPrice { get; set; } = null;
 
     /// <summary>
-    /// The pre-tax shipping price without any discounts applied.
+    /// The shipping price without any discounts applied. If the parent
+    /// order.taxesIncluded field is true, then this price includes taxes. Otherwise,
+    /// this field is the pre-tax price.
     /// </summary>
     [JsonPropertyName("originalPriceSet")]
     public MoneyBag? originalPriceSet { get; set; } = null;

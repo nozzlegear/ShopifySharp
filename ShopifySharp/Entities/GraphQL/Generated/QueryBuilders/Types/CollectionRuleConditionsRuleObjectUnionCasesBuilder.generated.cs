@@ -26,10 +26,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public CollectionRuleConditionsRuleObjectUnionCasesBuilder OnCollectionRuleMetafieldCondition(Action<CollectionRuleMetafieldConditionQueryBuilder> build)
+        public CollectionRuleConditionsRuleObjectUnionCasesBuilder OnCollectionRuleMetafieldCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleMetafieldConditionQueryBuilder> build)
         {
             var query = new Query<CollectionRuleMetafieldCondition>("... on CollectionRuleMetafieldCondition");
-            var queryBuilder = new CollectionRuleMetafieldConditionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleMetafieldConditionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

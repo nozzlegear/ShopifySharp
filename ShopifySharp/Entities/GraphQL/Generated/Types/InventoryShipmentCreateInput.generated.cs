@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryShipmentCreateInput : GraphQLInputObject<InventoryShipmentCreateInput>
 {
     /// <summary>
+    /// A unique barcode for the shipment.
+    /// </summary>
+    [JsonPropertyName("barcode")]
+    public string? barcode { get; set; } = null;
+
+    /// <summary>
     /// The date the shipment was created.
     /// </summary>
     [JsonPropertyName("dateCreated")]

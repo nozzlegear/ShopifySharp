@@ -13,6 +13,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
 [JsonDerivedType(typeof(MarketRegionCountry), typeDiscriminator: "MarketRegionCountry")]
+[JsonDerivedType(typeof(MarketRegionSubdivision), typeDiscriminator: "MarketRegionSubdivision")]
 public interface IMarketRegion : IGraphQLObject
 {
     /// <summary>

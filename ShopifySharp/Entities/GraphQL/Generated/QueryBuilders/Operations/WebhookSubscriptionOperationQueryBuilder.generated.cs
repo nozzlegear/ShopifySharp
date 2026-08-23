@@ -107,6 +107,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public WebhookSubscriptionOperationQueryBuilder Name()
+        {
+            base.InnerQuery.AddField("name");
+            return this;
+        }
+
         public WebhookSubscriptionOperationQueryBuilder Topic()
         {
             base.InnerQuery.AddField("topic");
@@ -122,16 +128,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public WebhookSubscriptionOperationQueryBuilder Uri()
         {
             base.InnerQuery.AddField("uri");
-            return this;
-        }
-
-        [Obsolete("Use `uri` instead.")]
-        public WebhookSubscriptionOperationQueryBuilder Endpoint(Action<WebhookSubscriptionEndpointUnionCasesBuilder> build)
-        {
-            var query = new Query<WebhookSubscriptionEndpoint>("endpoint");
-            var unionBuilder = new WebhookSubscriptionEndpointUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
             return this;
         }
     }

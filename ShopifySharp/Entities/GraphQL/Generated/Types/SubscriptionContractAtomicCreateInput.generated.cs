@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record SubscriptionContractAtomicCreateInput : GraphQLInputObject<SubscriptionContractAtomicCreateInput>
 {
     /// <summary>
+    /// The actor who initiated a subscription action.
+    /// </summary>
+    [JsonPropertyName("actor")]
+    public SubscriptionActor? actor { get; set; } = null;
+
+    /// <summary>
     /// The attributes used as input for the Subscription Draft.
     /// </summary>
     [JsonPropertyName("contract")]

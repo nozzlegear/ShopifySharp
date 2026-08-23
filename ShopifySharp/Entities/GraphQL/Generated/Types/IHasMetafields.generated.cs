@@ -27,6 +27,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 [JsonDerivedType(typeof(DiscountNode), typeDiscriminator: "DiscountNode")]
 [JsonDerivedType(typeof(DraftOrder), typeDiscriminator: "DraftOrder")]
 [JsonDerivedType(typeof(FulfillmentConstraintRule), typeDiscriminator: "FulfillmentConstraintRule")]
+[JsonDerivedType(typeof(GiftCardCashOutTransaction), typeDiscriminator: "GiftCardCashOutTransaction")]
 [JsonDerivedType(typeof(GiftCardCreditTransaction), typeDiscriminator: "GiftCardCreditTransaction")]
 [JsonDerivedType(typeof(GiftCardDebitTransaction), typeDiscriminator: "GiftCardDebitTransaction")]
 [JsonDerivedType(typeof(Image), typeDiscriminator: "Image")]

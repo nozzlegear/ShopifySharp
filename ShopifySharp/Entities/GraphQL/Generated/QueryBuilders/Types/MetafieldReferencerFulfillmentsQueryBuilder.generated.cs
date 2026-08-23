@@ -152,6 +152,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public MetafieldReferencerFulfillmentsQueryBuilder ShippingLabel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLabelQueryBuilder> build)
+        {
+            var query = new Query<ShippingLabel>("shippingLabel");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShippingLabelQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ShippingLabel>(query);
+            return this;
+        }
+
         public MetafieldReferencerFulfillmentsQueryBuilder Status()
         {
             base.InnerQuery.AddField("status");

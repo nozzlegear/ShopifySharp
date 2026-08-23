@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public SellingPlanPricingPolicyAdjustmentValueUnionCasesBuilder OnMoneyV2(Action<MoneyV2QueryBuilder> build)
+        public SellingPlanPricingPolicyAdjustmentValueUnionCasesBuilder OnMoneyV2(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("... on MoneyV2");
-            var queryBuilder = new MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public SellingPlanPricingPolicyAdjustmentValueUnionCasesBuilder OnSellingPlanPricingPolicyPercentageValue(Action<SellingPlanPricingPolicyPercentageValueQueryBuilder> build)
+        public SellingPlanPricingPolicyAdjustmentValueUnionCasesBuilder OnSellingPlanPricingPolicyPercentageValue(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanPricingPolicyPercentageValueQueryBuilder> build)
         {
             var query = new Query<SellingPlanPricingPolicyPercentageValue>("... on SellingPlanPricingPolicyPercentageValue");
-            var queryBuilder = new SellingPlanPricingPolicyPercentageValueQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanPricingPolicyPercentageValueQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

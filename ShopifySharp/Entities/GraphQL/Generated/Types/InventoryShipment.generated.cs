@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record InventoryShipment : IGraphQLObject, INode
 {
     /// <summary>
+    /// A unique barcode for the shipment.
+    /// </summary>
+    [JsonPropertyName("barcode")]
+    public string? barcode { get; set; } = null;
+
+    /// <summary>
     /// The date the shipment was created in UTC.
     /// </summary>
     [JsonPropertyName("dateCreated")]
@@ -74,7 +80,7 @@ public record InventoryShipment : IGraphQLObject, INode
     public int? totalAcceptedQuantity { get; set; } = null;
 
     /// <summary>
-    /// The total quantity of items received (both accepted and rejected) across all line items in this shipment.
+    /// The total quantity of items accepted, rejected, or marked as canceled across all line items in this shipment.
     /// </summary>
     [JsonPropertyName("totalReceivedQuantity")]
     public int? totalReceivedQuantity { get; set; } = null;

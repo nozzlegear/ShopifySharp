@@ -52,6 +52,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public FlowGenerateSignatureOperationQueryBuilder TargetUrl()
+        {
+            base.InnerQuery.AddField("targetUrl");
+            return this;
+        }
+
         public FlowGenerateSignatureOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
         {
             var query = new Query<UserError>("userErrors");

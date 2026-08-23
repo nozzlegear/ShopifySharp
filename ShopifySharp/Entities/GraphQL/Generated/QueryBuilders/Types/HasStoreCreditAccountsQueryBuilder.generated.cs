@@ -38,5 +38,32 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField<StoreCreditAccountConnection>(query);
             return this;
         }
+
+        public HasStoreCreditAccountsQueryBuilder OnCompanyLocation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationQueryBuilder> build)
+        {
+            var query = new Query<CompanyLocation>("... on CompanyLocation");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public HasStoreCreditAccountsQueryBuilder OnCustomer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
+        {
+            var query = new Query<Customer>("... on Customer");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public HasStoreCreditAccountsQueryBuilder HasStoreCreditAccounts(Action<HasStoreCreditAccountsInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IHasStoreCreditAccounts>("hasStoreCreditAccounts");
+            var unionBuilder = new HasStoreCreditAccountsInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

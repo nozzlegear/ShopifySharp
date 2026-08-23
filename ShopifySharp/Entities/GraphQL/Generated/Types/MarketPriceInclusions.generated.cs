@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MarketPriceInclusions : IGraphQLObject
 {
     /// <summary>
+    /// Whether adaptive pricing is enabled for the market. Only applicable to Managed Markets and must be ignored otherwise.
+    /// </summary>
+    [JsonPropertyName("adaptivePricingEnabled")]
+    public bool? adaptivePricingEnabled { get; set; } = null;
+
+    /// <summary>
     /// The inclusive duties pricing strategy of the market. This determines if prices include duties.
     /// </summary>
     [JsonPropertyName("inclusiveDutiesPricingStrategy")]

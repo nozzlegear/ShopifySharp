@@ -106,6 +106,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public WebhookSubscriptionQueryBuilder Name()
+        {
+            base.InnerQuery.AddField("name");
+            return this;
+        }
+
         public WebhookSubscriptionQueryBuilder Topic()
         {
             base.InnerQuery.AddField("topic");

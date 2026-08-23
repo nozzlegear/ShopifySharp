@@ -155,6 +155,7 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     /// ID of the channel that created the order.
     /// </summary>
     [JsonPropertyName("channelId")]
+    [Obsolete("Use [`order.attribution.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.handle) instead.")]
     public string? channelId { get; set; } = null;
 
     /// <summary>
@@ -265,6 +266,12 @@ public record FulfillmentOrder : IGraphQLUnionCase, IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("orderProcessedAt")]
     public DateTimeOffset? orderProcessedAt { get; set; } = null;
+
+    /// <summary>
+    /// The total weight of all line items in the fulfillment order that aren't yet fulfilled.
+    /// </summary>
+    [JsonPropertyName("remainingLineItemsWeight")]
+    public Weight? remainingLineItemsWeight { get; set; } = null;
 
     /// <summary>
     /// The request status of the fulfillment order.

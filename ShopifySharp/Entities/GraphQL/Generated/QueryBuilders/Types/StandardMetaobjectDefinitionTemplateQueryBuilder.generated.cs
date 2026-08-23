@@ -30,6 +30,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public StandardMetaobjectDefinitionTemplateQueryBuilder Access(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectAccessQueryBuilder> build)
+        {
+            var query = new Query<MetaobjectAccess>("access");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectAccessQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetaobjectAccess>(query);
+            return this;
+        }
+
         public StandardMetaobjectDefinitionTemplateQueryBuilder Description()
         {
             base.InnerQuery.AddField("description");

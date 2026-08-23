@@ -21,6 +21,15 @@ public record GiftCardCreateInput : GraphQLInputObject<GiftCardCreateInput>
     public string? code { get; set; } = null;
 
     /// <summary>
+    /// The strategy used to convert the gift card's balance when it's redeemed in a
+    /// currency other than the one it was issued in. When not provided, defaults to
+    /// `MARKET_FX` for gift cards issued in the shop's currency, and `NONE` for gift
+    /// cards issued in a different currency.
+    /// </summary>
+    [JsonPropertyName("crossCurrencyRedemptionStrategy")]
+    public GiftCardCrossCurrencyRedemptionStrategy? crossCurrencyRedemptionStrategy { get; set; } = null;
+
+    /// <summary>
     /// The ID of the customer who will receive the gift card. Requires `write_customers` access_scope.
     /// </summary>
     [JsonPropertyName("customerId")]
@@ -36,10 +45,10 @@ public record GiftCardCreateInput : GraphQLInputObject<GiftCardCreateInput>
     public DateOnly? expiresOn { get; set; } = null;
 
     /// <summary>
-    /// The initial value of the gift card.
+    /// The initial amount of the gift card.
     /// </summary>
-    [JsonPropertyName("initialValue")]
-    public decimal? initialValue { get; set; } = null;
+    [JsonPropertyName("initialAmount")]
+    public MoneyInput? initialAmount { get; set; } = null;
 
     /// <summary>
     /// The note associated with the gift card, which isn't visible to the customer.

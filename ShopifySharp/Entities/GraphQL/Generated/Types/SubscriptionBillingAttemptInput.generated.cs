@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record SubscriptionBillingAttemptInput : GraphQLInputObject<SubscriptionBillingAttemptInput>
 {
     /// <summary>
+    /// The actor who initiated a subscription action.
+    /// </summary>
+    [JsonPropertyName("actor")]
+    public SubscriptionActor? actor { get; set; } = null;
+
+    /// <summary>
     /// Select the specific billing cycle to be billed.
     /// Default to bill the current billing cycle if not specified.
     /// </summary>
@@ -42,4 +48,10 @@ public record SubscriptionBillingAttemptInput : GraphQLInputObject<SubscriptionB
     /// </summary>
     [JsonPropertyName("originTime")]
     public DateTimeOffset? originTime { get; set; } = null;
+
+    /// <summary>
+    /// Select payment processing policy for the billing attempt. Defaults to FAIL_UNLESS_VALID_PAYMENT_METHOD.
+    /// </summary>
+    [JsonPropertyName("paymentProcessingPolicy")]
+    public SubscriptionBillingAttemptPaymentProcessingPolicy? paymentProcessingPolicy { get; set; } = null;
 }

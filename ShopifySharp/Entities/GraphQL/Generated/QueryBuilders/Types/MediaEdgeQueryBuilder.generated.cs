@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public MediaEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder> build)
+        public MediaEdgeQueryBuilder Node(Action<MediaInterfaceCasesBuilder> build)
         {
             var query = new Query<IMedia>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMedia>(query);
+            var unionBuilder = new MediaInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

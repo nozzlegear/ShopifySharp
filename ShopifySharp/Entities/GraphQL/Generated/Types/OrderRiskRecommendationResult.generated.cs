@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// List of possible values for an OrderRiskRecommendation recommendation.
+/// Possible recommendations for an order.
 /// </summary>
 public enum OrderRiskRecommendationResult
 {

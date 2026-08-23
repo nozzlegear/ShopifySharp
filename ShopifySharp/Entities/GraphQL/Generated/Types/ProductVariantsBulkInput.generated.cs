@@ -82,6 +82,13 @@ public record ProductVariantsBulkInput : GraphQLInputObject<ProductVariantsBulkI
     public decimal? price { get; set; } = null;
 
     /// <summary>
+    /// Indicates whether the product variant is created as published or unpublished.
+    /// This option is only available for new product variants.
+    /// </summary>
+    [JsonPropertyName("published")]
+    public bool? published { get; set; } = null;
+
+    /// <summary>
     /// Adjust inventory quantities with deltas.
     /// </summary>
     [JsonPropertyName("quantityAdjustments")]

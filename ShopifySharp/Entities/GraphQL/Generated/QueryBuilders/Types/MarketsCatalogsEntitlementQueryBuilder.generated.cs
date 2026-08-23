@@ -35,5 +35,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("enabled");
             return this;
         }
+
+        public MarketsCatalogsEntitlementQueryBuilder Limit()
+        {
+            base.InnerQuery.AddField("limit");
+            return this;
+        }
     }
 }

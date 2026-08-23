@@ -51,6 +51,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public CalculatedDraftOrderQueryBuilder AmountDueLaterSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        {
+            var query = new Query<MoneyBag>("amountDueLaterSet");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyBag>(query);
+            return this;
+        }
+
+        public CalculatedDraftOrderQueryBuilder AmountDueNowSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        {
+            var query = new Query<MoneyBag>("amountDueNowSet");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyBag>(query);
+            return this;
+        }
+
         public CalculatedDraftOrderQueryBuilder AnyVariantPricesOverridden()
         {
             base.InnerQuery.AddField("anyVariantPricesOverridden");
@@ -273,12 +291,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public CalculatedDraftOrderQueryBuilder Warnings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderWarningQueryBuilder> build)
+        public CalculatedDraftOrderQueryBuilder Deposit(Action<DepositConfigurationUnionCasesBuilder> build)
         {
-            var query = new Query<IDraftOrderWarning>("warnings");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderWarningQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IDraftOrderWarning>(query);
+            var query = new Query<DepositConfiguration>("deposit");
+            var unionBuilder = new DepositConfigurationUnionCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddUnionCase(query);
             return this;
         }
 
@@ -288,6 +306,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var unionBuilder = new PurchasingEntityUnionCasesBuilder(query);
             build.Invoke(unionBuilder);
             base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public CalculatedDraftOrderQueryBuilder Warnings(Action<DraftOrderWarningInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IDraftOrderWarning>("warnings");
+            var unionBuilder = new DraftOrderWarningInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

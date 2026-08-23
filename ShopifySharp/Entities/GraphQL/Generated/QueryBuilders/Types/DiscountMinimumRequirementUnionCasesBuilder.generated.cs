@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DiscountMinimumRequirementUnionCasesBuilder OnDiscountMinimumQuantity(Action<DiscountMinimumQuantityQueryBuilder> build)
+        public DiscountMinimumRequirementUnionCasesBuilder OnDiscountMinimumQuantity(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountMinimumQuantityQueryBuilder> build)
         {
             var query = new Query<DiscountMinimumQuantity>("... on DiscountMinimumQuantity");
-            var queryBuilder = new DiscountMinimumQuantityQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountMinimumQuantityQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountMinimumRequirementUnionCasesBuilder OnDiscountMinimumSubtotal(Action<DiscountMinimumSubtotalQueryBuilder> build)
+        public DiscountMinimumRequirementUnionCasesBuilder OnDiscountMinimumSubtotal(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountMinimumSubtotalQueryBuilder> build)
         {
             var query = new Query<DiscountMinimumSubtotal>("... on DiscountMinimumSubtotal");
-            var queryBuilder = new DiscountMinimumSubtotalQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountMinimumSubtotalQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

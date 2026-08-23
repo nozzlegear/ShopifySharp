@@ -30,37 +30,42 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        [Obsolete("Use [`OrderAttributionDefinition.displayName`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.displayName) instead.")]
         public ChannelDefinitionQueryBuilder ChannelName()
         {
             base.InnerQuery.AddField("channelName");
             return this;
         }
 
+        [Obsolete("Use [`OrderAttributionDefinition.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.handle) instead.")]
         public ChannelDefinitionQueryBuilder Handle()
         {
             base.InnerQuery.AddField("handle");
             return this;
         }
 
+        [Obsolete("Use [`OrderAttributionDefinition.id`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.id) instead.")]
         public ChannelDefinitionQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");
             return this;
         }
 
+        [Obsolete("Use [`OrderAttributionDefinition.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.handle) instead.")]
         public ChannelDefinitionQueryBuilder IsMarketplace()
         {
             base.InnerQuery.AddField("isMarketplace");
             return this;
         }
 
+        [Obsolete("Use [`OrderAttributionDefinition.displayName`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.displayName) instead.")]
         public ChannelDefinitionQueryBuilder SubChannelName()
         {
             base.InnerQuery.AddField("subChannelName");
             return this;
         }
 
-        [Obsolete("Use App.icon instead")]
+        [Obsolete("Use [`OrderAttributionDefinition.icon`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.icon) instead.")]
         public ChannelDefinitionQueryBuilder SvgIcon()
         {
             base.InnerQuery.AddField("svgIcon");

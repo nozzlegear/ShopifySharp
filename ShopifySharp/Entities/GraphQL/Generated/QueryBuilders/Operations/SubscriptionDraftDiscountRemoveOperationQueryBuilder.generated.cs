@@ -57,14 +57,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<SubscriptionDraftUserError>(query);
             return this;
         }
-
-        public SubscriptionDraftDiscountRemoveOperationQueryBuilder DiscountRemoved(Action<SubscriptionDiscountUnionCasesBuilder> build)
-        {
-            var query = new Query<SubscriptionDiscount>("discountRemoved");
-            var unionBuilder = new SubscriptionDiscountUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

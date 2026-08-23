@@ -39,6 +39,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use [`OrderAttributionDefinition.displayName`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttributionDefinition#field-OrderAttributionDefinition.fields.displayName) instead.")]
         public AvailableChannelDefinitionsByChannelQueryBuilder ChannelName()
         {
             base.InnerQuery.AddField("channelName");

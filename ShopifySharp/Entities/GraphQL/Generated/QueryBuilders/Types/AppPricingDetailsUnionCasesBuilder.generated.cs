@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public AppPricingDetailsUnionCasesBuilder OnAppRecurringPricing(Action<AppRecurringPricingQueryBuilder> build)
+        public AppPricingDetailsUnionCasesBuilder OnAppRecurringPricing(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppRecurringPricingQueryBuilder> build)
         {
             var query = new Query<AppRecurringPricing>("... on AppRecurringPricing");
-            var queryBuilder = new AppRecurringPricingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppRecurringPricingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public AppPricingDetailsUnionCasesBuilder OnAppUsagePricing(Action<AppUsagePricingQueryBuilder> build)
+        public AppPricingDetailsUnionCasesBuilder OnAppUsagePricing(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppUsagePricingQueryBuilder> build)
         {
             var query = new Query<AppUsagePricing>("... on AppUsagePricing");
-            var queryBuilder = new AppUsagePricingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppUsagePricingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

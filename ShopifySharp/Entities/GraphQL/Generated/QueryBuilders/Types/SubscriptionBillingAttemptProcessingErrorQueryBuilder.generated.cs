@@ -41,5 +41,41 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("message");
             return this;
         }
+
+        public SubscriptionBillingAttemptProcessingErrorQueryBuilder OnSubscriptionBillingAttemptGenericError(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptGenericErrorQueryBuilder> build)
+        {
+            var query = new Query<SubscriptionBillingAttemptGenericError>("... on SubscriptionBillingAttemptGenericError");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptGenericErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SubscriptionBillingAttemptProcessingErrorQueryBuilder OnSubscriptionBillingAttemptInsufficientStockProductVariantsError(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptInsufficientStockProductVariantsErrorQueryBuilder> build)
+        {
+            var query = new Query<SubscriptionBillingAttemptInsufficientStockProductVariantsError>("... on SubscriptionBillingAttemptInsufficientStockProductVariantsError");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptInsufficientStockProductVariantsErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SubscriptionBillingAttemptProcessingErrorQueryBuilder OnSubscriptionBillingAttemptOutOfStockProductVariantsError(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptOutOfStockProductVariantsErrorQueryBuilder> build)
+        {
+            var query = new Query<SubscriptionBillingAttemptOutOfStockProductVariantsError>("... on SubscriptionBillingAttemptOutOfStockProductVariantsError");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptOutOfStockProductVariantsErrorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SubscriptionBillingAttemptProcessingErrorQueryBuilder SubscriptionBillingAttemptProcessingError(Action<SubscriptionBillingAttemptProcessingErrorInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ISubscriptionBillingAttemptProcessingError>("subscriptionBillingAttemptProcessingError");
+            var unionBuilder = new SubscriptionBillingAttemptProcessingErrorInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

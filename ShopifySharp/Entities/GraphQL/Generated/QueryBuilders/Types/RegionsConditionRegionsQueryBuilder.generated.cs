@@ -44,21 +44,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public RegionsConditionRegionsQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder> build)
-        {
-            var query = new Query<IMarketRegion>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMarketRegion>(query);
-            return this;
-        }
-
         public RegionsConditionRegionsQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
+            return this;
+        }
+
+        public RegionsConditionRegionsQueryBuilder Nodes(Action<MarketRegionInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IMarketRegion>("nodes");
+            var unionBuilder = new MarketRegionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

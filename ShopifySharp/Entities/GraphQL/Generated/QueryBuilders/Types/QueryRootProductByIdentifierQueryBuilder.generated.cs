@@ -176,21 +176,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootProductByIdentifierQueryBuilder FeaturedMedia(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder> build)
-        {
-            var query = new Query<IMedia>("featuredMedia");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMedia>(query);
-            return this;
-        }
-
         public QueryRootProductByIdentifierQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourceFeedbackQueryBuilder> build)
         {
             var query = new Query<ResourceFeedback>("feedback");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourceFeedbackQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourceFeedback>(query);
+            return this;
+        }
+
+        public QueryRootProductByIdentifierQueryBuilder GiftCardSettings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardProductSettingsQueryBuilder> build)
+        {
+            var query = new Query<GiftCardProductSettings>("giftCardSettings");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardProductSettingsQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<GiftCardProductSettings>(query);
             return this;
         }
 
@@ -642,9 +642,36 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootProductByIdentifierQueryBuilder VariantsInCollection(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
+        {
+            var query = new Query<ProductVariantConnection>("variantsInCollection");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ProductVariantConnection>(query);
+            return this;
+        }
+
+        public QueryRootProductByIdentifierQueryBuilder VariantsInCollectionCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
+        {
+            var query = new Query<Count>("variantsInCollectionCount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
         public QueryRootProductByIdentifierQueryBuilder Vendor()
         {
             base.InnerQuery.AddField("vendor");
+            return this;
+        }
+
+        public QueryRootProductByIdentifierQueryBuilder FeaturedMedia(Action<MediaInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IMedia>("featuredMedia");
+            var unionBuilder = new MediaInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

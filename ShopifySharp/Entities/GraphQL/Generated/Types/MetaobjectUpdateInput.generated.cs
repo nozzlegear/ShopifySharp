@@ -36,4 +36,12 @@ public record MetaobjectUpdateInput : GraphQLInputObject<MetaobjectUpdateInput>
     /// </summary>
     [JsonPropertyName("redirectNewHandle")]
     public bool? redirectNewHandle { get; set; } = null;
+
+    /// <summary>
+    /// The field values for the metaobject as a JSON object, keyed by field
+    /// definition key. This is a full replacement — omitted keys are cleared on an
+    /// existing record. Cannot be used in conjunction with `fields`.
+    /// </summary>
+    [JsonPropertyName("values")]
+    public string? values { get; set; } = null;
 }

@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `checkoutAndAccountsConfiguration` instead.")]
     public sealed class CheckoutProfileOperationQueryBuilder : FieldsQueryBuilderBase<CheckoutProfile, CheckoutProfileOperationQueryBuilder>, IGraphOperationQueryBuilder<CheckoutProfile>, IHasArguments<CheckoutProfileArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;

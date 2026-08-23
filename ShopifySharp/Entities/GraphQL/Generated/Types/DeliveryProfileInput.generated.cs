@@ -20,6 +20,16 @@ public record DeliveryProfileInput : GraphQLInputObject<DeliveryProfileInput>
     public ICollection<string>? conditionsToDelete { get; set; } = null;
 
     /// <summary>
+    /// Whether this delivery profile covers all items in the shop. Providing this field requires
+    /// the shop to be enabled and is only supported on app-owned shipping profiles. Set it to `true`
+    /// to make the profile cover all shippable items, or `false` to disable this behavior. When omitted
+    /// on create, the profile is created with `coversAllItems: false`. When omitted on update, the
+    /// existing value is preserved.
+    /// </summary>
+    [JsonPropertyName("coversAllItems")]
+    public bool? coversAllItems { get; set; } = null;
+
+    /// <summary>
     /// The list of location groups to be created in the delivery profile.
     /// **Note:** due to the potential complexity of the nested data, it is
     /// recommended to send no more than 5 location groups per each request.

@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public ReturnLineItemTypeEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder> build)
+        public ReturnLineItemTypeEdgeQueryBuilder Node(Action<ReturnLineItemTypeInterfaceCasesBuilder> build)
         {
             var query = new Query<IReturnLineItemType>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IReturnLineItemType>(query);
+            var unionBuilder = new ReturnLineItemTypeInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

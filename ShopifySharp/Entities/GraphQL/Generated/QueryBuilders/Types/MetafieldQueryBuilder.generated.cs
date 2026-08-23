@@ -97,15 +97,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public MetafieldQueryBuilder Owner(Action<ShopifySharp.GraphQL.QueryBuilders.Types.HasMetafieldsQueryBuilder> build)
-        {
-            var query = new Query<IHasMetafields>("owner");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.HasMetafieldsQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IHasMetafields>(query);
-            return this;
-        }
-
         public MetafieldQueryBuilder OwnerType()
         {
             base.InnerQuery.AddField("ownerType");
@@ -118,6 +109,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldReferenceConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldReferenceConnection>(query);
+            return this;
+        }
+
+        public MetafieldQueryBuilder SizeInBytes()
+        {
+            base.InnerQuery.AddField("sizeInBytes");
+            return this;
+        }
+
+        public MetafieldQueryBuilder Translations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder> build)
+        {
+            var query = new Query<Translation>("translations");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TranslationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Translation>(query);
             return this;
         }
 
@@ -145,6 +151,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var unionBuilder = new MetafieldReferenceUnionCasesBuilder(query);
             build.Invoke(unionBuilder);
             base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public MetafieldQueryBuilder Owner(Action<HasMetafieldsInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IHasMetafields>("owner");
+            var unionBuilder = new HasMetafieldsInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

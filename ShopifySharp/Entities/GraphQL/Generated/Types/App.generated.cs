@@ -50,6 +50,12 @@ public record App : IGraphQLObject, INode
     public Image? banner { get; set; } = null;
 
     /// <summary>
+    /// The sales channels associated with this app.
+    /// </summary>
+    [JsonPropertyName("channels")]
+    public ChannelConnection? channels { get; set; } = null;
+
+    /// <summary>
     /// Description of the app.
     /// </summary>
     [JsonPropertyName("description")]
@@ -118,7 +124,7 @@ public record App : IGraphQLObject, INode
 
     /// <summary>
     /// Corresponding AppInstallation for this shop and App.
-    /// Returns null if the App is not installed.
+    /// Returns null if the App isn't installed.
     /// </summary>
     [JsonPropertyName("installation")]
     public AppInstallation? installation { get; set; } = null;

@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record StandardMetaobjectDefinitionTemplate : IGraphQLObject
 {
     /// <summary>
+    /// Access configuration for the standard metaobject definition template.
+    /// </summary>
+    [JsonPropertyName("access")]
+    public MetaobjectAccess? access { get; set; } = null;
+
+    /// <summary>
     /// The administrative description.
     /// </summary>
     [JsonPropertyName("description")]

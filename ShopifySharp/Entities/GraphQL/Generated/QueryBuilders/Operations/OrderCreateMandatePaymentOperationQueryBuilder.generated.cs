@@ -49,6 +49,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public OrderCreateMandatePaymentOperationQueryBuilder JobResult(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderCreateMandatePaymentJobResultQueryBuilder> build)
+        {
+            var query = new Query<OrderCreateMandatePaymentJobResult>("jobResult");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderCreateMandatePaymentJobResultQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderCreateMandatePaymentJobResult>(query);
+            return this;
+        }
+
         public OrderCreateMandatePaymentOperationQueryBuilder PaymentReferenceId()
         {
             base.InnerQuery.AddField("paymentReferenceId");

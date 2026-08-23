@@ -32,6 +32,18 @@ public record MarketCreateInput : GraphQLInputObject<MarketCreateInput>
     public MarketCurrencySettingsUpdateInput? currencySettings { get; set; } = null;
 
     /// <summary>
+    /// Delivery settings for the market.
+    /// </summary>
+    [JsonPropertyName("delivery")]
+    public MarketDeliveryConfigurationsCreateInput? delivery { get; set; } = null;
+
+    /// <summary>
+    /// Discounts that are eligible for this market.
+    /// </summary>
+    [JsonPropertyName("discounts")]
+    public ICollection<string>? discounts { get; set; } = null;
+
+    /// <summary>
     /// A unique identifier for the market. For example `"ca"`.
     /// If the handle isn't provided, then the handle is auto-generated based on the country or name.
     /// </summary>

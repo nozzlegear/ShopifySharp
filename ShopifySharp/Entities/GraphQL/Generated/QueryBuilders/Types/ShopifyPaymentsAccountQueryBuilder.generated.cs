@@ -76,15 +76,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public ShopifyPaymentsAccountQueryBuilder ChargeStatementDescriptors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsChargeStatementDescriptorQueryBuilder> build)
-        {
-            var query = new Query<IShopifyPaymentsChargeStatementDescriptor>("chargeStatementDescriptors");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsChargeStatementDescriptorQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IShopifyPaymentsChargeStatementDescriptor>(query);
-            return this;
-        }
-
         public ShopifyPaymentsAccountQueryBuilder Country()
         {
             base.InnerQuery.AddField("country");
@@ -139,6 +130,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public ShopifyPaymentsAccountQueryBuilder PayoutStatementDescriptor()
         {
             base.InnerQuery.AddField("payoutStatementDescriptor");
+            return this;
+        }
+
+        public ShopifyPaymentsAccountQueryBuilder ChargeStatementDescriptors(Action<ShopifyPaymentsChargeStatementDescriptorInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IShopifyPaymentsChargeStatementDescriptor>("chargeStatementDescriptors");
+            var unionBuilder = new ShopifyPaymentsChargeStatementDescriptorInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

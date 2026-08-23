@@ -22,6 +22,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
+        public SubscriptionContractFailArgumentsBuilder Actor(SubscriptionActor? actor)
+        {
+            base.InnerQuery.AddArgument("actor", actor);
+            return this;
+        }
+
         public SubscriptionContractFailArgumentsBuilder SubscriptionContractId(string? subscriptionContractId)
         {
             base.InnerQuery.AddArgument("subscriptionContractId", subscriptionContractId);

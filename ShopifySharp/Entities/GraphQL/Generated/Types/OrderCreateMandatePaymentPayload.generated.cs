@@ -20,6 +20,12 @@ public record OrderCreateMandatePaymentPayload : IGraphQLObject
     public Job? job { get; set; } = null;
 
     /// <summary>
+    /// The job result for tracking the status of the mandate payment request.
+    /// </summary>
+    [JsonPropertyName("jobResult")]
+    public OrderCreateMandatePaymentJobResult? jobResult { get; set; } = null;
+
+    /// <summary>
     /// The Unique ID for the created payment.
     /// </summary>
     [JsonPropertyName("paymentReferenceId")]

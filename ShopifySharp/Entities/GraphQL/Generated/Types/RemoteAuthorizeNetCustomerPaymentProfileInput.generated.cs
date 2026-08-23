@@ -14,8 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record RemoteAuthorizeNetCustomerPaymentProfileInput : GraphQLInputObject<RemoteAuthorizeNetCustomerPaymentProfileInput>
 {
     /// <summary>
-    /// The customerPaymentProfileId value from the Authorize.net API. Starting on 2025,
-    /// customer_payment_profile_id will become mandatory for all API versions.
+    /// The customerPaymentProfileId value from the Authorize.net API.
     /// </summary>
     [JsonPropertyName("customerPaymentProfileId")]
     public string? customerPaymentProfileId { get; set; } = null;

@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Specifies the attribute of a product being used to populate the smart collection.
+/// Specifies the attribute of a product being used to populate the collection.
 /// </summary>
 public enum CollectionRuleColumn
 {

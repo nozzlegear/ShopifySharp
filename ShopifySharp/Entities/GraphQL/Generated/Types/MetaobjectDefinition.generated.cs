@@ -33,6 +33,12 @@ public record MetaobjectDefinition : IGraphQLObject, INode
     public MetaobjectCapabilities? capabilities { get; set; } = null;
 
     /// <summary>
+    /// The date and time when the metaobject definition was created.
+    /// </summary>
+    [JsonPropertyName("createdAt")]
+    public DateTimeOffset? createdAt { get; set; } = null;
+
+    /// <summary>
     /// The app used to create the metaobject definition.
     /// </summary>
     [JsonPropertyName("createdByApp")]
@@ -104,4 +110,10 @@ public record MetaobjectDefinition : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("type")]
     public string? type { get; set; } = null;
+
+    /// <summary>
+    /// The date and time when the metaobject definition was last updated.
+    /// </summary>
+    [JsonPropertyName("updatedAt")]
+    public DateTimeOffset? updatedAt { get; set; } = null;
 }

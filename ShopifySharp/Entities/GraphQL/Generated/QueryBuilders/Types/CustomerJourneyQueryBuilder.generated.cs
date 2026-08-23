@@ -60,12 +60,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public CustomerJourneyQueryBuilder Moments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMomentQueryBuilder> build)
+        public CustomerJourneyQueryBuilder Moments(Action<CustomerMomentInterfaceCasesBuilder> build)
         {
             var query = new Query<ICustomerMoment>("moments");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerMomentQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICustomerMoment>(query);
+            var unionBuilder = new CustomerMomentInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

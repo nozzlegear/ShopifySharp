@@ -18,7 +18,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
     {
         protected override DepositConfigurationUnionCasesBuilder Self => this;
 
-        public DepositConfigurationUnionCasesBuilder(string fieldName = "depositConfiguration") : this(new Query<DepositConfiguration>(fieldName))
+        public DepositConfigurationUnionCasesBuilder(string fieldName = "deposit") : this(new Query<DepositConfiguration>(fieldName))
         {
         }
 
@@ -26,10 +26,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DepositConfigurationUnionCasesBuilder OnDepositPercentage(Action<DepositPercentageQueryBuilder> build)
+        public DepositConfigurationUnionCasesBuilder OnDepositPercentage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DepositPercentageQueryBuilder> build)
         {
             var query = new Query<DepositPercentage>("... on DepositPercentage");
-            var queryBuilder = new DepositPercentageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DepositPercentageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

@@ -75,6 +75,12 @@ public record FulfillmentOrderLineItem : IGraphQLObject, INode
     public bool? requiresShipping { get; set; } = null;
 
     /// <summary>
+    /// The shipping line associated with this line item.
+    /// </summary>
+    [JsonPropertyName("shippingLine")]
+    public ShippingLine? shippingLine { get; set; } = null;
+
+    /// <summary>
     /// The variant SKU number.
     /// </summary>
     [JsonPropertyName("sku")]

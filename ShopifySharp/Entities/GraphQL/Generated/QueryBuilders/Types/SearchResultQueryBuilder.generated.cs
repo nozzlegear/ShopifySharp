@@ -45,15 +45,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public SearchResultQueryBuilder Reference(Action<ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder> build)
-        {
-            var query = new Query<INode>("reference");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.NodeQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<INode>(query);
-            return this;
-        }
-
         public SearchResultQueryBuilder Title()
         {
             base.InnerQuery.AddField("title");
@@ -63,6 +54,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public SearchResultQueryBuilder Url()
         {
             base.InnerQuery.AddField("url");
+            return this;
+        }
+
+        public SearchResultQueryBuilder Reference(Action<NodeInterfaceCasesBuilder> build)
+        {
+            var query = new Query<INode>("reference");
+            var unionBuilder = new NodeInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

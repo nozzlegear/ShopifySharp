@@ -1,0 +1,39 @@
+#nullable enable
+namespace ShopifySharp.GraphQL;
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using ShopifySharp.Credentials;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+
+/// <summary>
+/// Return type for `paymentScheduleCapture` mutation.
+/// </summary>
+public record PaymentScheduleCapturePayload : IGraphQLObject
+{
+    /// <summary>
+    /// The async job used for charging the payment.
+    /// </summary>
+    [JsonPropertyName("job")]
+    public Job? job { get; set; } = null;
+
+    /// <summary>
+    /// The job result for tracking the status of the payment capture.
+    /// </summary>
+    [JsonPropertyName("jobResult")]
+    public OrderCreateMandatePaymentJobResult? jobResult { get; set; } = null;
+
+    /// <summary>
+    /// The unique ID for the created payment.
+    /// </summary>
+    [JsonPropertyName("paymentReferenceId")]
+    public string? paymentReferenceId { get; set; } = null;
+
+    /// <summary>
+    /// The list of errors that occurred from executing the mutation.
+    /// </summary>
+    [JsonPropertyName("userErrors")]
+    public ICollection<PaymentScheduleCaptureUserError>? userErrors { get; set; } = null;
+}

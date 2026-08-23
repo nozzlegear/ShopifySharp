@@ -33,5 +33,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddArgument("metaobject", metaobject);
             return this;
         }
+
+        public MetaobjectUpsertArgumentsBuilder Values(string? values)
+        {
+            base.InnerQuery.AddArgument("values", values);
+            return this;
+        }
     }
 }

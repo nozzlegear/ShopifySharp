@@ -32,6 +32,12 @@ public record InventoryTransferCreateInput : GraphQLInputObject<InventoryTransfe
     public ICollection<InventoryTransferLineItemInput>? lineItems { get; set; } = null;
 
     /// <summary>
+    /// The metafields to attach to the inventory transfer.
+    /// </summary>
+    [JsonPropertyName("metafields")]
+    public ICollection<MetafieldInput>? metafields { get; set; } = null;
+
+    /// <summary>
     /// A note to add to the Inventory Transfer.
     /// </summary>
     [JsonPropertyName("note")]

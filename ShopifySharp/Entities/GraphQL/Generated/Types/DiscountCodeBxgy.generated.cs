@@ -154,6 +154,14 @@ public record DiscountCodeBxgy : IGraphQLUnionCase, IGraphQLObject
     public string? summary { get; set; } = null;
 
     /// <summary>
+    /// A list of searchable keywords that are associated with the discount.
+    /// For example, a merchant might apply the `loyalty` tag to discounts
+    /// that are associated with their loyalty program.
+    /// </summary>
+    [JsonPropertyName("tags")]
+    public ICollection<string>? tags { get; set; } = null;
+
+    /// <summary>
     /// The discount's name that displays to merchants in the Shopify admin and to customers.
     /// </summary>
     [JsonPropertyName("title")]

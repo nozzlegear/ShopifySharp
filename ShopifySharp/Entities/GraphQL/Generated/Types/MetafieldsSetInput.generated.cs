@@ -43,9 +43,9 @@ public record MetafieldsSetInput : GraphQLInputObject<MetafieldsSetInput>
     public string? ownerId { get; set; } = null;
 
     /// <summary>
-    /// The type of data that is stored in the metafield.
+    /// The type of data that's stored in the metafield.
     /// The type must be one of the [supported types](https://shopify.dev/apps/metafields/types).
-    /// Required when there is no corresponding definition for the given `namespace`, `key`, and
+    /// Required when there's no corresponding definition for the given `namespace`, `key`, and
     /// owner resource type (derived from `ownerId`).
     /// </summary>
     [JsonPropertyName("type")]

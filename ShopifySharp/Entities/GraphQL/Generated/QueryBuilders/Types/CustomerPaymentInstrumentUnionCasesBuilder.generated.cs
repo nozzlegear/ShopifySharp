@@ -26,37 +26,37 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public CustomerPaymentInstrumentUnionCasesBuilder OnBankAccount(Action<BankAccountQueryBuilder> build)
+        public CustomerPaymentInstrumentUnionCasesBuilder OnBankAccount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BankAccountQueryBuilder> build)
         {
             var query = new Query<BankAccount>("... on BankAccount");
-            var queryBuilder = new BankAccountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.BankAccountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerCreditCard(Action<CustomerCreditCardQueryBuilder> build)
+        public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerCreditCard(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerCreditCardQueryBuilder> build)
         {
             var query = new Query<CustomerCreditCard>("... on CustomerCreditCard");
-            var queryBuilder = new CustomerCreditCardQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerCreditCardQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerPaypalBillingAgreement(Action<CustomerPaypalBillingAgreementQueryBuilder> build)
+        public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerPaypalBillingAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaypalBillingAgreementQueryBuilder> build)
         {
             var query = new Query<CustomerPaypalBillingAgreement>("... on CustomerPaypalBillingAgreement");
-            var queryBuilder = new CustomerPaypalBillingAgreementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerPaypalBillingAgreementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerShopPayAgreement(Action<CustomerShopPayAgreementQueryBuilder> build)
+        public CustomerPaymentInstrumentUnionCasesBuilder OnCustomerShopPayAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerShopPayAgreementQueryBuilder> build)
         {
             var query = new Query<CustomerShopPayAgreement>("... on CustomerShopPayAgreement");
-            var queryBuilder = new CustomerShopPayAgreementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerShopPayAgreementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

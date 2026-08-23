@@ -26,37 +26,37 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public PaymentDetailsUnionCasesBuilder OnCardPaymentDetails(Action<CardPaymentDetailsQueryBuilder> build)
+        public PaymentDetailsUnionCasesBuilder OnCardPaymentDetails(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CardPaymentDetailsQueryBuilder> build)
         {
             var query = new Query<CardPaymentDetails>("... on CardPaymentDetails");
-            var queryBuilder = new CardPaymentDetailsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CardPaymentDetailsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PaymentDetailsUnionCasesBuilder OnLocalPaymentMethodsPaymentDetails(Action<LocalPaymentMethodsPaymentDetailsQueryBuilder> build)
+        public PaymentDetailsUnionCasesBuilder OnLocalPaymentMethodsPaymentDetails(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LocalPaymentMethodsPaymentDetailsQueryBuilder> build)
         {
             var query = new Query<LocalPaymentMethodsPaymentDetails>("... on LocalPaymentMethodsPaymentDetails");
-            var queryBuilder = new LocalPaymentMethodsPaymentDetailsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocalPaymentMethodsPaymentDetailsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PaymentDetailsUnionCasesBuilder OnPaypalWalletPaymentDetails(Action<PaypalWalletPaymentDetailsQueryBuilder> build)
+        public PaymentDetailsUnionCasesBuilder OnPaypalWalletPaymentDetails(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PaypalWalletPaymentDetailsQueryBuilder> build)
         {
             var query = new Query<PaypalWalletPaymentDetails>("... on PaypalWalletPaymentDetails");
-            var queryBuilder = new PaypalWalletPaymentDetailsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PaypalWalletPaymentDetailsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PaymentDetailsUnionCasesBuilder OnShopPayInstallmentsPaymentDetails(Action<ShopPayInstallmentsPaymentDetailsQueryBuilder> build)
+        public PaymentDetailsUnionCasesBuilder OnShopPayInstallmentsPaymentDetails(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopPayInstallmentsPaymentDetailsQueryBuilder> build)
         {
             var query = new Query<ShopPayInstallmentsPaymentDetails>("... on ShopPayInstallmentsPaymentDetails");
-            var queryBuilder = new ShopPayInstallmentsPaymentDetailsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopPayInstallmentsPaymentDetailsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

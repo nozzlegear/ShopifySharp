@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DiscountCustomerGetsValueUnionCasesBuilder OnDiscountAmount(Action<DiscountAmountQueryBuilder> build)
+        public DiscountCustomerGetsValueUnionCasesBuilder OnDiscountAmount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAmountQueryBuilder> build)
         {
             var query = new Query<DiscountAmount>("... on DiscountAmount");
-            var queryBuilder = new DiscountAmountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAmountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCustomerGetsValueUnionCasesBuilder OnDiscountOnQuantity(Action<DiscountOnQuantityQueryBuilder> build)
+        public DiscountCustomerGetsValueUnionCasesBuilder OnDiscountOnQuantity(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountOnQuantityQueryBuilder> build)
         {
             var query = new Query<DiscountOnQuantity>("... on DiscountOnQuantity");
-            var queryBuilder = new DiscountOnQuantityQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountOnQuantityQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCustomerGetsValueUnionCasesBuilder OnDiscountPercentage(Action<DiscountPercentageQueryBuilder> build)
+        public DiscountCustomerGetsValueUnionCasesBuilder OnDiscountPercentage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountPercentageQueryBuilder> build)
         {
             var query = new Query<DiscountPercentage>("... on DiscountPercentage");
-            var queryBuilder = new DiscountPercentageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountPercentageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

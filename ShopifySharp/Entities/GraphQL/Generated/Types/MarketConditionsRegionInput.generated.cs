@@ -18,4 +18,10 @@ public record MarketConditionsRegionInput : GraphQLInputObject<MarketConditionsR
     /// </summary>
     [JsonPropertyName("countryCode")]
     public CountryCode? countryCode { get; set; } = null;
+
+    /// <summary>
+    /// A subdivision such as a province or state.
+    /// </summary>
+    [JsonPropertyName("subdivision")]
+    public string? subdivision { get; set; } = null;
 }

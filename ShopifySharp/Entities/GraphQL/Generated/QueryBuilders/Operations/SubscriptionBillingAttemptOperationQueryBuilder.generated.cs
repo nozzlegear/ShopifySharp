@@ -112,15 +112,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public SubscriptionBillingAttemptOperationQueryBuilder ProcessingError(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder> build)
-        {
-            var query = new Query<ISubscriptionBillingAttemptProcessingError>("processingError");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ISubscriptionBillingAttemptProcessingError>(query);
-            return this;
-        }
-
         [Obsolete("Use `state` instead.")]
         public SubscriptionBillingAttemptOperationQueryBuilder Ready()
         {

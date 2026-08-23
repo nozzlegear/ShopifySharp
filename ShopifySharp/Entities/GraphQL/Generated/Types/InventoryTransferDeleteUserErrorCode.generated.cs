@@ -15,4 +15,5 @@ public enum InventoryTransferDeleteUserErrorCode
 {
     TRANSFER_NOT_FOUND,
     INVALID_TRANSFER_STATUS,
+    INVALID_STATE,
 }

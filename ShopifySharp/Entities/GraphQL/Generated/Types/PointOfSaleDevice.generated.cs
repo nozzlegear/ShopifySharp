@@ -14,6 +14,20 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record PointOfSaleDevice : IGraphQLObject, INode
 {
     /// <summary>
+    /// The currently open payment session for this device. Data is returned only if
+    /// the device's location has a POS Pro subscription.
+    /// </summary>
+    [JsonPropertyName("activePaymentSession")]
+    public PointOfSaleDevicePaymentSession? activePaymentSession { get; set; } = null;
+
+    /// <summary>
+    /// The cash drawer that this device is currently assigned to. Data is returned
+    /// only if the device's location has a POS Pro subscription.
+    /// </summary>
+    [JsonPropertyName("cashDrawer")]
+    public CashDrawer? cashDrawer { get; set; } = null;
+
+    /// <summary>
     /// A globally-unique ID.
     /// </summary>
     [JsonPropertyName("id")]

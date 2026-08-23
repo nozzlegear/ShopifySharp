@@ -9,7 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The input fields to override default customer merge rules.
+/// The input fields to override default customer merge rules. These overrides are field-specific; they don't
+/// provide a general way to force a particular customer ID to survive the merge.
 /// </summary>
 public record CustomerMergeOverrideFields : GraphQLInputObject<CustomerMergeOverrideFields>
 {
@@ -20,7 +21,8 @@ public record CustomerMergeOverrideFields : GraphQLInputObject<CustomerMergeOver
     public string? customerIdOfDefaultAddressToKeep { get; set; } = null;
 
     /// <summary>
-    /// The ID of the customer whose email will be kept.
+    /// The ID of the customer whose email will be kept. The selected customer must have an email address. When
+    /// this field is provided and valid, the selected customer is also the resulting customer after the merge.
     /// </summary>
     [JsonPropertyName("customerIdOfEmailToKeep")]
     public string? customerIdOfEmailToKeep { get; set; } = null;

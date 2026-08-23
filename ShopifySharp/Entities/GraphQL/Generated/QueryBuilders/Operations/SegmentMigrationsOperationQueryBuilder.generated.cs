@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use the migrated segment ID and query `segment` directly.")]
     public sealed class SegmentMigrationsOperationQueryBuilder : FieldsQueryBuilderBase<SegmentMigrationConnection, SegmentMigrationsOperationQueryBuilder>, IGraphOperationQueryBuilder<SegmentMigrationConnection>, IHasArguments<SegmentMigrationsArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;

@@ -145,7 +145,7 @@ public record MailingAddress : IGraphQLObject, INode
     public string? timeZone { get; set; } = null;
 
     /// <summary>
-    /// The validation status that is leveraged by the address validation feature in the Shopify Admin.
+    /// The validation status that's leveraged by the address validation feature in the Shopify Admin.
     /// See ["Validating addresses in your Shopify admin"](https://help.shopify.com/manual/fulfillment/managing-orders/validating-order-address)
     /// for more details.
     /// </summary>

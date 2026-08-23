@@ -40,6 +40,22 @@ public record CalculatedDraftOrder : IGraphQLObject
     public bool? allVariantPricesOverridden { get; set; } = null;
 
     /// <summary>
+    /// The amount due later.
+    /// When there are payment terms, this is the total price minus the deposit amount (if any).
+    /// When there are no payment terms, this is 0.
+    /// </summary>
+    [JsonPropertyName("amountDueLaterSet")]
+    public MoneyBag? amountDueLaterSet { get; set; } = null;
+
+    /// <summary>
+    /// The amount due now.
+    /// When there are payment terms this is the value of the deposit (0 by default).
+    /// When there are no payment terms, this is the total price.
+    /// </summary>
+    [JsonPropertyName("amountDueNowSet")]
+    public MoneyBag? amountDueNowSet { get; set; } = null;
+
+    /// <summary>
     /// Whether any variant prices have been overridden.
     /// </summary>
     [JsonPropertyName("anyVariantPricesOverridden")]
@@ -75,6 +91,12 @@ public record CalculatedDraftOrder : IGraphQLObject
     /// </summary>
     [JsonPropertyName("customer")]
     public Customer? customer { get; set; } = null;
+
+    /// <summary>
+    /// The portion required to be paid at checkout.
+    /// </summary>
+    [JsonPropertyName("deposit")]
+    public DepositConfiguration? deposit { get; set; } = null;
 
     /// <summary>
     /// All discount codes applied.

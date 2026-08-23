@@ -22,6 +22,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
+        public SubscriptionBillingCycleBulkChargeArgumentsBuilder Actor(SubscriptionActor? actor)
+        {
+            base.InnerQuery.AddArgument("actor", actor);
+            return this;
+        }
+
         public SubscriptionBillingCycleBulkChargeArgumentsBuilder BillingAttemptExpectedDateRange(SubscriptionBillingCyclesDateRangeSelector? billingAttemptExpectedDateRange)
         {
             base.InnerQuery.AddArgument("billingAttemptExpectedDateRange", billingAttemptExpectedDateRange);
@@ -37,6 +43,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public SubscriptionBillingCycleBulkChargeArgumentsBuilder InventoryPolicy(SubscriptionBillingAttemptInventoryPolicy? inventoryPolicy)
         {
             base.InnerQuery.AddArgument("inventoryPolicy", inventoryPolicy);
+            return this;
+        }
+
+        public SubscriptionBillingCycleBulkChargeArgumentsBuilder PaymentProcessingPolicy(SubscriptionBillingAttemptPaymentProcessingPolicy? paymentProcessingPolicy)
+        {
+            base.InnerQuery.AddArgument("paymentProcessingPolicy", paymentProcessingPolicy);
             return this;
         }
     }

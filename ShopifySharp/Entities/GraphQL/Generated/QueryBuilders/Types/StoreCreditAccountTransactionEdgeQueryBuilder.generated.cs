@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public StoreCreditAccountTransactionEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionQueryBuilder> build)
+        public StoreCreditAccountTransactionEdgeQueryBuilder Node(Action<StoreCreditAccountTransactionInterfaceCasesBuilder> build)
         {
             var query = new Query<IStoreCreditAccountTransaction>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IStoreCreditAccountTransaction>(query);
+            var unionBuilder = new StoreCreditAccountTransactionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

@@ -14,7 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record OrderRiskAssessmentCreatePayload : IGraphQLObject
 {
     /// <summary>
-    /// The order risk assessment created.
+    /// The created risk assessment.
     /// </summary>
     [JsonPropertyName("orderRiskAssessment")]
     public OrderRiskAssessment? orderRiskAssessment { get; set; } = null;

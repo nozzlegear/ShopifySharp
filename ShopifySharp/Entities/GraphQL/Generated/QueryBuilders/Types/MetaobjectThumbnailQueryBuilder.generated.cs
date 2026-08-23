@@ -30,18 +30,18 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public MetaobjectThumbnailQueryBuilder File(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder> build)
-        {
-            var query = new Query<IFile>("file");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IFile>(query);
-            return this;
-        }
-
         public MetaobjectThumbnailQueryBuilder Hex()
         {
             base.InnerQuery.AddField("hex");
+            return this;
+        }
+
+        public MetaobjectThumbnailQueryBuilder File(Action<FileInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IFile>("file");
+            var unionBuilder = new FileInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

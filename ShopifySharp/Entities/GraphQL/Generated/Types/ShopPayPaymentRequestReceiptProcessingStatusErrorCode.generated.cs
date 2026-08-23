@@ -32,6 +32,7 @@ public enum ShopPayPaymentRequestReceiptProcessingStatusErrorCode
     CONFIG_ERROR,
     TEST_MODE_LIVE_CARD,
     UNSUPPORTED_FEATURE,
+    CVV_ATTEMPTS_EXCEEDED,
     GENERIC_ERROR,
     INVALID_COUNTRY,
     INVALID_AMOUNT,

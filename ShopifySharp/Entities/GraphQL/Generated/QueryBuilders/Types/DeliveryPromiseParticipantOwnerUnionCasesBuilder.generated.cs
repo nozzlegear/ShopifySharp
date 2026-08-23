@@ -26,10 +26,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DeliveryPromiseParticipantOwnerUnionCasesBuilder OnProductVariant(Action<ProductVariantQueryBuilder> build)
+        public DeliveryPromiseParticipantOwnerUnionCasesBuilder OnProductVariant(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder> build)
         {
             var query = new Query<ProductVariant>("... on ProductVariant");
-            var queryBuilder = new ProductVariantQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

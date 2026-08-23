@@ -47,6 +47,12 @@ public record DraftOrderInput : GraphQLInputObject<DraftOrderInput>
     public ICollection<AttributeInput>? customAttributes { get; set; } = null;
 
     /// <summary>
+    /// The input fields configuring the deposit requirement.
+    /// </summary>
+    [JsonPropertyName("deposit")]
+    public DepositInput? deposit { get; set; } = null;
+
+    /// <summary>
     /// The list of discount codes that will be attempted to be applied to the draft order.
     /// If the draft isn't eligible for any given discount code it will be skipped during calculation.
     /// </summary>
@@ -141,14 +147,11 @@ public record DraftOrderInput : GraphQLInputObject<DraftOrderInput>
     public ShippingLineInput? shippingLine { get; set; } = null;
 
     /// <summary>
-    /// The source of the checkout.
-    /// To use this field for sales attribution, you must register the channels that your app is managing.
-    /// You can register the channels that your app is managing by completing
-    /// [this Google Form](https://docs.google.com/forms/d/e/1FAIpQLScmVTZRQNjOJ7RD738mL1lGeFjqKVe_FM2tO9xsm21QEo5Ozg/viewform?usp=sf_link).
-    /// After you've submitted your request, you need to wait for your request to be processed by Shopify.
-    /// You can find a list of your channels in the Partner Dashboard, in your app's Marketplace extension.
-    /// You need to specify the handle as the `source_name` value in your request.
-    /// The handle is the channel that the order was placed from.
+    /// The source channel that the order is attributed to. Set this to the handle of
+    /// an order attribution definition configured for your sales channel app, such as
+    /// `youtube` or `channel:amazon-us`.
+    /// To set up order attribution for your app, follow the [order attribution
+    /// guide](https://shopify.dev/docs/apps/build/sales-channels/order-attribution).
     /// </summary>
     [JsonPropertyName("sourceName")]
     public string? sourceName { get; set; } = null;

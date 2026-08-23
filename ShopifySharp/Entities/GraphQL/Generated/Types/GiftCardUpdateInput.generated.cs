@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record GiftCardUpdateInput : GraphQLInputObject<GiftCardUpdateInput>
 {
     /// <summary>
+    /// The strategy used to convert the gift card's balance when it's redeemed in a currency other than the one it was issued in.
+    /// </summary>
+    [JsonPropertyName("crossCurrencyRedemptionStrategy")]
+    public GiftCardCrossCurrencyRedemptionStrategy? crossCurrencyRedemptionStrategy { get; set; } = null;
+
+    /// <summary>
     /// The ID of the customer who will receive the gift card. The ID can't be changed
     /// if the gift card already has an assigned customer ID.
     /// </summary>

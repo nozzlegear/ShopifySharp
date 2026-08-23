@@ -49,6 +49,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        [Obsolete("Use [`order.attribution.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.handle) instead.")]
         public FulfillmentOrderOperationQueryBuilder ChannelId()
         {
             base.InnerQuery.AddField("channelId");
@@ -184,6 +185,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public FulfillmentOrderOperationQueryBuilder OrderProcessedAt()
         {
             base.InnerQuery.AddField("orderProcessedAt");
+            return this;
+        }
+
+        public FulfillmentOrderOperationQueryBuilder RemainingLineItemsWeight(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder> build)
+        {
+            var query = new Query<Weight>("remainingLineItemsWeight");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Weight>(query);
             return this;
         }
 

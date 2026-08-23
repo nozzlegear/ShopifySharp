@@ -1,0 +1,66 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class CollectionSourceInclusionConditionMetafieldStringQueryBuilder : FieldsQueryBuilderBase<CollectionSourceInclusionConditionMetafieldString, CollectionSourceInclusionConditionMetafieldStringQueryBuilder>
+    {
+        protected override CollectionSourceInclusionConditionMetafieldStringQueryBuilder Self => this;
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder() : this("collectionSourceInclusionConditionMetafieldString")
+        {
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder(string name) : base(new Query<CollectionSourceInclusionConditionMetafieldString>(name))
+        {
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder(IQuery<CollectionSourceInclusionConditionMetafieldString> query) : base(query)
+        {
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder Definition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder> build)
+        {
+            var query = new Query<MetafieldDefinition>("definition");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldDefinitionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetafieldDefinition>(query);
+            return this;
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder Id()
+        {
+            base.InnerQuery.AddField("id");
+            return this;
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder MatchType()
+        {
+            base.InnerQuery.AddField("matchType");
+            return this;
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder Relation()
+        {
+            base.InnerQuery.AddField("relation");
+            return this;
+        }
+
+        public CollectionSourceInclusionConditionMetafieldStringQueryBuilder Values()
+        {
+            base.InnerQuery.AddField("values");
+            return this;
+        }
+    }
+}

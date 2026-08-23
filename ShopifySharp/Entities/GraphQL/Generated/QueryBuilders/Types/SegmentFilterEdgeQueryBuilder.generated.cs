@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public SegmentFilterEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SegmentFilterQueryBuilder> build)
+        public SegmentFilterEdgeQueryBuilder Node(Action<SegmentFilterInterfaceCasesBuilder> build)
         {
             var query = new Query<ISegmentFilter>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SegmentFilterQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ISegmentFilter>(query);
+            var unionBuilder = new SegmentFilterInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

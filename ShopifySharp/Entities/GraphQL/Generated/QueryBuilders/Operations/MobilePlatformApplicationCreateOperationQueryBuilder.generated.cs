@@ -48,14 +48,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<MobilePlatformApplicationUserError>(query);
             return this;
         }
-
-        public MobilePlatformApplicationCreateOperationQueryBuilder MobilePlatformApplication(Action<MobilePlatformApplicationUnionCasesBuilder> build)
-        {
-            var query = new Query<MobilePlatformApplication>("mobilePlatformApplication");
-            var unionBuilder = new MobilePlatformApplicationUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

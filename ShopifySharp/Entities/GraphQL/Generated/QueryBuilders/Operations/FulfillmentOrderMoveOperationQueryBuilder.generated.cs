@@ -67,12 +67,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public FulfillmentOrderMoveOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)
+        public FulfillmentOrderMoveOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMoveFulfillmentOrderMoveUserErrorQueryBuilder> build)
         {
-            var query = new Query<UserError>("userErrors");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder(query);
+            var query = new Query<FulfillmentOrderMoveFulfillmentOrderMoveUserError>("userErrors");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FulfillmentOrderMoveFulfillmentOrderMoveUserErrorQueryBuilder(query);
             build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<UserError>(query);
+            base.InnerQuery.AddField<FulfillmentOrderMoveFulfillmentOrderMoveUserError>(query);
             return this;
         }
     }

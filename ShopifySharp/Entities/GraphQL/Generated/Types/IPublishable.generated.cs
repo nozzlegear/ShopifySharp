@@ -15,6 +15,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
 [JsonDerivedType(typeof(Collection), typeDiscriminator: "Collection")]
 [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]
+[JsonDerivedType(typeof(ProductVariant), typeDiscriminator: "ProductVariant")]
 public interface IPublishable : IGraphQLObject
 {
     /// <summary>
@@ -27,10 +28,11 @@ public interface IPublishable : IGraphQLObject
     public Count? availablePublicationsCount { get; set; }
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("publicationCount")]
     [Obsolete("Use `resourcePublicationsCount` instead.")]
@@ -76,10 +78,11 @@ public interface IPublishable : IGraphQLObject
     public ResourcePublicationConnection? resourcePublications { get; set; }
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("resourcePublicationsCount")]
     public Count? resourcePublicationsCount { get; set; }
@@ -87,6 +90,10 @@ public interface IPublishable : IGraphQLObject
     /// <summary>
     /// The list of resources that are either published or staged to be published to a
     /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// By default, only publications to `APP` catalog types are returned.
+    /// For `Product` and `ProductVariant`, use the `catalogType` argument to retrieve
+    /// publications for other catalog types, such as `COMPANY_LOCATION` (B2B) or `MARKET`.
+    /// `Collection` only supports publications to `APP` catalog types.
     /// </summary>
     [JsonPropertyName("resourcePublicationsV2")]
     public ResourcePublicationV2Connection? resourcePublicationsV2 { get; set; }

@@ -35,6 +35,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootPointOfSaleDeviceQueryBuilder ActivePaymentSession(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionQueryBuilder> build)
+        {
+            var query = new Query<PointOfSaleDevicePaymentSession>("activePaymentSession");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PointOfSaleDevicePaymentSessionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PointOfSaleDevicePaymentSession>(query);
+            return this;
+        }
+
+        public QueryRootPointOfSaleDeviceQueryBuilder CashDrawer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerQueryBuilder> build)
+        {
+            var query = new Query<CashDrawer>("cashDrawer");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CashDrawerQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CashDrawer>(query);
+            return this;
+        }
+
         public QueryRootPointOfSaleDeviceQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");

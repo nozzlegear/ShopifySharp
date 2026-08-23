@@ -1,0 +1,51 @@
+#nullable enable
+using System;
+using System.Threading.Tasks;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using ShopifySharp.Credentials;
+using ShopifySharp.GraphQL;
+using ShopifySharp.GraphQL.QueryBuilders;
+using ShopifySharp.Infrastructure;
+using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.GraphQL.QueryBuilders.Operations;
+using ShopifySharp.GraphQL.QueryBuilders.Types;
+
+namespace ShopifySharp.GraphQL.QueryBuilders.Types
+{
+    public sealed class PreviewInstallUserErrorQueryBuilder : FieldsQueryBuilderBase<PreviewInstallUserError, PreviewInstallUserErrorQueryBuilder>
+    {
+        protected override PreviewInstallUserErrorQueryBuilder Self => this;
+
+        public PreviewInstallUserErrorQueryBuilder() : this("previewInstallUserError")
+        {
+        }
+
+        public PreviewInstallUserErrorQueryBuilder(string name) : base(new Query<PreviewInstallUserError>(name))
+        {
+        }
+
+        public PreviewInstallUserErrorQueryBuilder(IQuery<PreviewInstallUserError> query) : base(query)
+        {
+        }
+
+        public PreviewInstallUserErrorQueryBuilder Code()
+        {
+            base.InnerQuery.AddField("code");
+            return this;
+        }
+
+        public PreviewInstallUserErrorQueryBuilder Field()
+        {
+            base.InnerQuery.AddField("field");
+            return this;
+        }
+
+        public PreviewInstallUserErrorQueryBuilder Message()
+        {
+            base.InnerQuery.AddField("message");
+            return this;
+        }
+    }
+}

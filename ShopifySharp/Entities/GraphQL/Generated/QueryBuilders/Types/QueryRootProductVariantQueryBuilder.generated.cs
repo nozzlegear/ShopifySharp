@@ -41,6 +41,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootProductVariantQueryBuilder AvailablePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
+        {
+            var query = new Query<Count>("availablePublicationsCount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
         public QueryRootProductVariantQueryBuilder Barcode()
         {
             base.InnerQuery.AddField("barcode");
@@ -224,9 +233,70 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use `resourcePublicationsCount` instead.")]
+        public QueryRootProductVariantQueryBuilder PublicationCount()
+        {
+            base.InnerQuery.AddField("publicationCount");
+            return this;
+        }
+
+        [Obsolete("Use `publishedOnPublication` instead.")]
+        public QueryRootProductVariantQueryBuilder PublishedOnChannel()
+        {
+            base.InnerQuery.AddField("publishedOnChannel");
+            return this;
+        }
+
+        [Obsolete("Use `publishedOnCurrentPublication` instead.")]
+        public QueryRootProductVariantQueryBuilder PublishedOnCurrentChannel()
+        {
+            base.InnerQuery.AddField("publishedOnCurrentChannel");
+            return this;
+        }
+
+        [Obsolete("Use `publishedOnPublication` instead.")]
+        public QueryRootProductVariantQueryBuilder PublishedOnCurrentPublication()
+        {
+            base.InnerQuery.AddField("publishedOnCurrentPublication");
+            return this;
+        }
+
+        public QueryRootProductVariantQueryBuilder PublishedOnPublication()
+        {
+            base.InnerQuery.AddField("publishedOnPublication");
+            return this;
+        }
+
         public QueryRootProductVariantQueryBuilder RequiresComponents()
         {
             base.InnerQuery.AddField("requiresComponents");
+            return this;
+        }
+
+        public QueryRootProductVariantQueryBuilder ResourcePublications(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationConnectionQueryBuilder> build)
+        {
+            var query = new Query<ResourcePublicationConnection>("resourcePublications");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ResourcePublicationConnection>(query);
+            return this;
+        }
+
+        public QueryRootProductVariantQueryBuilder ResourcePublicationsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
+        {
+            var query = new Query<Count>("resourcePublicationsCount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
+        public QueryRootProductVariantQueryBuilder ResourcePublicationsV2(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationV2ConnectionQueryBuilder> build)
+        {
+            var query = new Query<ResourcePublicationV2Connection>("resourcePublicationsV2");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourcePublicationV2ConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ResourcePublicationV2Connection>(query);
             return this;
         }
 
@@ -332,6 +402,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.UnitPriceMeasurementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<UnitPriceMeasurement>(query);
+            return this;
+        }
+
+        public QueryRootProductVariantQueryBuilder UnpublishedChannels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
+        {
+            var query = new Query<ChannelConnection>("unpublishedChannels");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ChannelConnection>(query);
+            return this;
+        }
+
+        public QueryRootProductVariantQueryBuilder UnpublishedPublications(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublicationConnectionQueryBuilder> build)
+        {
+            var query = new Query<PublicationConnection>("unpublishedPublications");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PublicationConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<PublicationConnection>(query);
             return this;
         }
 

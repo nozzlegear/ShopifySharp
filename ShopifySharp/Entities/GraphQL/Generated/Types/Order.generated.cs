@@ -66,6 +66,12 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     public OrderApp? app { get; set; } = null;
 
     /// <summary>
+    /// The attribution details for the order.
+    /// </summary>
+    [JsonPropertyName("attribution")]
+    public OrderAttribution? attribution { get; set; } = null;
+
+    /// <summary>
     /// The billing address associated with the payment method selected by the customer for an order.
     /// Returns `null` if no billing address was provided during checkout.
     /// </summary>
@@ -142,6 +148,12 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     public MoneyBag? cartDiscountAmountSet { get; set; } = null;
 
     /// <summary>
+    /// The token associated with the cart that was used to create the order.
+    /// </summary>
+    [JsonPropertyName("cartToken")]
+    public string? cartToken { get; set; } = null;
+
+    /// <summary>
     /// The sales channel from which an order originated, such as the [Online
     /// Store](https://shopify.dev/docs/apps/build/app-surfaces#online-store) or
     /// [Shopify POS](https://shopify.dev/docs/apps/build/app-surfaces#point-of-sale).
@@ -155,7 +167,16 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// and [channel name](https://shopify.dev/docs/api/admin-graphql/latest/objects/ChannelDefinition#field-ChannelDefinition.fields.channelName), which helps to track order sources.
     /// </summary>
     [JsonPropertyName("channelInformation")]
+    [Obsolete("Use `attribution` instead.")]
     public ChannelInformation? channelInformation { get; set; } = null;
+
+    /// <summary>
+    /// The token associated with the checkout that was used to create the order.
+    /// Useful for correlating an order with the checkout it originated from,
+    /// including in web pixels and analytics workflows.
+    /// </summary>
+    [JsonPropertyName("checkoutToken")]
+    public string? checkoutToken { get; set; } = null;
 
     /// <summary>
     /// The IP address of the customer who placed the order. Useful for fraud detection and geographic analysis.
@@ -600,6 +621,7 @@ public record Order : IGraphQLUnionCase, IGraphQLObject, ICommentEventSubject, I
     /// The note associated with the order.
     /// Contains additional information or instructions added by merchants or customers during the order process.
     /// Commonly used for special delivery instructions, gift messages, or internal processing notes.
+    /// The maximum length is 5000 characters.
     /// </summary>
     [JsonPropertyName("note")]
     public string? note { get; set; } = null;

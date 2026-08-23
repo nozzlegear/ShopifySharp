@@ -81,14 +81,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<MetafieldConnection>(query);
             return this;
         }
-
-        public DiscountNodeOperationQueryBuilder Discount(Action<DiscountUnionCasesBuilder> build)
-        {
-            var query = new Query<Discount>("discount");
-            var unionBuilder = new DiscountUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

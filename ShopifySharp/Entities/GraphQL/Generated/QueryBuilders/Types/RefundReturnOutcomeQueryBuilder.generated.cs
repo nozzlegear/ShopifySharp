@@ -39,21 +39,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public RefundReturnOutcomeQueryBuilder SuggestedRefundMethods(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedRefundMethodQueryBuilder> build)
-        {
-            var query = new Query<ISuggestedRefundMethod>("suggestedRefundMethods");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedRefundMethodQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ISuggestedRefundMethod>(query);
-            return this;
-        }
-
         public RefundReturnOutcomeQueryBuilder SuggestedTransactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedOrderTransactionQueryBuilder> build)
         {
             var query = new Query<SuggestedOrderTransaction>("suggestedTransactions");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedOrderTransactionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<SuggestedOrderTransaction>(query);
+            return this;
+        }
+
+        public RefundReturnOutcomeQueryBuilder SuggestedRefundMethods(Action<SuggestedRefundMethodInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ISuggestedRefundMethod>("suggestedRefundMethods");
+            var unionBuilder = new SuggestedRefundMethodInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

@@ -166,6 +166,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootCustomerQueryBuilder IdentityProviderSubjects(Action<ShopifySharp.GraphQL.QueryBuilders.Types.IdentityProviderSubjectQueryBuilder> build)
+        {
+            var query = new Query<IdentityProviderSubject>("identityProviderSubjects");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.IdentityProviderSubjectQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<IdentityProviderSubject>(query);
+            return this;
+        }
+
         public QueryRootCustomerQueryBuilder Image(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ImageQueryBuilder> build)
         {
             var query = new Query<Image>("image");
@@ -359,6 +368,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public QueryRootCustomerQueryBuilder TaxExemptions()
         {
             base.InnerQuery.AddField("taxExemptions");
+            return this;
+        }
+
+        public QueryRootCustomerQueryBuilder TaxSettings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxSettingsQueryBuilder> build)
+        {
+            var query = new Query<TaxSettings>("taxSettings");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxSettingsQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<TaxSettings>(query);
             return this;
         }
 

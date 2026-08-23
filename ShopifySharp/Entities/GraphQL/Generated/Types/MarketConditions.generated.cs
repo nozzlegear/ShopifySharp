@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MarketConditions : IGraphQLObject
 {
     /// <summary>
+    /// The channel conditions that determine whether a visitor is in the market.
+    /// </summary>
+    [JsonPropertyName("channelsCondition")]
+    public ChannelsCondition? channelsCondition { get; set; } = null;
+
+    /// <summary>
     /// The company location conditions that determine whether a visitor is in the market.
     /// </summary>
     [JsonPropertyName("companyLocationsCondition")]

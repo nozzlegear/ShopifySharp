@@ -48,21 +48,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public DiscountApplicationConnectionQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountApplicationQueryBuilder> build)
-        {
-            var query = new Query<IDiscountApplication>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountApplicationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IDiscountApplication>(query);
-            return this;
-        }
-
         public DiscountApplicationConnectionQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
+            return this;
+        }
+
+        public DiscountApplicationConnectionQueryBuilder Nodes(Action<DiscountApplicationInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IDiscountApplication>("nodes");
+            var unionBuilder = new DiscountApplicationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

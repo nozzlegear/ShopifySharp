@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public SubscriptionDeliveryMethodUnionCasesBuilder OnSubscriptionDeliveryMethodLocalDelivery(Action<SubscriptionDeliveryMethodLocalDeliveryQueryBuilder> build)
+        public SubscriptionDeliveryMethodUnionCasesBuilder OnSubscriptionDeliveryMethodLocalDelivery(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodLocalDeliveryQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryMethodLocalDelivery>("... on SubscriptionDeliveryMethodLocalDelivery");
-            var queryBuilder = new SubscriptionDeliveryMethodLocalDeliveryQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodLocalDeliveryQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public SubscriptionDeliveryMethodUnionCasesBuilder OnSubscriptionDeliveryMethodPickup(Action<SubscriptionDeliveryMethodPickupQueryBuilder> build)
+        public SubscriptionDeliveryMethodUnionCasesBuilder OnSubscriptionDeliveryMethodPickup(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodPickupQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryMethodPickup>("... on SubscriptionDeliveryMethodPickup");
-            var queryBuilder = new SubscriptionDeliveryMethodPickupQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodPickupQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public SubscriptionDeliveryMethodUnionCasesBuilder OnSubscriptionDeliveryMethodShipping(Action<SubscriptionDeliveryMethodShippingQueryBuilder> build)
+        public SubscriptionDeliveryMethodUnionCasesBuilder OnSubscriptionDeliveryMethodShipping(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodShippingQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryMethodShipping>("... on SubscriptionDeliveryMethodShipping");
-            var queryBuilder = new SubscriptionDeliveryMethodShippingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryMethodShippingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

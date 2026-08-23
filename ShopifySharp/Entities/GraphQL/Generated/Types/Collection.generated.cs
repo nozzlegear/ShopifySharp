@@ -14,12 +14,6 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// Collections serve as the primary way to categorize and display products across
 /// [online stores](https://shopify.dev/docs/apps/build/online-store),
 /// [sales channels](https://shopify.dev/docs/apps/build/sales-channels), and marketing campaigns.
-/// There are two types of collections:
-/// - **[Custom (manual) collections](https://help.shopify.com/manual/products/collections/manual-shopify-collection)**:
-/// You specify the products to include in a collection.
-/// - **[Smart (automated) collections](https://help.shopify.com/manual/products/collections/automated-collections)**:
-/// You define rules, and products matching those rules are automatically included
-/// in the collection.
 /// The `Collection` object provides information to:
 /// - Organize products by category, season, or promotion.
 /// - Automate product grouping using rules (for example, by tag, type, or price).
@@ -34,7 +28,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// and can be customized with [template suffixes](https://shopify.dev/docs/storefronts/themes/architecture/templates/alternate-templates)
 /// for unique layouts. They also support advanced features like translated content, resource feedback,
 /// and contextual publication for location-based catalogs.
-/// Learn about [using metafields with smart collections](https://shopify.dev/docs/apps/build/custom-data/metafields/use-metafield-capabilities).
+/// Learn about [using metafields with collection conditions](https://shopify.dev/docs/apps/build/custom-data/metafields/use-metafield-capabilities).
 /// </summary>
 public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, INode, IPublishable
 {
@@ -154,10 +148,11 @@ public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMe
     public Count? productsCount { get; set; } = null;
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("publicationCount")]
     [Obsolete("Use `resourcePublicationsCount` instead.")]
@@ -210,10 +205,11 @@ public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMe
     public ResourcePublicationConnection? resourcePublications { get; set; } = null;
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("resourcePublicationsCount")]
     public Count? resourcePublicationsCount { get; set; } = null;
@@ -221,14 +217,19 @@ public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMe
     /// <summary>
     /// The list of resources that are either published or staged to be published to a
     /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// By default, only publications to `APP` catalog types are returned.
+    /// For `Product` and `ProductVariant`, use the `catalogType` argument to retrieve
+    /// publications for other catalog types, such as `COMPANY_LOCATION` (B2B) or `MARKET`.
+    /// `Collection` only supports publications to `APP` catalog types.
     /// </summary>
     [JsonPropertyName("resourcePublicationsV2")]
     public ResourcePublicationV2Connection? resourcePublicationsV2 { get; set; } = null;
 
     /// <summary>
-    /// For a smart (automated) collection, specifies the rules that determine whether a product is included.
+    /// Specifies the rules that determine whether a product is included.
     /// </summary>
     [JsonPropertyName("ruleSet")]
+    [Obsolete("Use `sources` instead.")]
     public CollectionRuleSet? ruleSet { get; set; } = null;
 
     /// <summary>
@@ -245,6 +246,13 @@ public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMe
     public CollectionSortOrder? sortOrder { get; set; } = null;
 
     /// <summary>
+    /// The sources that provide products for this collection. Each source represents
+    /// a way products are included in the collection, such as through conditions and rules.
+    /// </summary>
+    [JsonPropertyName("sources")]
+    public ICollection<ICollectionSource>? sources { get; set; } = null;
+
+    /// <summary>
     /// The Storefront GraphQL API ID of the `Collection`.
     /// As of the `2022-04` version release, the Storefront GraphQL API will no longer
     /// return Base64 encoded IDs to match the behavior of the Admin GraphQL API.
@@ -253,6 +261,14 @@ public record Collection : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMe
     [JsonPropertyName("storefrontId")]
     [Obsolete("Use `id` instead.")]
     public string? storefrontId { get; set; } = null;
+
+    /// <summary>
+    /// Whether this collection is eligible to be referenced as a sub-collection from
+    /// another collection's source. Returns one state per role (inclusion / exclusion).
+    /// Use this to filter ineligible targets up front and surface the reason.
+    /// </summary>
+    [JsonPropertyName("subCollectionEligibility")]
+    public CollectionSubCollectionEligibility? subCollectionEligibility { get; set; } = null;
 
     /// <summary>
     /// The suffix of the Liquid template being used to show the collection in an

@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public SaleEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SaleQueryBuilder> build)
+        public SaleEdgeQueryBuilder Node(Action<SaleInterfaceCasesBuilder> build)
         {
             var query = new Query<ISale>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SaleQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ISale>(query);
+            var unionBuilder = new SaleInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

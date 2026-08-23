@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `marketingActivityUpsertExternal` instead.")]
     public sealed class MarketingActivityCreateExternalOperationQueryBuilder : FieldsQueryBuilderBase<MarketingActivityCreateExternalPayload, MarketingActivityCreateExternalOperationQueryBuilder>, IGraphOperationQueryBuilder<MarketingActivityCreateExternalPayload>, IHasArguments<MarketingActivityCreateExternalArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;

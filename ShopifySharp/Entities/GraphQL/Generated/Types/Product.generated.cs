@@ -172,6 +172,12 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     public ResourceFeedback? feedback { get; set; } = null;
 
     /// <summary>
+    /// The gift card settings for this product. Only available on gift card products.
+    /// </summary>
+    [JsonPropertyName("giftCardSettings")]
+    public GiftCardProductSettings? giftCardSettings { get; set; } = null;
+
+    /// <summary>
     /// The [theme template](https://shopify.dev/docs/storefronts/themes/architecture/templates)
     /// that's used when customers view the gift card in a store.
     /// </summary>
@@ -354,10 +360,11 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     public string? productType { get; set; } = null;
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("publicationCount")]
     [Obsolete("Use `resourcePublicationsCount` instead.")]
@@ -441,10 +448,11 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     public ResourcePublicationConnection? resourcePublications { get; set; } = null;
 
     /// <summary>
-    /// The number of
+    /// The total number of
     /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
-    /// that a resource is published to, without
+    /// that a resource is published to, including publications with
     /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
     /// </summary>
     [JsonPropertyName("resourcePublicationsCount")]
     public Count? resourcePublicationsCount { get; set; } = null;
@@ -452,6 +460,10 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// <summary>
     /// The list of resources that are either published or staged to be published to a
     /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// By default, only publications to `APP` catalog types are returned.
+    /// For `Product` and `ProductVariant`, use the `catalogType` argument to retrieve
+    /// publications for other catalog types, such as `COMPANY_LOCATION` (B2B) or `MARKET`.
+    /// `Collection` only supports publications to `APP` catalog types.
     /// </summary>
     [JsonPropertyName("resourcePublicationsV2")]
     public ResourcePublicationV2Connection? resourcePublicationsV2 { get; set; } = null;
@@ -607,6 +619,23 @@ public record Product : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetaf
     /// </summary>
     [JsonPropertyName("variantsCount")]
     public Count? variantsCount { get; set; } = null;
+
+    /// <summary>
+    /// A list of [variants](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant)
+    /// associated with the product that are members of the specified
+    /// [collection](https://shopify.dev/docs/api/admin-graphql/latest/objects/Collection).
+    /// Returns null for products whose collection membership is product-scoped rather than variant-scoped.
+    /// </summary>
+    [JsonPropertyName("variantsInCollection")]
+    public ProductVariantConnection? variantsInCollection { get; set; } = null;
+
+    /// <summary>
+    /// The number of [variants](https://shopify.dev/docs/api/admin-graphql/latest/objects/ProductVariant)
+    /// associated with the product that are members of the specified
+    /// [collection](https://shopify.dev/docs/api/admin-graphql/latest/objects/Collection).
+    /// </summary>
+    [JsonPropertyName("variantsInCollectionCount")]
+    public Count? variantsInCollectionCount { get; set; } = null;
 
     /// <summary>
     /// The name of the product's vendor.

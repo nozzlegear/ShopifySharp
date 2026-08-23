@@ -108,7 +108,7 @@ public record InventoryTransfer : IGraphQLUnionCase, IGraphQLObject, ICommentEve
     public LocationSnapshot? origin { get; set; } = null;
 
     /// <summary>
-    /// The total quantity of items received in the transfer.
+    /// The total quantity of items accepted, rejected, or marked as canceled in the transfer.
     /// </summary>
     [JsonPropertyName("receivedQuantity")]
     public int? receivedQuantity { get; set; } = null;

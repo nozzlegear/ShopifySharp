@@ -30,4 +30,10 @@ public record DiscountContextInput : GraphQLInputObject<DiscountContextInput>
     /// </summary>
     [JsonPropertyName("customerSegments")]
     public DiscountCustomerSegmentsInput? customerSegments { get; set; } = null;
+
+    /// <summary>
+    /// The list of market IDs to add or remove from the list of markets.
+    /// </summary>
+    [JsonPropertyName("markets")]
+    public DiscountMarketsInput? markets { get; set; } = null;
 }

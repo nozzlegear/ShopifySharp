@@ -55,15 +55,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public StoreCreditAccountOperationQueryBuilder Owner(Action<ShopifySharp.GraphQL.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder> build)
-        {
-            var query = new Query<IHasStoreCreditAccounts>("owner");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.HasStoreCreditAccountsQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IHasStoreCreditAccounts>(query);
-            return this;
-        }
-
         public StoreCreditAccountOperationQueryBuilder Transactions(Action<ShopifySharp.GraphQL.QueryBuilders.Types.StoreCreditAccountTransactionConnectionQueryBuilder> build)
         {
             var query = new Query<StoreCreditAccountTransactionConnection>("transactions");

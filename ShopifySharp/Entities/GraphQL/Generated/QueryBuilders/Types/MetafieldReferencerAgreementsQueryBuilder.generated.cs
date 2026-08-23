@@ -44,21 +44,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public MetafieldReferencerAgreementsQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SalesAgreementQueryBuilder> build)
-        {
-            var query = new Query<ISalesAgreement>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SalesAgreementQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ISalesAgreement>(query);
-            return this;
-        }
-
         public MetafieldReferencerAgreementsQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
+            return this;
+        }
+
+        public MetafieldReferencerAgreementsQueryBuilder Nodes(Action<SalesAgreementInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ISalesAgreement>("nodes");
+            var unionBuilder = new SalesAgreementInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

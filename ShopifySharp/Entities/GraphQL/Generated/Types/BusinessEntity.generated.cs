@@ -51,6 +51,12 @@ public record BusinessEntity : IGraphQLObject, INode
     public string? id { get; set; } = null;
 
     /// <summary>
+    /// The stable central legal entity ID associated with this business entity.
+    /// </summary>
+    [JsonPropertyName("legalEntityId")]
+    public long? legalEntityId { get; set; } = null;
+
+    /// <summary>
     /// Whether it's the merchant's primary Business Entity.
     /// </summary>
     [JsonPropertyName("primary")]

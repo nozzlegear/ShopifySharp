@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public PublicationOperationUnionCasesBuilder OnAddAllProductsOperation(Action<AddAllProductsOperationQueryBuilder> build)
+        public PublicationOperationUnionCasesBuilder OnAddAllProductsOperation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AddAllProductsOperationQueryBuilder> build)
         {
             var query = new Query<AddAllProductsOperation>("... on AddAllProductsOperation");
-            var queryBuilder = new AddAllProductsOperationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AddAllProductsOperationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PublicationOperationUnionCasesBuilder OnCatalogCsvOperation(Action<CatalogCsvOperationQueryBuilder> build)
+        public PublicationOperationUnionCasesBuilder OnCatalogCsvOperation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogCsvOperationQueryBuilder> build)
         {
             var query = new Query<CatalogCsvOperation>("... on CatalogCsvOperation");
-            var queryBuilder = new CatalogCsvOperationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CatalogCsvOperationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PublicationOperationUnionCasesBuilder OnPublicationResourceOperation(Action<PublicationResourceOperationQueryBuilder> build)
+        public PublicationOperationUnionCasesBuilder OnPublicationResourceOperation(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublicationResourceOperationQueryBuilder> build)
         {
             var query = new Query<PublicationResourceOperation>("... on PublicationResourceOperation");
-            var queryBuilder = new PublicationResourceOperationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PublicationResourceOperationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

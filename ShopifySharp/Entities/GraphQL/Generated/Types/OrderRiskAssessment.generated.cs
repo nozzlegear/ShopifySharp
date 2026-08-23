@@ -9,13 +9,13 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The risk assessments for an order.
-/// See the [example query "Retrieves a list of all order risks for an order"](https://shopify.dev/docs/api/admin-graphql/unstable/queries/order?example=Retrieves+a+list+of+all+order+risks+for+an+order).
+/// A risk assessment for an order.
+/// See the [example query "Retrieve order risk assessments"](https://shopify.dev/docs/api/admin-graphql/unstable/queries/order?example=retrieve-order-risk-assessments).
 /// </summary>
 public record OrderRiskAssessment : IGraphQLObject
 {
     /// <summary>
-    /// Optional facts used to describe the risk assessment. The values in here are specific to the provider.
+    /// Facts included with the risk assessment. Fact values are specific to the provider.
     /// See the [examples for the mutation orderRiskAssessmentCreate](https://shopify.dev/api/admin-graphql/unstable/mutations/orderRiskAssessmentCreate#section-examples).
     /// </summary>
     [JsonPropertyName("facts")]
@@ -28,7 +28,7 @@ public record OrderRiskAssessment : IGraphQLObject
     public App? provider { get; set; } = null;
 
     /// <summary>
-    /// The likelihood that the order is fraudulent, based on this risk assessment.
+    /// The risk level assigned to the order.
     /// </summary>
     [JsonPropertyName("riskLevel")]
     public RiskAssessmentResult? riskLevel { get; set; } = null;

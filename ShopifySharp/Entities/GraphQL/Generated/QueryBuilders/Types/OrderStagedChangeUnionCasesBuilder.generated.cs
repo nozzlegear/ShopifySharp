@@ -26,73 +26,73 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddCustomItem(Action<OrderStagedChangeAddCustomItemQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddCustomItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddCustomItemQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeAddCustomItem>("... on OrderStagedChangeAddCustomItem");
-            var queryBuilder = new OrderStagedChangeAddCustomItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddCustomItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddLineItemDiscount(Action<OrderStagedChangeAddLineItemDiscountQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddLineItemDiscount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddLineItemDiscountQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeAddLineItemDiscount>("... on OrderStagedChangeAddLineItemDiscount");
-            var queryBuilder = new OrderStagedChangeAddLineItemDiscountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddLineItemDiscountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddShippingLine(Action<OrderStagedChangeAddShippingLineQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddShippingLine(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddShippingLineQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeAddShippingLine>("... on OrderStagedChangeAddShippingLine");
-            var queryBuilder = new OrderStagedChangeAddShippingLineQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddShippingLineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddVariant(Action<OrderStagedChangeAddVariantQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeAddVariant(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddVariantQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeAddVariant>("... on OrderStagedChangeAddVariant");
-            var queryBuilder = new OrderStagedChangeAddVariantQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeAddVariantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeDecrementItem(Action<OrderStagedChangeDecrementItemQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeDecrementItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeDecrementItemQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeDecrementItem>("... on OrderStagedChangeDecrementItem");
-            var queryBuilder = new OrderStagedChangeDecrementItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeDecrementItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeIncrementItem(Action<OrderStagedChangeIncrementItemQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeIncrementItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeIncrementItemQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeIncrementItem>("... on OrderStagedChangeIncrementItem");
-            var queryBuilder = new OrderStagedChangeIncrementItemQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeIncrementItemQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeRemoveDiscount(Action<OrderStagedChangeRemoveDiscountQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeRemoveDiscount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeRemoveDiscountQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeRemoveDiscount>("... on OrderStagedChangeRemoveDiscount");
-            var queryBuilder = new OrderStagedChangeRemoveDiscountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeRemoveDiscountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeRemoveShippingLine(Action<OrderStagedChangeRemoveShippingLineQueryBuilder> build)
+        public OrderStagedChangeUnionCasesBuilder OnOrderStagedChangeRemoveShippingLine(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeRemoveShippingLineQueryBuilder> build)
         {
             var query = new Query<OrderStagedChangeRemoveShippingLine>("... on OrderStagedChangeRemoveShippingLine");
-            var queryBuilder = new OrderStagedChangeRemoveShippingLineQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderStagedChangeRemoveShippingLineQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

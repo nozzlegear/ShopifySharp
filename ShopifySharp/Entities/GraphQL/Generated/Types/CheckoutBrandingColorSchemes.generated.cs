@@ -36,4 +36,16 @@ public record CheckoutBrandingColorSchemes : IGraphQLObject
     /// </summary>
     [JsonPropertyName("scheme4")]
     public CheckoutBrandingColorScheme? scheme4 { get; set; } = null;
+
+    /// <summary>
+    /// An extra scheme available to customize more surfaces, components or specific states of the user interface.
+    /// </summary>
+    [JsonPropertyName("scheme5")]
+    public CheckoutBrandingColorScheme? scheme5 { get; set; } = null;
+
+    /// <summary>
+    /// An extra scheme available to customize more surfaces, components or specific states of the user interface.
+    /// </summary>
+    [JsonPropertyName("scheme6")]
+    public CheckoutBrandingColorScheme? scheme6 { get; set; } = null;
 }

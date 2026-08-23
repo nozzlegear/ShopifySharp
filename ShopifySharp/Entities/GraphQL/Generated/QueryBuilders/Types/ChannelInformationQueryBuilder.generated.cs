@@ -48,18 +48,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        [Obsolete("Use [`Order.attribution.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.handle) instead.")]
         public ChannelInformationQueryBuilder ChannelId()
         {
             base.InnerQuery.AddField("channelId");
             return this;
         }
 
+        [Obsolete("Use [`Order.attribution.displayName`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.displayName) instead.")]
         public ChannelInformationQueryBuilder DisplayName()
         {
             base.InnerQuery.AddField("displayName");
             return this;
         }
 
+        [Obsolete("Use [`Order.attribution.handle`](https://shopify.dev/docs/api/admin-graphql/latest/objects/OrderAttribution#field-OrderAttribution.fields.handle) instead.")]
         public ChannelInformationQueryBuilder Id()
         {
             base.InnerQuery.AddField("id");

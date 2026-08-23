@@ -76,6 +76,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public OrderByIdentifierOperationQueryBuilder Attribution(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderAttributionQueryBuilder> build)
+        {
+            var query = new Query<OrderAttribution>("attribution");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderAttributionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<OrderAttribution>(query);
+            return this;
+        }
+
         public OrderByIdentifierOperationQueryBuilder BillingAddress(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MailingAddressQueryBuilder> build)
         {
             var query = new Query<MailingAddress>("billingAddress");
@@ -146,6 +155,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public OrderByIdentifierOperationQueryBuilder CartToken()
+        {
+            base.InnerQuery.AddField("cartToken");
+            return this;
+        }
+
         public OrderByIdentifierOperationQueryBuilder Channel(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelQueryBuilder> build)
         {
             var query = new Query<Channel>("channel");
@@ -161,6 +176,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelInformationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ChannelInformation>(query);
+            return this;
+        }
+
+        public OrderByIdentifierOperationQueryBuilder CheckoutToken()
+        {
+            base.InnerQuery.AddField("checkoutToken");
             return this;
         }
 
@@ -1166,15 +1187,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public OrderByIdentifierOperationQueryBuilder UpdatedAt()
         {
             base.InnerQuery.AddField("updatedAt");
-            return this;
-        }
-
-        public OrderByIdentifierOperationQueryBuilder PurchasingEntity(Action<PurchasingEntityUnionCasesBuilder> build)
-        {
-            var query = new Query<PurchasingEntity>("purchasingEntity");
-            var unionBuilder = new PurchasingEntityUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
             return this;
         }
     }

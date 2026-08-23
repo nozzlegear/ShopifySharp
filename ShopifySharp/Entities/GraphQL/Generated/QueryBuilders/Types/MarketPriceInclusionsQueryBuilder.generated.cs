@@ -30,6 +30,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public MarketPriceInclusionsQueryBuilder AdaptivePricingEnabled()
+        {
+            base.InnerQuery.AddField("adaptivePricingEnabled");
+            return this;
+        }
+
         public MarketPriceInclusionsQueryBuilder InclusiveDutiesPricingStrategy()
         {
             base.InnerQuery.AddField("inclusiveDutiesPricingStrategy");
