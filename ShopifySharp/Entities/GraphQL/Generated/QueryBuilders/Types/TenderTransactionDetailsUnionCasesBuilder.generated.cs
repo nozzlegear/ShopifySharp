@@ -26,10 +26,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public TenderTransactionDetailsUnionCasesBuilder OnTenderTransactionCreditCardDetails(Action<TenderTransactionCreditCardDetailsQueryBuilder> build)
+        public TenderTransactionDetailsUnionCasesBuilder OnTenderTransactionCreditCardDetails(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TenderTransactionCreditCardDetailsQueryBuilder> build)
         {
             var query = new Query<TenderTransactionCreditCardDetails>("... on TenderTransactionCreditCardDetails");
-            var queryBuilder = new TenderTransactionCreditCardDetailsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TenderTransactionCreditCardDetailsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

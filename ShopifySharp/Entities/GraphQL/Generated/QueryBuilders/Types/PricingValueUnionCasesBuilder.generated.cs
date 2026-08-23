@@ -18,7 +18,7 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
     {
         protected override PricingValueUnionCasesBuilder Self => this;
 
-        public PricingValueUnionCasesBuilder(string fieldName = "pricingValue") : this(new Query<PricingValue>(fieldName))
+        public PricingValueUnionCasesBuilder(string fieldName = "value") : this(new Query<PricingValue>(fieldName))
         {
         }
 
@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public PricingValueUnionCasesBuilder OnMoneyV2(Action<MoneyV2QueryBuilder> build)
+        public PricingValueUnionCasesBuilder OnMoneyV2(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder> build)
         {
             var query = new Query<MoneyV2>("... on MoneyV2");
-            var queryBuilder = new MoneyV2QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyV2QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PricingValueUnionCasesBuilder OnPricingPercentageValue(Action<PricingPercentageValueQueryBuilder> build)
+        public PricingValueUnionCasesBuilder OnPricingPercentageValue(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PricingPercentageValueQueryBuilder> build)
         {
             var query = new Query<PricingPercentageValue>("... on PricingPercentageValue");
-            var queryBuilder = new PricingPercentageValueQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PricingPercentageValueQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

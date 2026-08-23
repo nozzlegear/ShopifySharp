@@ -76,6 +76,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public AppByKeyOperationQueryBuilder Channels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
+        {
+            var query = new Query<ChannelConnection>("channels");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ChannelConnection>(query);
+            return this;
+        }
+
         public AppByKeyOperationQueryBuilder Description()
         {
             base.InnerQuery.AddField("description");

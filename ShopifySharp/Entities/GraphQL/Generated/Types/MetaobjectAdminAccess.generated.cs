@@ -14,9 +14,11 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 public enum MetaobjectAdminAccess
 {
+    [Obsolete("Use MERCHANT_READ instead. Removed in API version 2027-01.")]
     PRIVATE,
     MERCHANT_READ,
     MERCHANT_READ_WRITE,
+    [Obsolete("Use MERCHANT_READ instead. Removed in API version 2027-01.")]
     PUBLIC_READ,
     PUBLIC_READ_WRITE,
 }

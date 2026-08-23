@@ -46,9 +46,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public StringConnectionArgumentsBuilder Query(string? query)
+        {
+            base.InnerQuery.AddArgument("query", query);
+            return this;
+        }
+
         public StringConnectionArgumentsBuilder Reverse(bool? reverse)
         {
             base.InnerQuery.AddArgument("reverse", reverse);
+            return this;
+        }
+
+        public StringConnectionArgumentsBuilder SortKey(DiscountTagSortKeys? sortKey)
+        {
+            base.InnerQuery.AddArgument("sortKey", sortKey);
             return this;
         }
 

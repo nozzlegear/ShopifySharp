@@ -63,6 +63,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public InventoryLevelQueryBuilder IsActive()
+        {
+            base.InnerQuery.AddField("isActive");
+            return this;
+        }
+
         public InventoryLevelQueryBuilder Item(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InventoryItemQueryBuilder> build)
         {
             var query = new Query<InventoryItem>("item");

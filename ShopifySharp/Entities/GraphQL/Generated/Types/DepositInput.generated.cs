@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// The input fields configuring the deposit for a B2B buyer.
+/// The input fields configuring the deposit requirement.
 /// </summary>
 public record DepositInput : GraphQLInputObject<DepositInput>
 {

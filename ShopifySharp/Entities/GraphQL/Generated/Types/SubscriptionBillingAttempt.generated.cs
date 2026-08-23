@@ -112,6 +112,12 @@ public record SubscriptionBillingAttempt : IGraphQLObject, INode
     public bool? respectInventoryPolicy { get; set; } = null;
 
     /// <summary>
+    /// The state of the billing attempt with state-specific data.
+    /// </summary>
+    [JsonPropertyName("state")]
+    public SubscriptionBillingAttemptState? state { get; set; } = null;
+
+    /// <summary>
     /// The subscription contract.
     /// </summary>
     [JsonPropertyName("subscriptionContract")]

@@ -182,21 +182,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public ProductByHandleOperationQueryBuilder FeaturedMedia(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder> build)
-        {
-            var query = new Query<IMedia>("featuredMedia");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IMedia>(query);
-            return this;
-        }
-
         public ProductByHandleOperationQueryBuilder Feedback(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourceFeedbackQueryBuilder> build)
         {
             var query = new Query<ResourceFeedback>("feedback");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourceFeedbackQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<ResourceFeedback>(query);
+            return this;
+        }
+
+        public ProductByHandleOperationQueryBuilder GiftCardSettings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardProductSettingsQueryBuilder> build)
+        {
+            var query = new Query<GiftCardProductSettings>("giftCardSettings");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GiftCardProductSettingsQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<GiftCardProductSettings>(query);
             return this;
         }
 
@@ -642,6 +642,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public ProductByHandleOperationQueryBuilder VariantsCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
         {
             var query = new Query<Count>("variantsCount");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Count>(query);
+            return this;
+        }
+
+        public ProductByHandleOperationQueryBuilder VariantsInCollection(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder> build)
+        {
+            var query = new Query<ProductVariantConnection>("variantsInCollection");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantConnectionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ProductVariantConnection>(query);
+            return this;
+        }
+
+        public ProductByHandleOperationQueryBuilder VariantsInCollectionCount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder> build)
+        {
+            var query = new Query<Count>("variantsInCollectionCount");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Count>(query);

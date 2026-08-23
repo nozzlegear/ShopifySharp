@@ -62,5 +62,32 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("title");
             return this;
         }
+
+        public CustomerAccountPageQueryBuilder OnCustomerAccountAppExtensionPage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountAppExtensionPageQueryBuilder> build)
+        {
+            var query = new Query<CustomerAccountAppExtensionPage>("... on CustomerAccountAppExtensionPage");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountAppExtensionPageQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public CustomerAccountPageQueryBuilder OnCustomerAccountNativePage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountNativePageQueryBuilder> build)
+        {
+            var query = new Query<CustomerAccountNativePage>("... on CustomerAccountNativePage");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerAccountNativePageQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public CustomerAccountPageQueryBuilder CustomerAccountPage(Action<CustomerAccountPageInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICustomerAccountPage>("customerAccountPage");
+            var unionBuilder = new CustomerAccountPageInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

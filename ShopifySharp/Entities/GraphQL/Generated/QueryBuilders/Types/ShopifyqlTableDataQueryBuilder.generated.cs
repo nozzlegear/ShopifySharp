@@ -39,6 +39,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ShopifyqlTableDataQueryBuilder RowMetadata(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyqlRowMetadataQueryBuilder> build)
+        {
+            var query = new Query<ShopifyqlRowMetadata>("rowMetadata");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyqlRowMetadataQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ShopifyqlRowMetadata>(query);
+            return this;
+        }
+
         public ShopifyqlTableDataQueryBuilder Rows()
         {
             base.InnerQuery.AddField("rows");

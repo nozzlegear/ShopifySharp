@@ -9,7 +9,8 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A preview of the results of a customer merge request.
+/// A preview of the results of a customer merge request. Use `resultingCustomerId` to check which customer
+/// would be kept before running `customerMerge`.
 /// </summary>
 public record CustomerMergePreview : IGraphQLObject
 {
@@ -38,7 +39,7 @@ public record CustomerMergePreview : IGraphQLObject
     public CustomerMergePreviewDefaultFields? defaultFields { get; set; } = null;
 
     /// <summary>
-    /// The resulting customer ID if the two customers are merged.
+    /// The ID of the customer that would be kept if the two customers were merged.
     /// </summary>
     [JsonPropertyName("resultingCustomerId")]
     public string? resultingCustomerId { get; set; } = null;

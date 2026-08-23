@@ -14,6 +14,7 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
+    [Obsolete("Use `discountNode` instead.")]
     public sealed class AutomaticDiscountNodeOperationQueryBuilder : FieldsQueryBuilderBase<DiscountAutomaticNode, AutomaticDiscountNodeOperationQueryBuilder>, IGraphOperationQueryBuilder<DiscountAutomaticNode>, IHasArguments<AutomaticDiscountNodeArgumentsBuilder>
     {
         public OperationType OperationType { get; } = OperationType.Query;
@@ -79,15 +80,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<MetafieldConnection>(query);
-            return this;
-        }
-
-        public AutomaticDiscountNodeOperationQueryBuilder AutomaticDiscount(Action<DiscountAutomaticUnionCasesBuilder> build)
-        {
-            var query = new Query<DiscountAutomatic>("automaticDiscount");
-            var unionBuilder = new DiscountAutomaticUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
             return this;
         }
     }

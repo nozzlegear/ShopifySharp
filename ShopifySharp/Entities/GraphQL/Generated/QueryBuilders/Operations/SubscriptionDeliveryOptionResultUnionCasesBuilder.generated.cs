@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public SubscriptionDeliveryOptionResultUnionCasesBuilder OnSubscriptionDeliveryOptionResultFailure(Action<SubscriptionDeliveryOptionResultFailureQueryBuilder> build)
+        public SubscriptionDeliveryOptionResultUnionCasesBuilder OnSubscriptionDeliveryOptionResultFailure(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryOptionResultFailureQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryOptionResultFailure>("... on SubscriptionDeliveryOptionResultFailure");
-            var queryBuilder = new SubscriptionDeliveryOptionResultFailureQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryOptionResultFailureQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public SubscriptionDeliveryOptionResultUnionCasesBuilder OnSubscriptionDeliveryOptionResultSuccess(Action<SubscriptionDeliveryOptionResultSuccessQueryBuilder> build)
+        public SubscriptionDeliveryOptionResultUnionCasesBuilder OnSubscriptionDeliveryOptionResultSuccess(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryOptionResultSuccessQueryBuilder> build)
         {
             var query = new Query<SubscriptionDeliveryOptionResultSuccess>("... on SubscriptionDeliveryOptionResultSuccess");
-            var queryBuilder = new SubscriptionDeliveryOptionResultSuccessQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionDeliveryOptionResultSuccessQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

@@ -54,12 +54,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public PublicationQueryBuilder Catalog(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)
+        public PublicationQueryBuilder Channels(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder> build)
         {
-            var query = new Query<ICatalog>("catalog");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder(query);
+            var query = new Query<ChannelConnection>("channels");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICatalog>(query);
+            base.InnerQuery.AddField<ChannelConnection>(query);
             return this;
         }
 
@@ -148,6 +148,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var unionBuilder = new PublicationOperationUnionCasesBuilder(query);
             build.Invoke(unionBuilder);
             base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public PublicationQueryBuilder Catalog(Action<CatalogInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICatalog>("catalog");
+            var unionBuilder = new CatalogInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

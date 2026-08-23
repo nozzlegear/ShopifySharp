@@ -14,6 +14,16 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MarketPriceInclusionsInput : GraphQLInputObject<MarketPriceInclusionsInput>
 {
     /// <summary>
+    /// Whether adaptive pricing is enabled for the market. Only applicable for
+    /// Markets with Managed Market enabled. When enabled, forces a state of
+    /// `INCLUDES_TAXES_IN_PRICE_BASED_ON_COUNTRY`, `INCLUDE_DUTIES_IN_PRICE`, and
+    /// `DDP`. When disabled, defaults to `INCLUDES_TAXES_IN_PRICE_BASED_ON_COUNTRY`,
+    /// `ADD_DUTIES_AT_CHECKOUT`, and `DDP` unless otherwise specified.
+    /// </summary>
+    [JsonPropertyName("adaptivePricingEnabled")]
+    public bool? adaptivePricingEnabled { get; set; } = null;
+
+    /// <summary>
     /// The inclusive duties pricing strategy for the market.
     /// </summary>
     [JsonPropertyName("dutiesPricingStrategy")]

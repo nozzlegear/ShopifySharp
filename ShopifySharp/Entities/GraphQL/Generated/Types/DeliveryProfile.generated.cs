@@ -29,6 +29,14 @@ public record DeliveryProfile : IGraphQLObject, INode
     public int? activeMethodDefinitionsCount { get; set; } = null;
 
     /// <summary>
+    /// Whether this delivery profile covers every shippable product variant in the
+    /// shop. Rates from a profile with `coversAllItems: true` apply to all items at
+    /// checkout, overriding any explicit product or variant assignments.
+    /// </summary>
+    [JsonPropertyName("coversAllItems")]
+    public bool? coversAllItems { get; set; } = null;
+
+    /// <summary>
     /// Whether this is the default profile.
     /// </summary>
     [JsonPropertyName("default")]
@@ -39,13 +47,6 @@ public record DeliveryProfile : IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("id")]
     public string? id { get; set; } = null;
-
-    /// <summary>
-    /// Whether this shop has enabled legacy compatibility mode for delivery profiles.
-    /// </summary>
-    [JsonPropertyName("legacyMode")]
-    [Obsolete("Legacy mode profiles are no longer supported. This will be removed in 2026-04.")]
-    public bool? legacyMode { get; set; } = null;
 
     /// <summary>
     /// The number of locations without rates defined.

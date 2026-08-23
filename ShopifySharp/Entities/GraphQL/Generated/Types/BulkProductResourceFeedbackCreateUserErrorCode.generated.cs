@@ -16,6 +16,7 @@ public enum BulkProductResourceFeedbackCreateUserErrorCode
     MAXIMUM_FEEDBACK_LIMIT_EXCEEDED,
     OUTDATED_FEEDBACK,
     PRODUCT_NOT_FOUND,
+    NOT_FOUND,
     INVALID,
     BLANK,
     PRESENT,

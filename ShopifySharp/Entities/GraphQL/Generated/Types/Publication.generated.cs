@@ -42,6 +42,12 @@ public record Publication : IGraphQLObject, INode
     public ICatalog? catalog { get; set; } = null;
 
     /// <summary>
+    /// The channels associated with the publication.
+    /// </summary>
+    [JsonPropertyName("channels")]
+    public ChannelConnection? channels { get; set; } = null;
+
+    /// <summary>
     /// The list of collection publication records, each representing the publication
     /// status and details for a collection published to this publication (typically channel).
     /// </summary>

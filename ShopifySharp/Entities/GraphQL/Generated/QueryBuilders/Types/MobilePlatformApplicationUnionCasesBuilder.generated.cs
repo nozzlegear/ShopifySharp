@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public MobilePlatformApplicationUnionCasesBuilder OnAndroidApplication(Action<AndroidApplicationQueryBuilder> build)
+        public MobilePlatformApplicationUnionCasesBuilder OnAndroidApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AndroidApplicationQueryBuilder> build)
         {
             var query = new Query<AndroidApplication>("... on AndroidApplication");
-            var queryBuilder = new AndroidApplicationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AndroidApplicationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MobilePlatformApplicationUnionCasesBuilder OnAppleApplication(Action<AppleApplicationQueryBuilder> build)
+        public MobilePlatformApplicationUnionCasesBuilder OnAppleApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppleApplicationQueryBuilder> build)
         {
             var query = new Query<AppleApplication>("... on AppleApplication");
-            var queryBuilder = new AppleApplicationQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppleApplicationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

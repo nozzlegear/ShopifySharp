@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DeliveryRateProviderUnionCasesBuilder OnDeliveryParticipant(Action<DeliveryParticipantQueryBuilder> build)
+        public DeliveryRateProviderUnionCasesBuilder OnDeliveryParticipant(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryParticipantQueryBuilder> build)
         {
             var query = new Query<DeliveryParticipant>("... on DeliveryParticipant");
-            var queryBuilder = new DeliveryParticipantQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryParticipantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DeliveryRateProviderUnionCasesBuilder OnDeliveryRateDefinition(Action<DeliveryRateDefinitionQueryBuilder> build)
+        public DeliveryRateProviderUnionCasesBuilder OnDeliveryRateDefinition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryRateDefinitionQueryBuilder> build)
         {
             var query = new Query<DeliveryRateDefinition>("... on DeliveryRateDefinition");
-            var queryBuilder = new DeliveryRateDefinitionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliveryRateDefinitionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

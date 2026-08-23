@@ -26,37 +26,37 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public DiscountCodeUnionCasesBuilder OnDiscountCodeApp(Action<DiscountCodeAppQueryBuilder> build)
+        public DiscountCodeUnionCasesBuilder OnDiscountCodeApp(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeAppQueryBuilder> build)
         {
             var query = new Query<DiscountCodeApp>("... on DiscountCodeApp");
-            var queryBuilder = new DiscountCodeAppQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeAppQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCodeUnionCasesBuilder OnDiscountCodeBasic(Action<DiscountCodeBasicQueryBuilder> build)
+        public DiscountCodeUnionCasesBuilder OnDiscountCodeBasic(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeBasicQueryBuilder> build)
         {
             var query = new Query<DiscountCodeBasic>("... on DiscountCodeBasic");
-            var queryBuilder = new DiscountCodeBasicQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeBasicQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCodeUnionCasesBuilder OnDiscountCodeBxgy(Action<DiscountCodeBxgyQueryBuilder> build)
+        public DiscountCodeUnionCasesBuilder OnDiscountCodeBxgy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeBxgyQueryBuilder> build)
         {
             var query = new Query<DiscountCodeBxgy>("... on DiscountCodeBxgy");
-            var queryBuilder = new DiscountCodeBxgyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeBxgyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCodeUnionCasesBuilder OnDiscountCodeFreeShipping(Action<DiscountCodeFreeShippingQueryBuilder> build)
+        public DiscountCodeUnionCasesBuilder OnDiscountCodeFreeShipping(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeFreeShippingQueryBuilder> build)
         {
             var query = new Query<DiscountCodeFreeShipping>("... on DiscountCodeFreeShipping");
-            var queryBuilder = new DiscountCodeFreeShippingQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeFreeShippingQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

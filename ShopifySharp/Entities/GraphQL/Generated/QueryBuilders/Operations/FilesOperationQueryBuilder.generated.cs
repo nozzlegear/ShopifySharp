@@ -49,15 +49,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public FilesOperationQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder> build)
-        {
-            var query = new Query<IFile>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IFile>(query);
-            return this;
-        }
-
         public FilesOperationQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");

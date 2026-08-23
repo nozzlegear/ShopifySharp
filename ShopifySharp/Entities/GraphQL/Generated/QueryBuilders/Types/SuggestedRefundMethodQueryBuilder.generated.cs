@@ -47,5 +47,23 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField<MoneyBag>(query);
             return this;
         }
+
+        public SuggestedRefundMethodQueryBuilder OnSuggestedStoreCreditRefund(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedStoreCreditRefundQueryBuilder> build)
+        {
+            var query = new Query<SuggestedStoreCreditRefund>("... on SuggestedStoreCreditRefund");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SuggestedStoreCreditRefundQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SuggestedRefundMethodQueryBuilder SuggestedRefundMethod(Action<SuggestedRefundMethodInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ISuggestedRefundMethod>("suggestedRefundMethod");
+            var unionBuilder = new SuggestedRefundMethodInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

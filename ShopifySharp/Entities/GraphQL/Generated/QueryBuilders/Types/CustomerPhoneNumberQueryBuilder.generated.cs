@@ -30,24 +30,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        [Obsolete("Use `smsMarketingConsent.collectedFrom` instead.")]
         public CustomerPhoneNumberQueryBuilder MarketingCollectedFrom()
         {
             base.InnerQuery.AddField("marketingCollectedFrom");
             return this;
         }
 
+        [Obsolete("Use `smsMarketingConsent.optInLevel` instead.")]
         public CustomerPhoneNumberQueryBuilder MarketingOptInLevel()
         {
             base.InnerQuery.AddField("marketingOptInLevel");
             return this;
         }
 
+        [Obsolete("Use `smsMarketingConsent.state` instead.")]
         public CustomerPhoneNumberQueryBuilder MarketingState()
         {
             base.InnerQuery.AddField("marketingState");
             return this;
         }
 
+        [Obsolete("Use `smsMarketingConsent.updatedAt` instead.")]
         public CustomerPhoneNumberQueryBuilder MarketingUpdatedAt()
         {
             base.InnerQuery.AddField("marketingUpdatedAt");
@@ -66,6 +70,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LocationQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<Location>(query);
+            return this;
+        }
+
+        public CustomerPhoneNumberQueryBuilder WhatsAppMarketingConsent(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerWhatsAppMarketingConsentQueryBuilder> build)
+        {
+            var query = new Query<CustomerWhatsAppMarketingConsent>("whatsAppMarketingConsent");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerWhatsAppMarketingConsentQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CustomerWhatsAppMarketingConsent>(query);
             return this;
         }
     }

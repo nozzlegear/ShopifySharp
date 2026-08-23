@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public FileEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder> build)
+        public FileEdgeQueryBuilder Node(Action<FileInterfaceCasesBuilder> build)
         {
             var query = new Query<IFile>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.FileQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IFile>(query);
+            var unionBuilder = new FileInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

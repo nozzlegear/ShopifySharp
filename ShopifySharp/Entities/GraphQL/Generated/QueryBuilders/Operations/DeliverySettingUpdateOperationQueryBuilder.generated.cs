@@ -14,10 +14,9 @@ using ShopifySharp.GraphQL.QueryBuilders.Types;
 
 namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 {
-    public sealed class DeliverySettingUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DeliverySettingUpdatePayload, DeliverySettingUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliverySettingUpdatePayload>, IHasArguments<DeliverySettingUpdateArgumentsBuilder>
+    public sealed class DeliverySettingUpdateOperationQueryBuilder : FieldsQueryBuilderBase<DeliverySettingUpdatePayload, DeliverySettingUpdateOperationQueryBuilder>, IGraphOperationQueryBuilder<DeliverySettingUpdatePayload>
     {
         public OperationType OperationType { get; } = OperationType.Mutation;
-        public DeliverySettingUpdateArgumentsBuilder Arguments { get; }
         protected override DeliverySettingUpdateOperationQueryBuilder Self => this;
 
         public DeliverySettingUpdateOperationQueryBuilder() : this("deliverySettingUpdate")
@@ -26,27 +25,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
 
         public DeliverySettingUpdateOperationQueryBuilder(string name) : base(new Query<DeliverySettingUpdatePayload>(name))
         {
-            Arguments = new DeliverySettingUpdateArgumentsBuilder(base.InnerQuery);
         }
 
         public DeliverySettingUpdateOperationQueryBuilder(IQuery<DeliverySettingUpdatePayload> query) : base(query)
         {
-            Arguments = new DeliverySettingUpdateArgumentsBuilder(base.InnerQuery);
-        }
-
-        public DeliverySettingUpdateOperationQueryBuilder SetArguments(Action<DeliverySettingUpdateArgumentsBuilder> configure)
-        {
-            configure(this.Arguments);
-            return this;
-        }
-
-        public DeliverySettingUpdateOperationQueryBuilder Setting(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DeliverySettingQueryBuilder> build)
-        {
-            var query = new Query<DeliverySetting>("setting");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DeliverySettingQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<DeliverySetting>(query);
-            return this;
         }
 
         public DeliverySettingUpdateOperationQueryBuilder UserErrors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.UserErrorQueryBuilder> build)

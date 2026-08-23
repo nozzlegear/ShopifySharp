@@ -40,6 +40,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public InventoryLevelConnectionArgumentsBuilder IncludeInactive(bool? includeInactive)
+        {
+            base.InnerQuery.AddArgument("includeInactive", includeInactive);
+            return this;
+        }
+
         public InventoryLevelConnectionArgumentsBuilder Last(int? last)
         {
             base.InnerQuery.AddArgument("last", last);

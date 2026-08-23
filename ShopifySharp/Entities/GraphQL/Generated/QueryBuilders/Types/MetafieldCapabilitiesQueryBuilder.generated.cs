@@ -39,6 +39,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public MetafieldCapabilitiesQueryBuilder AnalyticsQueryable(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldCapabilityAnalyticsQueryableQueryBuilder> build)
+        {
+            var query = new Query<MetafieldCapabilityAnalyticsQueryable>("analyticsQueryable");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldCapabilityAnalyticsQueryableQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetafieldCapabilityAnalyticsQueryable>(query);
+            return this;
+        }
+
+        public MetafieldCapabilitiesQueryBuilder CartToOrderCopyable(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldCapabilityCartToOrderCopyableQueryBuilder> build)
+        {
+            var query = new Query<MetafieldCapabilityCartToOrderCopyable>("cartToOrderCopyable");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldCapabilityCartToOrderCopyableQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MetafieldCapabilityCartToOrderCopyable>(query);
+            return this;
+        }
+
         public MetafieldCapabilitiesQueryBuilder SmartCollectionCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetafieldCapabilitySmartCollectionConditionQueryBuilder> build)
         {
             var query = new Query<MetafieldCapabilitySmartCollectionCondition>("smartCollectionCondition");

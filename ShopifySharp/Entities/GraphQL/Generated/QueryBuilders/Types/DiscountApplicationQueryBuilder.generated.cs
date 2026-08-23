@@ -54,12 +54,57 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public DiscountApplicationQueryBuilder OnAutomaticDiscountApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AutomaticDiscountApplicationQueryBuilder> build)
+        {
+            var query = new Query<AutomaticDiscountApplication>("... on AutomaticDiscountApplication");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AutomaticDiscountApplicationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public DiscountApplicationQueryBuilder OnDiscountCodeApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeApplicationQueryBuilder> build)
+        {
+            var query = new Query<DiscountCodeApplication>("... on DiscountCodeApplication");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCodeApplicationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public DiscountApplicationQueryBuilder OnManualDiscountApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ManualDiscountApplicationQueryBuilder> build)
+        {
+            var query = new Query<ManualDiscountApplication>("... on ManualDiscountApplication");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ManualDiscountApplicationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public DiscountApplicationQueryBuilder OnScriptDiscountApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ScriptDiscountApplicationQueryBuilder> build)
+        {
+            var query = new Query<ScriptDiscountApplication>("... on ScriptDiscountApplication");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ScriptDiscountApplicationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
         public DiscountApplicationQueryBuilder Value(Action<PricingValueUnionCasesBuilder> build)
         {
             var query = new Query<PricingValue>("value");
             var unionBuilder = new PricingValueUnionCasesBuilder(query);
             build.Invoke(unionBuilder);
             base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public DiscountApplicationQueryBuilder DiscountApplication(Action<DiscountApplicationInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IDiscountApplication>("discountApplication");
+            var unionBuilder = new DiscountApplicationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

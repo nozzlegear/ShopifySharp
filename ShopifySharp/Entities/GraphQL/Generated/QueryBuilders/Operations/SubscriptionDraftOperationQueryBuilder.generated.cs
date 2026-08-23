@@ -213,33 +213,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField("status");
             return this;
         }
-
-        public SubscriptionDraftOperationQueryBuilder DeliveryMethod(Action<SubscriptionDeliveryMethodUnionCasesBuilder> build)
-        {
-            var query = new Query<SubscriptionDeliveryMethod>("deliveryMethod");
-            var unionBuilder = new SubscriptionDeliveryMethodUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
-
-        public SubscriptionDraftOperationQueryBuilder DeliveryOptions(Action<SubscriptionDeliveryOptionResultUnionCasesBuilder> build)
-        {
-            var query = new Query<SubscriptionDeliveryOptionResult>("deliveryOptions");
-            var unionBuilder = new SubscriptionDeliveryOptionResultUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
-
-        [Obsolete("Use `deliveryOptions` instead.")]
-        public SubscriptionDraftOperationQueryBuilder ShippingOptions(Action<SubscriptionShippingOptionResultUnionCasesBuilder> build)
-        {
-            var query = new Query<SubscriptionShippingOptionResult>("shippingOptions");
-            var unionBuilder = new SubscriptionShippingOptionResultUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

@@ -124,6 +124,12 @@ public record Fulfillment : IGraphQLObject, ILegacyInteroperability, INode
     public FulfillmentService? service { get; set; } = null;
 
     /// <summary>
+    /// The optional shipping label for this fulfillment.
+    /// </summary>
+    [JsonPropertyName("shippingLabel")]
+    public ShippingLabel? shippingLabel { get; set; } = null;
+
+    /// <summary>
     /// The status of the fulfillment.
     /// </summary>
     [JsonPropertyName("status")]

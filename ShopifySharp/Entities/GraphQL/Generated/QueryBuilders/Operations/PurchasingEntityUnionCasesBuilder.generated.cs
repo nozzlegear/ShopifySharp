@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public PurchasingEntityUnionCasesBuilder OnCustomer(Action<CustomerQueryBuilder> build)
+        public PurchasingEntityUnionCasesBuilder OnCustomer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("... on Customer");
-            var queryBuilder = new CustomerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PurchasingEntityUnionCasesBuilder OnPurchasingCompany(Action<PurchasingCompanyQueryBuilder> build)
+        public PurchasingEntityUnionCasesBuilder OnPurchasingCompany(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PurchasingCompanyQueryBuilder> build)
         {
             var query = new Query<PurchasingCompany>("... on PurchasingCompany");
-            var queryBuilder = new PurchasingCompanyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PurchasingCompanyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

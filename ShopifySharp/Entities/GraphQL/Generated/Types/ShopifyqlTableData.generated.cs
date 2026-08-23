@@ -20,6 +20,12 @@ public record ShopifyqlTableData : IGraphQLObject
     public ICollection<ShopifyqlTableDataColumn>? columns { get; set; } = null;
 
     /// <summary>
+    /// Per-row metadata, aligned by index with `rows`.
+    /// </summary>
+    [JsonPropertyName("rowMetadata")]
+    public ICollection<ShopifyqlRowMetadata>? rowMetadata { get; set; } = null;
+
+    /// <summary>
     /// The rows of the table.
     /// </summary>
     [JsonPropertyName("rows")]

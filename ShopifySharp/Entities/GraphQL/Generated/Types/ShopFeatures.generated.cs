@@ -34,6 +34,12 @@ public record ShopFeatures : IGraphQLObject
     public BundlesFeature? bundles { get; set; } = null;
 
     /// <summary>
+    /// Whether the buyer experience deposit configuration is enabled.
+    /// </summary>
+    [JsonPropertyName("buyerExperienceDepositEnabled")]
+    public bool? buyerExperienceDepositEnabled { get; set; } = null;
+
+    /// <summary>
     /// Whether a shop's online store can have CAPTCHA protection.
     /// </summary>
     [JsonPropertyName("captcha")]
@@ -58,6 +64,12 @@ public record ShopFeatures : IGraphQLObject
     [JsonPropertyName("deliveryProfiles")]
     [Obsolete("Delivery profiles are now 100% enabled across Shopify.")]
     public bool? deliveryProfiles { get; set; } = null;
+
+    /// <summary>
+    /// Whether the direct connection catalog assignment is enabled.
+    /// </summary>
+    [JsonPropertyName("directConnectionCatalogAssignmentEnabled")]
+    public bool? directConnectionCatalogAssignmentEnabled { get; set; } = null;
 
     /// <summary>
     /// Whether a shop has access to the Google Analytics dynamic remarketing feature.
@@ -125,6 +137,12 @@ public record ShopFeatures : IGraphQLObject
     public bool? liveView { get; set; } = null;
 
     /// <summary>
+    /// Whether market-driven shipping is enabled for the shop.
+    /// </summary>
+    [JsonPropertyName("marketDrivenShipping")]
+    public bool? marketDrivenShipping { get; set; } = null;
+
+    /// <summary>
     /// Whether a shop has access to the onboarding visual.
     /// </summary>
     [JsonPropertyName("onboardingVisual")]
@@ -167,6 +185,12 @@ public record ShopFeatures : IGraphQLObject
     /// </summary>
     [JsonPropertyName("storefront")]
     public bool? storefront { get; set; } = null;
+
+    /// <summary>
+    /// Whether a shop is eligible for Sub Country Markets.
+    /// </summary>
+    [JsonPropertyName("subCountryMarketsEnabled")]
+    public bool? subCountryMarketsEnabled { get; set; } = null;
 
     /// <summary>
     /// Whether a shop is eligible for Unified Markets.

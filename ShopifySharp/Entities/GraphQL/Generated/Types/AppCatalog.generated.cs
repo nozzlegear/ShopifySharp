@@ -20,6 +20,12 @@ public record AppCatalog : IGraphQLObject, ICatalog, INode
     public AppConnection? apps { get; set; } = null;
 
     /// <summary>
+    /// The channels associated with the catalog.
+    /// </summary>
+    [JsonPropertyName("channels")]
+    public ChannelConnection? channels { get; set; } = null;
+
+    /// <summary>
     /// A globally-unique ID.
     /// </summary>
     [JsonPropertyName("id")]

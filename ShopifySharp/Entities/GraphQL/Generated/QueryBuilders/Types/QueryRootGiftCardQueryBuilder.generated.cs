@@ -50,6 +50,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootGiftCardQueryBuilder CrossCurrencyRedemptionStrategy()
+        {
+            base.InnerQuery.AddField("crossCurrencyRedemptionStrategy");
+            return this;
+        }
+
         public QueryRootGiftCardQueryBuilder Customer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("customer");
@@ -92,9 +98,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootGiftCardQueryBuilder IsRedeemable()
+        {
+            base.InnerQuery.AddField("isRedeemable");
+            return this;
+        }
+
         public QueryRootGiftCardQueryBuilder LastCharacters()
         {
             base.InnerQuery.AddField("lastCharacters");
+            return this;
+        }
+
+        public QueryRootGiftCardQueryBuilder LineItem(Action<ShopifySharp.GraphQL.QueryBuilders.Types.LineItemQueryBuilder> build)
+        {
+            var query = new Query<LineItem>("lineItem");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.LineItemQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<LineItem>(query);
             return this;
         }
 

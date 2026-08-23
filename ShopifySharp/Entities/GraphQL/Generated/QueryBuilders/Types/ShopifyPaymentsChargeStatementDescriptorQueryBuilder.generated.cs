@@ -41,5 +41,32 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("prefix");
             return this;
         }
+
+        public ShopifyPaymentsChargeStatementDescriptorQueryBuilder OnShopifyPaymentsDefaultChargeStatementDescriptor(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDefaultChargeStatementDescriptorQueryBuilder> build)
+        {
+            var query = new Query<ShopifyPaymentsDefaultChargeStatementDescriptor>("... on ShopifyPaymentsDefaultChargeStatementDescriptor");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsDefaultChargeStatementDescriptorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public ShopifyPaymentsChargeStatementDescriptorQueryBuilder OnShopifyPaymentsJpChargeStatementDescriptor(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsJpChargeStatementDescriptorQueryBuilder> build)
+        {
+            var query = new Query<ShopifyPaymentsJpChargeStatementDescriptor>("... on ShopifyPaymentsJpChargeStatementDescriptor");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsJpChargeStatementDescriptorQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public ShopifyPaymentsChargeStatementDescriptorQueryBuilder ShopifyPaymentsChargeStatementDescriptor(Action<ShopifyPaymentsChargeStatementDescriptorInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IShopifyPaymentsChargeStatementDescriptor>("shopifyPaymentsChargeStatementDescriptor");
+            var unionBuilder = new ShopifyPaymentsChargeStatementDescriptorInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

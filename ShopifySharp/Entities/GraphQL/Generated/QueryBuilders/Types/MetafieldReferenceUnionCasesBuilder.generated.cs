@@ -26,127 +26,127 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnArticle(Action<ArticleQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnArticle(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ArticleQueryBuilder> build)
         {
             var query = new Query<Article>("... on Article");
-            var queryBuilder = new ArticleQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ArticleQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnCollection(Action<CollectionQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnCollection(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionQueryBuilder> build)
         {
             var query = new Query<Collection>("... on Collection");
-            var queryBuilder = new CollectionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnCompany(Action<CompanyQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnCompany(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyQueryBuilder> build)
         {
             var query = new Query<Company>("... on Company");
-            var queryBuilder = new CompanyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CompanyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnCustomer(Action<CustomerQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnCustomer(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder> build)
         {
             var query = new Query<Customer>("... on Customer");
-            var queryBuilder = new CustomerQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CustomerQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnGenericFile(Action<GenericFileQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnGenericFile(Action<ShopifySharp.GraphQL.QueryBuilders.Types.GenericFileQueryBuilder> build)
         {
             var query = new Query<GenericFile>("... on GenericFile");
-            var queryBuilder = new GenericFileQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.GenericFileQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnMediaImage(Action<MediaImageQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnMediaImage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MediaImageQueryBuilder> build)
         {
             var query = new Query<MediaImage>("... on MediaImage");
-            var queryBuilder = new MediaImageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MediaImageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnMetaobject(Action<MetaobjectQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnMetaobject(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectQueryBuilder> build)
         {
             var query = new Query<Metaobject>("... on Metaobject");
-            var queryBuilder = new MetaobjectQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MetaobjectQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnModel3d(Action<Model3dQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnModel3d(Action<ShopifySharp.GraphQL.QueryBuilders.Types.Model3dQueryBuilder> build)
         {
             var query = new Query<Model3d>("... on Model3d");
-            var queryBuilder = new Model3dQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.Model3dQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnOrder(Action<OrderQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnOrder(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder> build)
         {
             var query = new Query<Order>("... on Order");
-            var queryBuilder = new OrderQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnPage(Action<PageQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnPage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageQueryBuilder> build)
         {
             var query = new Query<Page>("... on Page");
-            var queryBuilder = new PageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnProduct(Action<ProductQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnProduct(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)
         {
             var query = new Query<Product>("... on Product");
-            var queryBuilder = new ProductQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnProductVariant(Action<ProductVariantQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnProductVariant(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder> build)
         {
             var query = new Query<ProductVariant>("... on ProductVariant");
-            var queryBuilder = new ProductVariantQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ProductVariantQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnTaxonomyValue(Action<TaxonomyValueQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnTaxonomyValue(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyValueQueryBuilder> build)
         {
             var query = new Query<TaxonomyValue>("... on TaxonomyValue");
-            var queryBuilder = new TaxonomyValueQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyValueQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public MetafieldReferenceUnionCasesBuilder OnVideo(Action<VideoQueryBuilder> build)
+        public MetafieldReferenceUnionCasesBuilder OnVideo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.VideoQueryBuilder> build)
         {
             var query = new Query<Video>("... on Video");
-            var queryBuilder = new VideoQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.VideoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

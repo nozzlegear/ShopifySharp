@@ -12,6 +12,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// Interface for a gift card transaction.
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
+[JsonDerivedType(typeof(GiftCardCashOutTransaction), typeDiscriminator: "GiftCardCashOutTransaction")]
 [JsonDerivedType(typeof(GiftCardCreditTransaction), typeDiscriminator: "GiftCardCreditTransaction")]
 [JsonDerivedType(typeof(GiftCardDebitTransaction), typeDiscriminator: "GiftCardDebitTransaction")]
 public interface IGiftCardTransaction : IGraphQLObject

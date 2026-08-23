@@ -30,6 +30,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public MarketConditionsQueryBuilder ChannelsCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ChannelsConditionQueryBuilder> build)
+        {
+            var query = new Query<ChannelsCondition>("channelsCondition");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ChannelsConditionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<ChannelsCondition>(query);
+            return this;
+        }
+
         public MarketConditionsQueryBuilder CompanyLocationsCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CompanyLocationsConditionQueryBuilder> build)
         {
             var query = new Query<CompanyLocationsCondition>("companyLocationsCondition");

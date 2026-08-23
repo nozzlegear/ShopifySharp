@@ -58,6 +58,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public DraftOrderOperationQueryBuilder AmountDueLaterSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        {
+            var query = new Query<MoneyBag>("amountDueLaterSet");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyBag>(query);
+            return this;
+        }
+
+        public DraftOrderOperationQueryBuilder AmountDueNowSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        {
+            var query = new Query<MoneyBag>("amountDueNowSet");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyBag>(query);
+            return this;
+        }
+
         public DraftOrderOperationQueryBuilder AnyVariantPricesOverridden()
         {
             base.InnerQuery.AddField("anyVariantPricesOverridden");
@@ -484,24 +502,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         public DraftOrderOperationQueryBuilder VisibleToCustomer()
         {
             base.InnerQuery.AddField("visibleToCustomer");
-            return this;
-        }
-
-        public DraftOrderOperationQueryBuilder Warnings(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderWarningQueryBuilder> build)
-        {
-            var query = new Query<IDraftOrderWarning>("warnings");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DraftOrderWarningQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IDraftOrderWarning>(query);
-            return this;
-        }
-
-        public DraftOrderOperationQueryBuilder PurchasingEntity(Action<PurchasingEntityUnionCasesBuilder> build)
-        {
-            var query = new Query<PurchasingEntity>("purchasingEntity");
-            var unionBuilder = new PurchasingEntityUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
             return this;
         }
     }

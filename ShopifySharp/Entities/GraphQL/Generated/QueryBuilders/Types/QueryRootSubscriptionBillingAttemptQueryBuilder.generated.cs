@@ -107,15 +107,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootSubscriptionBillingAttemptQueryBuilder ProcessingError(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder> build)
-        {
-            var query = new Query<ISubscriptionBillingAttemptProcessingError>("processingError");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionBillingAttemptProcessingErrorQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ISubscriptionBillingAttemptProcessingError>(query);
-            return this;
-        }
-
         [Obsolete("Use `state` instead.")]
         public QueryRootSubscriptionBillingAttemptQueryBuilder Ready()
         {
@@ -144,6 +135,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<OrderTransactionConnection>(query);
+            return this;
+        }
+
+        public QueryRootSubscriptionBillingAttemptQueryBuilder State(Action<SubscriptionBillingAttemptStateUnionCasesBuilder> build)
+        {
+            var query = new Query<SubscriptionBillingAttemptState>("state");
+            var unionBuilder = new SubscriptionBillingAttemptStateUnionCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public QueryRootSubscriptionBillingAttemptQueryBuilder ProcessingError(Action<SubscriptionBillingAttemptProcessingErrorInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ISubscriptionBillingAttemptProcessingError>("processingError");
+            var unionBuilder = new SubscriptionBillingAttemptProcessingErrorInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

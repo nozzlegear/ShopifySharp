@@ -14,6 +14,12 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record MarketConditionsInput : GraphQLInputObject<MarketConditionsInput>
 {
     /// <summary>
+    /// The channels to include in the market conditions.
+    /// </summary>
+    [JsonPropertyName("channelsCondition")]
+    public MarketConditionsChannelsInput? channelsCondition { get; set; } = null;
+
+    /// <summary>
     /// The company locations to include in the market conditions.
     /// </summary>
     [JsonPropertyName("companyLocationsCondition")]

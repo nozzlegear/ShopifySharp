@@ -68,6 +68,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootBusinessEntityQueryBuilder LegalEntityId()
+        {
+            base.InnerQuery.AddField("legalEntityId");
+            return this;
+        }
+
         public QueryRootBusinessEntityQueryBuilder Primary()
         {
             base.InnerQuery.AddField("primary");

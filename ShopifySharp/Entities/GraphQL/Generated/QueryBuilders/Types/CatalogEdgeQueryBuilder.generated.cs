@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public CatalogEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)
+        public CatalogEdgeQueryBuilder Node(Action<CatalogInterfaceCasesBuilder> build)
         {
             var query = new Query<ICatalog>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICatalog>(query);
+            var unionBuilder = new CatalogInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

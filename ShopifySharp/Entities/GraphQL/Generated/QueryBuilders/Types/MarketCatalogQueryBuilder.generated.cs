@@ -54,15 +54,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public MarketCatalogQueryBuilder Operations(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ResourceOperationQueryBuilder> build)
-        {
-            var query = new Query<IResourceOperation>("operations");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ResourceOperationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IResourceOperation>(query);
-            return this;
-        }
-
         public MarketCatalogQueryBuilder PriceList(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PriceListQueryBuilder> build)
         {
             var query = new Query<PriceList>("priceList");
@@ -90,6 +81,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public MarketCatalogQueryBuilder Title()
         {
             base.InnerQuery.AddField("title");
+            return this;
+        }
+
+        public MarketCatalogQueryBuilder Operations(Action<ResourceOperationInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IResourceOperation>("operations");
+            var unionBuilder = new ResourceOperationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

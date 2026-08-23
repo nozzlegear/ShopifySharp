@@ -44,7 +44,7 @@ public record InventoryShipmentLineItem : IGraphQLObject, INode
     public int? rejectedQuantity { get; set; } = null;
 
     /// <summary>
-    /// The total quantity of units that haven't been received (neither accepted or rejected) in this shipment line item.
+    /// The total quantity of units that haven't been accepted, rejected, or marked as canceled in this shipment line item.
     /// </summary>
     [JsonPropertyName("unreceivedQuantity")]
     public int? unreceivedQuantity { get; set; } = null;

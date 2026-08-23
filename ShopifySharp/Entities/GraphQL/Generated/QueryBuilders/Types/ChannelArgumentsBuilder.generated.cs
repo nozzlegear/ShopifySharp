@@ -27,5 +27,11 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddArgument("id", id);
             return this;
         }
+
+        public ChannelArgumentsBuilder Handle(string? handle)
+        {
+            base.InnerQuery.AddArgument("handle", handle);
+            return this;
+        }
     }
 }

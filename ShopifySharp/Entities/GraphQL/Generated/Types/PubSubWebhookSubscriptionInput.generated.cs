@@ -48,6 +48,12 @@ public record PubSubWebhookSubscriptionInput : GraphQLInputObject<PubSubWebhookS
     public ICollection<HasMetafieldsMetafieldIdentifierInput>? metafields { get; set; } = null;
 
     /// <summary>
+    /// A human-readable name for the webhook subscription.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string? name { get; set; } = null;
+
+    /// <summary>
     /// The Pub/Sub project ID.
     /// </summary>
     [JsonPropertyName("pubSubProject")]

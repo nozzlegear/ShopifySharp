@@ -18,4 +18,10 @@ public record MarketsCatalogsEntitlement : IGraphQLObject
     /// </summary>
     [JsonPropertyName("enabled")]
     public bool? enabled { get; set; } = null;
+
+    /// <summary>
+    /// The maximum number of catalogs allowed.
+    /// </summary>
+    [JsonPropertyName("limit")]
+    public int? limit { get; set; } = null;
 }

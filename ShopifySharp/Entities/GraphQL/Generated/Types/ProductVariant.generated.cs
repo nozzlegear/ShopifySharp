@@ -32,13 +32,22 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// - [`SellingPlanGroup`](https://shopify.dev/docs/api/admin-graphql/latest/objects/SellingPlanGroup): Used for subscriptions and selling plans
 /// Learn more about [Shopify's product model](https://shopify.dev/docs/apps/build/graphql/migrate/new-product-model/product-model-components).
 /// </summary>
-public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, ILegacyInteroperability, INavigable, INode
+public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IHasMetafieldDefinitions, IHasMetafields, IHasPublishedTranslations, ILegacyInteroperability, INavigable, INode, IPublishable
 {
     /// <summary>
     /// Whether the product variant is available for sale.
     /// </summary>
     [JsonPropertyName("availableForSale")]
     public bool? availableForSale { get; set; } = null;
+
+    /// <summary>
+    /// The number of
+    /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
+    /// that a resource is published to, without
+    /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// </summary>
+    [JsonPropertyName("availablePublicationsCount")]
+    public Count? availablePublicationsCount { get; set; } = null;
 
     /// <summary>
     /// The value of the barcode associated with the product.
@@ -193,12 +202,83 @@ public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IH
     public ProductVariantComponentConnection? productVariantComponents { get; set; } = null;
 
     /// <summary>
+    /// The total number of
+    /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
+    /// that a resource is published to, including publications with
+    /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
+    /// </summary>
+    [JsonPropertyName("publicationCount")]
+    [Obsolete("Use `resourcePublicationsCount` instead.")]
+    public int? publicationCount { get; set; } = null;
+
+    /// <summary>
+    /// Whether the resource is published to a specific channel.
+    /// </summary>
+    [JsonPropertyName("publishedOnChannel")]
+    [Obsolete("Use `publishedOnPublication` instead.")]
+    public bool? publishedOnChannel { get; set; } = null;
+
+    /// <summary>
+    /// Whether the resource is published to a
+    /// [channel](https://shopify.dev/docs/api/admin-graphql/latest/objects/Channel).
+    /// For example, the resource might be published to the online store channel.
+    /// </summary>
+    [JsonPropertyName("publishedOnCurrentChannel")]
+    [Obsolete("Use `publishedOnCurrentPublication` instead.")]
+    public bool? publishedOnCurrentChannel { get; set; } = null;
+
+    /// <summary>
+    /// Whether the resource is published to the app's
+    /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// For example, the resource might be published to the app's online store channel.
+    /// </summary>
+    [JsonPropertyName("publishedOnCurrentPublication")]
+    [Obsolete("Use `publishedOnPublication` instead.")]
+    public bool? publishedOnCurrentPublication { get; set; } = null;
+
+    /// <summary>
+    /// Whether the resource is published to a specified
+    /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// </summary>
+    [JsonPropertyName("publishedOnPublication")]
+    public bool? publishedOnPublication { get; set; } = null;
+
+    /// <summary>
     /// Whether a product variant requires components. The default value is `false`.
     /// If `true`, then the product variant can only be purchased as a parent bundle with components and it will be omitted
     /// from channels that don't support bundles.
     /// </summary>
     [JsonPropertyName("requiresComponents")]
     public bool? requiresComponents { get; set; } = null;
+
+    /// <summary>
+    /// The list of resources that are published to a
+    /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// </summary>
+    [JsonPropertyName("resourcePublications")]
+    public ResourcePublicationConnection? resourcePublications { get; set; } = null;
+
+    /// <summary>
+    /// The total number of
+    /// [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
+    /// that a resource is published to, including publications with
+    /// [feedback errors](https://shopify.dev/docs/api/admin-graphql/latest/objects/ResourceFeedback).
+    /// To get a count that excludes publications with feedback errors, use `availablePublicationsCount`.
+    /// </summary>
+    [JsonPropertyName("resourcePublicationsCount")]
+    public Count? resourcePublicationsCount { get; set; } = null;
+
+    /// <summary>
+    /// The list of resources that are either published or staged to be published to a
+    /// [publication](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication).
+    /// By default, only publications to `APP` catalog types are returned.
+    /// For `Product` and `ProductVariant`, use the `catalogType` argument to retrieve
+    /// publications for other catalog types, such as `COMPANY_LOCATION` (B2B) or `MARKET`.
+    /// `Collection` only supports publications to `APP` catalog types.
+    /// </summary>
+    [JsonPropertyName("resourcePublicationsV2")]
+    public ResourcePublicationV2Connection? resourcePublicationsV2 { get; set; } = null;
 
     /// <summary>
     /// List of product options applied to the variant.
@@ -292,6 +372,20 @@ public record ProductVariant : IGraphQLUnionCase, IGraphQLObject, IHasEvents, IH
     /// </summary>
     [JsonPropertyName("unitPriceMeasurement")]
     public UnitPriceMeasurement? unitPriceMeasurement { get; set; } = null;
+
+    /// <summary>
+    /// The list of channels that the resource is not published to.
+    /// </summary>
+    [JsonPropertyName("unpublishedChannels")]
+    [Obsolete("Use `unpublishedPublications` instead.")]
+    public ChannelConnection? unpublishedChannels { get; set; } = null;
+
+    /// <summary>
+    /// The list of [publications](https://shopify.dev/docs/api/admin-graphql/latest/objects/Publication)
+    /// that the resource isn't published to.
+    /// </summary>
+    [JsonPropertyName("unpublishedPublications")]
+    public PublicationConnection? unpublishedPublications { get; set; } = null;
 
     /// <summary>
     /// The date and time (ISO 8601 format) when the product variant was last modified.

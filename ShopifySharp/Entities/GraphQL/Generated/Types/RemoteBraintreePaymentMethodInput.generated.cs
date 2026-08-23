@@ -20,8 +20,7 @@ public record RemoteBraintreePaymentMethodInput : GraphQLInputObject<RemoteBrain
     public string? customerId { get; set; } = null;
 
     /// <summary>
-    /// The `payment_method_token` value from the Braintree API. Starting on 2025,
-    /// payment_method_token will become mandatory for all API versions.
+    /// The `payment_method_token` value from the Braintree API.
     /// </summary>
     [JsonPropertyName("paymentMethodToken")]
     public string? paymentMethodToken { get; set; } = null;

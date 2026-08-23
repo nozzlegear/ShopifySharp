@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public SellingPlanPricingPolicyUnionCasesBuilder OnSellingPlanFixedPricingPolicy(Action<SellingPlanFixedPricingPolicyQueryBuilder> build)
+        public SellingPlanPricingPolicyUnionCasesBuilder OnSellingPlanFixedPricingPolicy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanFixedPricingPolicyQueryBuilder> build)
         {
             var query = new Query<SellingPlanFixedPricingPolicy>("... on SellingPlanFixedPricingPolicy");
-            var queryBuilder = new SellingPlanFixedPricingPolicyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanFixedPricingPolicyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public SellingPlanPricingPolicyUnionCasesBuilder OnSellingPlanRecurringPricingPolicy(Action<SellingPlanRecurringPricingPolicyQueryBuilder> build)
+        public SellingPlanPricingPolicyUnionCasesBuilder OnSellingPlanRecurringPricingPolicy(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanRecurringPricingPolicyQueryBuilder> build)
         {
             var query = new Query<SellingPlanRecurringPricingPolicy>("... on SellingPlanRecurringPricingPolicy");
-            var queryBuilder = new SellingPlanRecurringPricingPolicyQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SellingPlanRecurringPricingPolicyQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

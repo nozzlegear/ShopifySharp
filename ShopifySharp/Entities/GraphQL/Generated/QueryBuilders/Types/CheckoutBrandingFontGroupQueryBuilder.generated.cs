@@ -30,24 +30,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public CheckoutBrandingFontGroupQueryBuilder Base(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingFontQueryBuilder> build)
-        {
-            var query = new Query<ICheckoutBrandingFont>("base");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingFontQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICheckoutBrandingFont>(query);
-            return this;
-        }
-
-        public CheckoutBrandingFontGroupQueryBuilder Bold(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingFontQueryBuilder> build)
-        {
-            var query = new Query<ICheckoutBrandingFont>("bold");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CheckoutBrandingFontQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICheckoutBrandingFont>(query);
-            return this;
-        }
-
         public CheckoutBrandingFontGroupQueryBuilder LoadingStrategy()
         {
             base.InnerQuery.AddField("loadingStrategy");
@@ -57,6 +39,24 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public CheckoutBrandingFontGroupQueryBuilder Name()
         {
             base.InnerQuery.AddField("name");
+            return this;
+        }
+
+        public CheckoutBrandingFontGroupQueryBuilder Base(Action<CheckoutBrandingFontInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICheckoutBrandingFont>("base");
+            var unionBuilder = new CheckoutBrandingFontInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public CheckoutBrandingFontGroupQueryBuilder Bold(Action<CheckoutBrandingFontInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICheckoutBrandingFont>("bold");
+            var unionBuilder = new CheckoutBrandingFontInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

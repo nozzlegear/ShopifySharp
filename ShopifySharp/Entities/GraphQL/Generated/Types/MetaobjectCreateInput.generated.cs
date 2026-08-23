@@ -36,4 +36,11 @@ public record MetaobjectCreateInput : GraphQLInputObject<MetaobjectCreateInput>
     /// </summary>
     [JsonPropertyName("type")]
     public string? type { get; set; } = null;
+
+    /// <summary>
+    /// The field values for the metaobject as a JSON object, keyed by field
+    /// definition key. Cannot be used in conjunction with `fields`.
+    /// </summary>
+    [JsonPropertyName("values")]
+    public string? values { get; set; } = null;
 }

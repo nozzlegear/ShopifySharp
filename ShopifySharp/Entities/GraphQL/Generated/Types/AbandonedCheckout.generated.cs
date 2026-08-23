@@ -29,14 +29,14 @@ public record AbandonedCheckout : IGraphQLObject, INavigable, INode
 
     /// <summary>
     /// The billing address provided by the buyer.
-    /// Null if the user did not provide a billing address.
+    /// Null if the user didn't provide a billing address.
     /// </summary>
     [JsonPropertyName("billingAddress")]
     public MailingAddress? billingAddress { get; set; } = null;
 
     /// <summary>
     /// The date and time when the buyer completed the checkout.
-    /// Null if the checkout has not been completed.
+    /// Null if the checkout hasn't been completed.
     /// </summary>
     [JsonPropertyName("completedAt")]
     public DateTimeOffset? completedAt { get; set; } = null;
@@ -106,7 +106,7 @@ public record AbandonedCheckout : IGraphQLObject, INavigable, INode
 
     /// <summary>
     /// The shipping address to where the line items will be shipped.
-    /// Null if the user did not provide a shipping address.
+    /// Null if the user didn't provide a shipping address.
     /// </summary>
     [JsonPropertyName("shippingAddress")]
     public MailingAddress? shippingAddress { get; set; } = null;

@@ -16,6 +16,14 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record PaymentMandateResource : IGraphQLObject
 {
     /// <summary>
+    /// The unique ID of the payment mandate. Matches the corresponding
+    /// `CustomerPaymentMethod.id` token, so partners can identify which payment
+    /// method to use for a given mandate scope (e.g., SUBSCRIPTIONS).
+    /// </summary>
+    [JsonPropertyName("id")]
+    public string? id { get; set; } = null;
+
+    /// <summary>
     /// The ID of the resource that this payment method was created for.
     /// </summary>
     [JsonPropertyName("resourceId")]

@@ -48,21 +48,21 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public ReturnLineItemTypeConnectionQueryBuilder Nodes(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder> build)
-        {
-            var query = new Query<IReturnLineItemType>("nodes");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnLineItemTypeQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IReturnLineItemType>(query);
-            return this;
-        }
-
         public ReturnLineItemTypeConnectionQueryBuilder PageInfo(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder> build)
         {
             var query = new Query<PageInfo>("pageInfo");
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PageInfoQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<PageInfo>(query);
+            return this;
+        }
+
+        public ReturnLineItemTypeConnectionQueryBuilder Nodes(Action<ReturnLineItemTypeInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IReturnLineItemType>("nodes");
+            var unionBuilder = new ReturnLineItemTypeInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

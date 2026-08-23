@@ -41,5 +41,32 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField("name");
             return this;
         }
+
+        public MarketRegionQueryBuilder OnMarketRegionCountry(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionCountryQueryBuilder> build)
+        {
+            var query = new Query<MarketRegionCountry>("... on MarketRegionCountry");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionCountryQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public MarketRegionQueryBuilder OnMarketRegionSubdivision(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionSubdivisionQueryBuilder> build)
+        {
+            var query = new Query<MarketRegionSubdivision>("... on MarketRegionSubdivision");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MarketRegionSubdivisionQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public MarketRegionQueryBuilder MarketRegion(Action<MarketRegionInterfaceCasesBuilder> build)
+        {
+            var query = new Query<IMarketRegion>("marketRegion");
+            var unionBuilder = new MarketRegionInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

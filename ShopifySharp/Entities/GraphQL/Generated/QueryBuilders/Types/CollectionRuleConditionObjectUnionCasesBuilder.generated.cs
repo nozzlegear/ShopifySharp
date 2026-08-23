@@ -26,37 +26,37 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleCategoryCondition(Action<CollectionRuleCategoryConditionQueryBuilder> build)
+        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleCategoryCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleCategoryConditionQueryBuilder> build)
         {
             var query = new Query<CollectionRuleCategoryCondition>("... on CollectionRuleCategoryCondition");
-            var queryBuilder = new CollectionRuleCategoryConditionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleCategoryConditionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleMetafieldCondition(Action<CollectionRuleMetafieldConditionQueryBuilder> build)
+        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleMetafieldCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleMetafieldConditionQueryBuilder> build)
         {
             var query = new Query<CollectionRuleMetafieldCondition>("... on CollectionRuleMetafieldCondition");
-            var queryBuilder = new CollectionRuleMetafieldConditionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleMetafieldConditionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleProductCategoryCondition(Action<CollectionRuleProductCategoryConditionQueryBuilder> build)
+        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleProductCategoryCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleProductCategoryConditionQueryBuilder> build)
         {
             var query = new Query<CollectionRuleProductCategoryCondition>("... on CollectionRuleProductCategoryCondition");
-            var queryBuilder = new CollectionRuleProductCategoryConditionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleProductCategoryConditionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleTextCondition(Action<CollectionRuleTextConditionQueryBuilder> build)
+        public CollectionRuleConditionObjectUnionCasesBuilder OnCollectionRuleTextCondition(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleTextConditionQueryBuilder> build)
         {
             var query = new Query<CollectionRuleTextCondition>("... on CollectionRuleTextCondition");
-            var queryBuilder = new CollectionRuleTextConditionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionRuleTextConditionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

@@ -29,5 +29,5 @@ public record FulfillmentOrderCancelPayload : IGraphQLObject
     /// The list of errors that occurred from executing the mutation.
     /// </summary>
     [JsonPropertyName("userErrors")]
-    public ICollection<UserError>? userErrors { get; set; } = null;
+    public ICollection<FulfillmentOrderCancelError>? userErrors { get; set; } = null;
 }

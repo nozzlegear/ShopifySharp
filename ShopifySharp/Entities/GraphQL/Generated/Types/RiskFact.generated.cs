@@ -9,20 +9,18 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// A risk fact belongs to a single risk assessment and serves to provide additional
-/// context for an assessment. Risk facts are not necessarily tied to the result of
-/// the recommendation.
+/// Additional context provided with an order risk assessment. Facts may not affect the order's risk recommendation.
 /// </summary>
 public record RiskFact : IGraphQLObject
 {
     /// <summary>
-    /// A description of the fact.
+    /// Descriptions longer than 256 characters are truncated.
     /// </summary>
     [JsonPropertyName("description")]
     public string? description { get; set; } = null;
 
     /// <summary>
-    /// Indicates whether the fact is a negative, neutral or positive contributor with regards to risk.
+    /// Indicates whether the fact contributes negatively, neutrally, or positively to risk.
     /// </summary>
     [JsonPropertyName("sentiment")]
     public RiskFactSentiment? sentiment { get; set; } = null;

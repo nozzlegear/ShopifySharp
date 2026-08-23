@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
         {
         }
 
-        public SubscriptionDiscountUnionCasesBuilder OnSubscriptionAppliedCodeDiscount(Action<SubscriptionAppliedCodeDiscountQueryBuilder> build)
+        public SubscriptionDiscountUnionCasesBuilder OnSubscriptionAppliedCodeDiscount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionAppliedCodeDiscountQueryBuilder> build)
         {
             var query = new Query<SubscriptionAppliedCodeDiscount>("... on SubscriptionAppliedCodeDiscount");
-            var queryBuilder = new SubscriptionAppliedCodeDiscountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionAppliedCodeDiscountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public SubscriptionDiscountUnionCasesBuilder OnSubscriptionManualDiscount(Action<SubscriptionManualDiscountQueryBuilder> build)
+        public SubscriptionDiscountUnionCasesBuilder OnSubscriptionManualDiscount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionManualDiscountQueryBuilder> build)
         {
             var query = new Query<SubscriptionManualDiscount>("... on SubscriptionManualDiscount");
-            var queryBuilder = new SubscriptionManualDiscountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.SubscriptionManualDiscountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

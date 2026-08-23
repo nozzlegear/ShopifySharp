@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DiscountEffectUnionCasesBuilder OnDiscountAmount(Action<DiscountAmountQueryBuilder> build)
+        public DiscountEffectUnionCasesBuilder OnDiscountAmount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAmountQueryBuilder> build)
         {
             var query = new Query<DiscountAmount>("... on DiscountAmount");
-            var queryBuilder = new DiscountAmountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountAmountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountEffectUnionCasesBuilder OnDiscountPercentage(Action<DiscountPercentageQueryBuilder> build)
+        public DiscountEffectUnionCasesBuilder OnDiscountPercentage(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountPercentageQueryBuilder> build)
         {
             var query = new Query<DiscountPercentage>("... on DiscountPercentage");
-            var queryBuilder = new DiscountPercentageQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountPercentageQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

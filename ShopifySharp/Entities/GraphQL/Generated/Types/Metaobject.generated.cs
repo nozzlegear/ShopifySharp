@@ -117,4 +117,10 @@ public record Metaobject : IGraphQLUnionCase, IGraphQLObject, INode
     /// </summary>
     [JsonPropertyName("updatedAt")]
     public DateTimeOffset? updatedAt { get; set; } = null;
+
+    /// <summary>
+    /// The values of the metaobject.
+    /// </summary>
+    [JsonPropertyName("values")]
+    public string? values { get; set; } = null;
 }

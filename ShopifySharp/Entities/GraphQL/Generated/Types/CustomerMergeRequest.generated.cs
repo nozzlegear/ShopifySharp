@@ -26,7 +26,7 @@ public record CustomerMergeRequest : IGraphQLObject
     public string? jobId { get; set; } = null;
 
     /// <summary>
-    /// The ID of the customer resulting from the merge.
+    /// The ID of the customer that was kept after the merge. Treat this ID as authoritative.
     /// </summary>
     [JsonPropertyName("resultingCustomerId")]
     public string? resultingCustomerId { get; set; } = null;

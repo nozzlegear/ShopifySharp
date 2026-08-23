@@ -36,12 +36,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public EventEdgeQueryBuilder Node(Action<ShopifySharp.GraphQL.QueryBuilders.Types.EventQueryBuilder> build)
+        public EventEdgeQueryBuilder Node(Action<EventInterfaceCasesBuilder> build)
         {
             var query = new Query<IEvent>("node");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.EventQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IEvent>(query);
+            var unionBuilder = new EventInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

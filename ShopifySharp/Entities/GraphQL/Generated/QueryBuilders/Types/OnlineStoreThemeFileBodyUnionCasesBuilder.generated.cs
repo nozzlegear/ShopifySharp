@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public OnlineStoreThemeFileBodyUnionCasesBuilder OnOnlineStoreThemeFileBodyBase64(Action<OnlineStoreThemeFileBodyBase64QueryBuilder> build)
+        public OnlineStoreThemeFileBodyUnionCasesBuilder OnOnlineStoreThemeFileBodyBase64(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileBodyBase64QueryBuilder> build)
         {
             var query = new Query<OnlineStoreThemeFileBodyBase64>("... on OnlineStoreThemeFileBodyBase64");
-            var queryBuilder = new OnlineStoreThemeFileBodyBase64QueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileBodyBase64QueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OnlineStoreThemeFileBodyUnionCasesBuilder OnOnlineStoreThemeFileBodyText(Action<OnlineStoreThemeFileBodyTextQueryBuilder> build)
+        public OnlineStoreThemeFileBodyUnionCasesBuilder OnOnlineStoreThemeFileBodyText(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileBodyTextQueryBuilder> build)
         {
             var query = new Query<OnlineStoreThemeFileBodyText>("... on OnlineStoreThemeFileBodyText");
-            var queryBuilder = new OnlineStoreThemeFileBodyTextQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileBodyTextQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public OnlineStoreThemeFileBodyUnionCasesBuilder OnOnlineStoreThemeFileBodyUrl(Action<OnlineStoreThemeFileBodyUrlQueryBuilder> build)
+        public OnlineStoreThemeFileBodyUnionCasesBuilder OnOnlineStoreThemeFileBodyUrl(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileBodyUrlQueryBuilder> build)
         {
             var query = new Query<OnlineStoreThemeFileBodyUrl>("... on OnlineStoreThemeFileBodyUrl");
-            var queryBuilder = new OnlineStoreThemeFileBodyUrlQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OnlineStoreThemeFileBodyUrlQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

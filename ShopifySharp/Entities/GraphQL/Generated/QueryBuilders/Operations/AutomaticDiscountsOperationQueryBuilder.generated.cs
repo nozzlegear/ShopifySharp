@@ -58,14 +58,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<PageInfo>(query);
             return this;
         }
-
-        public AutomaticDiscountsOperationQueryBuilder Nodes(Action<DiscountAutomaticUnionCasesBuilder> build)
-        {
-            var query = new Query<DiscountAutomatic>("nodes");
-            var unionBuilder = new DiscountAutomaticUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

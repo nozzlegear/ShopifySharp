@@ -52,6 +52,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public CountArgumentsBuilder CollectionId(string? collectionId)
+        {
+            base.InnerQuery.AddArgument("collectionId", collectionId);
+            return this;
+        }
+
         public CountArgumentsBuilder SavedSearchId(string? savedSearchId)
         {
             base.InnerQuery.AddArgument("savedSearchId", savedSearchId);
@@ -73,6 +79,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public CountArgumentsBuilder ProductId(string? productId)
         {
             base.InnerQuery.AddArgument("productId", productId);
+            return this;
+        }
+
+        public CountArgumentsBuilder Active(bool? active)
+        {
+            base.InnerQuery.AddArgument("active", active);
             return this;
         }
     }

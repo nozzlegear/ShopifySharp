@@ -17,4 +17,5 @@ public record DiscountContext : GraphQLObject<DiscountContext>, IGraphQLUnionTyp
     public DiscountBuyerSelectionAll? AsDiscountBuyerSelectionAll() => this is DiscountContextDiscountBuyerSelectionAll wrapper ? wrapper.Value : null;
     public DiscountCustomerSegments? AsDiscountCustomerSegments() => this is DiscountContextDiscountCustomerSegments wrapper ? wrapper.Value : null;
     public DiscountCustomers? AsDiscountCustomers() => this is DiscountContextDiscountCustomers wrapper ? wrapper.Value : null;
+    public DiscountMarkets? AsDiscountMarkets() => this is DiscountContextDiscountMarkets wrapper ? wrapper.Value : null;
 }

@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public TaxonomyCategoryAttributeUnionCasesBuilder OnTaxonomyAttribute(Action<TaxonomyAttributeQueryBuilder> build)
+        public TaxonomyCategoryAttributeUnionCasesBuilder OnTaxonomyAttribute(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyAttributeQueryBuilder> build)
         {
             var query = new Query<TaxonomyAttribute>("... on TaxonomyAttribute");
-            var queryBuilder = new TaxonomyAttributeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyAttributeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public TaxonomyCategoryAttributeUnionCasesBuilder OnTaxonomyChoiceListAttribute(Action<TaxonomyChoiceListAttributeQueryBuilder> build)
+        public TaxonomyCategoryAttributeUnionCasesBuilder OnTaxonomyChoiceListAttribute(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyChoiceListAttributeQueryBuilder> build)
         {
             var query = new Query<TaxonomyChoiceListAttribute>("... on TaxonomyChoiceListAttribute");
-            var queryBuilder = new TaxonomyChoiceListAttributeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyChoiceListAttributeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public TaxonomyCategoryAttributeUnionCasesBuilder OnTaxonomyMeasurementAttribute(Action<TaxonomyMeasurementAttributeQueryBuilder> build)
+        public TaxonomyCategoryAttributeUnionCasesBuilder OnTaxonomyMeasurementAttribute(Action<ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyMeasurementAttributeQueryBuilder> build)
         {
             var query = new Query<TaxonomyMeasurementAttribute>("... on TaxonomyMeasurementAttribute");
-            var queryBuilder = new TaxonomyMeasurementAttributeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.TaxonomyMeasurementAttributeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

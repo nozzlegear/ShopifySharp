@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public WebhookSubscriptionEndpointUnionCasesBuilder OnWebhookEventBridgeEndpoint(Action<WebhookEventBridgeEndpointQueryBuilder> build)
+        public WebhookSubscriptionEndpointUnionCasesBuilder OnWebhookEventBridgeEndpoint(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WebhookEventBridgeEndpointQueryBuilder> build)
         {
             var query = new Query<WebhookEventBridgeEndpoint>("... on WebhookEventBridgeEndpoint");
-            var queryBuilder = new WebhookEventBridgeEndpointQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WebhookEventBridgeEndpointQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public WebhookSubscriptionEndpointUnionCasesBuilder OnWebhookHttpEndpoint(Action<WebhookHttpEndpointQueryBuilder> build)
+        public WebhookSubscriptionEndpointUnionCasesBuilder OnWebhookHttpEndpoint(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WebhookHttpEndpointQueryBuilder> build)
         {
             var query = new Query<WebhookHttpEndpoint>("... on WebhookHttpEndpoint");
-            var queryBuilder = new WebhookHttpEndpointQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WebhookHttpEndpointQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public WebhookSubscriptionEndpointUnionCasesBuilder OnWebhookPubSubEndpoint(Action<WebhookPubSubEndpointQueryBuilder> build)
+        public WebhookSubscriptionEndpointUnionCasesBuilder OnWebhookPubSubEndpoint(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WebhookPubSubEndpointQueryBuilder> build)
         {
             var query = new Query<WebhookPubSubEndpoint>("... on WebhookPubSubEndpoint");
-            var queryBuilder = new WebhookPubSubEndpointQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WebhookPubSubEndpointQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

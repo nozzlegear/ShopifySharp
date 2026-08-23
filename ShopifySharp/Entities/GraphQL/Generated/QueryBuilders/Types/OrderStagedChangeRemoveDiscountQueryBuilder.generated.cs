@@ -30,12 +30,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public OrderStagedChangeRemoveDiscountQueryBuilder DiscountApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountApplicationQueryBuilder> build)
+        public OrderStagedChangeRemoveDiscountQueryBuilder DiscountApplication(Action<DiscountApplicationInterfaceCasesBuilder> build)
         {
             var query = new Query<IDiscountApplication>("discountApplication");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountApplicationQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IDiscountApplication>(query);
+            var unionBuilder = new DiscountApplicationInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

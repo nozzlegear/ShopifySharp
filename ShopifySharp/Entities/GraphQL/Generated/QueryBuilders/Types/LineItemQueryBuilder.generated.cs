@@ -223,6 +223,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public LineItemQueryBuilder PriceAfterAllDiscountsBeforeTaxesSet(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder> build)
+        {
+            var query = new Query<MoneyBag>("priceAfterAllDiscountsBeforeTaxesSet");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.MoneyBagQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<MoneyBag>(query);
+            return this;
+        }
+
         public LineItemQueryBuilder Product(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ProductQueryBuilder> build)
         {
             var query = new Query<Product>("product");
@@ -382,6 +391,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public LineItemQueryBuilder Vendor()
         {
             base.InnerQuery.AddField("vendor");
+            return this;
+        }
+
+        public LineItemQueryBuilder Weight(Action<ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder> build)
+        {
+            var query = new Query<Weight>("weight");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.WeightQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<Weight>(query);
             return this;
         }
     }

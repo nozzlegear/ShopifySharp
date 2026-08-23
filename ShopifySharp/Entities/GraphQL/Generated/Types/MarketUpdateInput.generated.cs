@@ -38,6 +38,24 @@ public record MarketUpdateInput : GraphQLInputObject<MarketUpdateInput>
     public MarketCurrencySettingsUpdateInput? currencySettings { get; set; } = null;
 
     /// <summary>
+    /// Delivery setting updates. When omitted, delivery settings are not changed.
+    /// </summary>
+    [JsonPropertyName("delivery")]
+    public MarketDeliveryConfigurationsUpdateInput? delivery { get; set; } = null;
+
+    /// <summary>
+    /// The discounts to add to the market.
+    /// </summary>
+    [JsonPropertyName("discountsToAdd")]
+    public ICollection<string>? discountsToAdd { get; set; } = null;
+
+    /// <summary>
+    /// The discounts to remove from the market.
+    /// </summary>
+    [JsonPropertyName("discountsToDelete")]
+    public ICollection<string>? discountsToDelete { get; set; } = null;
+
+    /// <summary>
     /// A unique identifier for the market. For example `"ca"`.
     /// </summary>
     [JsonPropertyName("handle")]

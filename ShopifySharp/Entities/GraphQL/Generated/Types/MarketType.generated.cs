@@ -17,4 +17,5 @@ public enum MarketType
     REGION,
     LOCATION,
     COMPANY_LOCATION,
+    CHANNEL,
 }

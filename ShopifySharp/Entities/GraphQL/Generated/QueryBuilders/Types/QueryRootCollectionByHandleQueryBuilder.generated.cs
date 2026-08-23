@@ -262,6 +262,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public QueryRootCollectionByHandleQueryBuilder SubCollectionEligibility(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionSubCollectionEligibilityQueryBuilder> build)
+        {
+            var query = new Query<CollectionSubCollectionEligibility>("subCollectionEligibility");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionSubCollectionEligibilityQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CollectionSubCollectionEligibility>(query);
+            return this;
+        }
+
         public QueryRootCollectionByHandleQueryBuilder TemplateSuffix()
         {
             base.InnerQuery.AddField("templateSuffix");
@@ -304,6 +313,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         public QueryRootCollectionByHandleQueryBuilder UpdatedAt()
         {
             base.InnerQuery.AddField("updatedAt");
+            return this;
+        }
+
+        public QueryRootCollectionByHandleQueryBuilder Sources(Action<CollectionSourceInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICollectionSource>("sources");
+            var unionBuilder = new CollectionSourceInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

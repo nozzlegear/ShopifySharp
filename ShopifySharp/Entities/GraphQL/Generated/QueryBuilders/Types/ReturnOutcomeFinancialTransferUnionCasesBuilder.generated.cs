@@ -26,19 +26,19 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public ReturnOutcomeFinancialTransferUnionCasesBuilder OnInvoiceReturnOutcome(Action<InvoiceReturnOutcomeQueryBuilder> build)
+        public ReturnOutcomeFinancialTransferUnionCasesBuilder OnInvoiceReturnOutcome(Action<ShopifySharp.GraphQL.QueryBuilders.Types.InvoiceReturnOutcomeQueryBuilder> build)
         {
             var query = new Query<InvoiceReturnOutcome>("... on InvoiceReturnOutcome");
-            var queryBuilder = new InvoiceReturnOutcomeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.InvoiceReturnOutcomeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public ReturnOutcomeFinancialTransferUnionCasesBuilder OnRefundReturnOutcome(Action<RefundReturnOutcomeQueryBuilder> build)
+        public ReturnOutcomeFinancialTransferUnionCasesBuilder OnRefundReturnOutcome(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RefundReturnOutcomeQueryBuilder> build)
         {
             var query = new Query<RefundReturnOutcome>("... on RefundReturnOutcome");
-            var queryBuilder = new RefundReturnOutcomeQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.RefundReturnOutcomeQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

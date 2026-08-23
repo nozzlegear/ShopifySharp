@@ -14,6 +14,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public enum InventoryShipmentCreateUserErrorCode
 {
     BARCODE_DUPLICATE,
+    BARCODE_TOO_LONG,
     EMPTY_SHIPMENT_INPUT,
     ITEM_NOT_FOUND,
     TRANSFER_NOT_FOUND,
@@ -27,5 +28,7 @@ public enum InventoryShipmentCreateUserErrorCode
     INVALID_URL,
     LOCATION_NOT_ACTIVE,
     IDEMPOTENCY_CONCURRENT_REQUEST,
+    IDEMPOTENCY_PREVIOUS_ATTEMPT_FAILED,
     IDEMPOTENCY_KEY_PARAMETER_MISMATCH,
+    IDEMPOTENCY_RECORD_NOT_FOUND,
 }

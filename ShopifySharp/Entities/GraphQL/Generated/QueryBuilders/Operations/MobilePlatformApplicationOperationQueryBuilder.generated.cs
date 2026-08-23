@@ -39,5 +39,23 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             configure(this.Arguments);
             return this;
         }
+
+        public MobilePlatformApplicationOperationQueryBuilder OnAndroidApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AndroidApplicationQueryBuilder> build)
+        {
+            var query = new Query<AndroidApplication>("... on AndroidApplication");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AndroidApplicationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
+
+        public MobilePlatformApplicationOperationQueryBuilder OnAppleApplication(Action<ShopifySharp.GraphQL.QueryBuilders.Types.AppleApplicationQueryBuilder> build)
+        {
+            var query = new Query<AppleApplication>("... on AppleApplication");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.AppleApplicationQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddUnionCase(query);
+            return this;
+        }
     }
 }

@@ -77,15 +77,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public ShopifyPaymentsAccountOperationQueryBuilder ChargeStatementDescriptors(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsChargeStatementDescriptorQueryBuilder> build)
-        {
-            var query = new Query<IShopifyPaymentsChargeStatementDescriptor>("chargeStatementDescriptors");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ShopifyPaymentsChargeStatementDescriptorQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IShopifyPaymentsChargeStatementDescriptor>(query);
-            return this;
-        }
-
         public ShopifyPaymentsAccountOperationQueryBuilder Country()
         {
             base.InnerQuery.AddField("country");

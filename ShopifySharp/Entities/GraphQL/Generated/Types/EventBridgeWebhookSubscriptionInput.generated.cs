@@ -52,4 +52,10 @@ public record EventBridgeWebhookSubscriptionInput : GraphQLInputObject<EventBrid
     /// </summary>
     [JsonPropertyName("metafields")]
     public ICollection<HasMetafieldsMetafieldIdentifierInput>? metafields { get; set; } = null;
+
+    /// <summary>
+    /// A human-readable name for the webhook subscription.
+    /// </summary>
+    [JsonPropertyName("name")]
+    public string? name { get; set; } = null;
 }

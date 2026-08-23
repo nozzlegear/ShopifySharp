@@ -94,10 +94,10 @@ public record MarketingEngagement : IGraphQLObject
     /// `occuredOn`. Non-cumulative metrics are aggregated over the single day
     /// indicated in `occuredOn`. Cumulative metrics will monotonically increase in
     /// time as each record includes the previous day's values, and so on.
-    /// Non-cumulative is strongly preferred, and support for cumulative metrics may
-    /// be deprecated in the future.
+    /// Non-cumulative metrics are required going forward; cumulative metrics are deprecated.
     /// </summary>
     [JsonPropertyName("isCumulative")]
+    [Obsolete("Cumulative metrics are being phased out. Send non-cumulative engagement metrics instead (values aggregated over the single day indicated in `occurredOn`, with `isCumulative: false`). Existing activities that have been sending cumulative metrics can migrate to non-cumulative at any time.")]
     public bool? isCumulative { get; set; } = null;
 
     /// <summary>

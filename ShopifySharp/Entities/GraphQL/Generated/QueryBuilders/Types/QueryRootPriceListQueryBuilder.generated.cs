@@ -35,15 +35,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
-        public QueryRootPriceListQueryBuilder Catalog(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder> build)
-        {
-            var query = new Query<ICatalog>("catalog");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CatalogQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<ICatalog>(query);
-            return this;
-        }
-
         public QueryRootPriceListQueryBuilder Currency()
         {
             base.InnerQuery.AddField("currency");
@@ -92,6 +83,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.QuantityRuleConnectionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField<QuantityRuleConnection>(query);
+            return this;
+        }
+
+        public QueryRootPriceListQueryBuilder Catalog(Action<CatalogInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ICatalog>("catalog");
+            var unionBuilder = new CatalogInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
             return this;
         }
     }

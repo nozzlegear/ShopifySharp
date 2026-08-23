@@ -20,5 +20,6 @@ public record DiscountCustomerSelection : GraphQLObject<DiscountCustomerSelectio
 {
     public DiscountCustomerAll? AsDiscountCustomerAll() => this is DiscountCustomerSelectionDiscountCustomerAll wrapper ? wrapper.Value : null;
     public DiscountCustomerSegments? AsDiscountCustomerSegments() => this is DiscountCustomerSelectionDiscountCustomerSegments wrapper ? wrapper.Value : null;
+    public DiscountCustomerSelectionUnknown? AsDiscountCustomerSelectionUnknown() => this is DiscountCustomerSelectionDiscountCustomerSelectionUnknown wrapper ? wrapper.Value : null;
     public DiscountCustomers? AsDiscountCustomers() => this is DiscountCustomerSelectionDiscountCustomers wrapper ? wrapper.Value : null;
 }

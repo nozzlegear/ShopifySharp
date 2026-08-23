@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// List of possible values for a RiskFact sentiment.
+/// Possible sentiments for a risk fact.
 /// </summary>
 public enum RiskFactSentiment
 {

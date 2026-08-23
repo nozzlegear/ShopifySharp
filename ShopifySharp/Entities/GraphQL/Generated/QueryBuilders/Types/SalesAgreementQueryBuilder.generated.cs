@@ -74,5 +74,50 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             base.InnerQuery.AddField<StaffMember>(query);
             return this;
         }
+
+        public SalesAgreementQueryBuilder OnOrderAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderAgreementQueryBuilder> build)
+        {
+            var query = new Query<OrderAgreement>("... on OrderAgreement");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderAgreementQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SalesAgreementQueryBuilder OnOrderEditAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditAgreementQueryBuilder> build)
+        {
+            var query = new Query<OrderEditAgreement>("... on OrderEditAgreement");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderEditAgreementQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SalesAgreementQueryBuilder OnRefundAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.RefundAgreementQueryBuilder> build)
+        {
+            var query = new Query<RefundAgreement>("... on RefundAgreement");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.RefundAgreementQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SalesAgreementQueryBuilder OnReturnAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReturnAgreementQueryBuilder> build)
+        {
+            var query = new Query<ReturnAgreement>("... on ReturnAgreement");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReturnAgreementQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
+
+        public SalesAgreementQueryBuilder SalesAgreement(Action<SalesAgreementInterfaceCasesBuilder> build)
+        {
+            var query = new Query<ISalesAgreement>("salesAgreement");
+            var unionBuilder = new SalesAgreementInterfaceCasesBuilder(query);
+            build.Invoke(unionBuilder);
+            base.InnerQuery.AddInterfaceCase(query);
+            return this;
+        }
     }
 }

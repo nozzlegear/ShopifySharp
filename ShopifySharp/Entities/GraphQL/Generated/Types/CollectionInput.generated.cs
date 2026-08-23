@@ -44,7 +44,7 @@ public record CollectionInput : GraphQLInputObject<CollectionInput>
     public ICollection<MetafieldInput>? metafields { get; set; } = null;
 
     /// <summary>
-    /// Initial list of collection products. Only valid with `collectionCreate` and without rules.
+    /// Initial list of collection products. Only valid with `collectionCreate`.
     /// </summary>
     [JsonPropertyName("products")]
     public ICollection<string>? products { get; set; } = null;
@@ -57,7 +57,8 @@ public record CollectionInput : GraphQLInputObject<CollectionInput>
     public bool? redirectNewHandle { get; set; } = null;
 
     /// <summary>
-    /// The rules used to assign products to the collection.
+    /// The rules used to assign products to the collection. This is the legacy smart-collection model;
+    /// use `sources` with `conditions` instead. Each `ruleSet` rule has an equivalent `condition`.
     /// </summary>
     [JsonPropertyName("ruleSet")]
     public CollectionRuleSetInput? ruleSet { get; set; } = null;

@@ -42,6 +42,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public MetafieldDefinitionUpdateUserErrorQueryBuilder ElementKey()
+        {
+            base.InnerQuery.AddField("elementKey");
+            return this;
+        }
+
         public MetafieldDefinitionUpdateUserErrorQueryBuilder Field()
         {
             base.InnerQuery.AddField("field");

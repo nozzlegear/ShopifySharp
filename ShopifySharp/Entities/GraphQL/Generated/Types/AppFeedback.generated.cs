@@ -22,6 +22,12 @@ public record AppFeedback : IGraphQLObject
     public App? app { get; set; } = null;
 
     /// <summary>
+    /// The channel this feedback is for.
+    /// </summary>
+    [JsonPropertyName("channel")]
+    public Channel? channel { get; set; } = null;
+
+    /// <summary>
     /// The date and time when the app feedback was generated.
     /// </summary>
     [JsonPropertyName("feedbackGeneratedAt")]

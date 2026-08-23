@@ -26,28 +26,28 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public PaymentInstrumentUnionCasesBuilder OnBankAccount(Action<BankAccountQueryBuilder> build)
+        public PaymentInstrumentUnionCasesBuilder OnBankAccount(Action<ShopifySharp.GraphQL.QueryBuilders.Types.BankAccountQueryBuilder> build)
         {
             var query = new Query<BankAccount>("... on BankAccount");
-            var queryBuilder = new BankAccountQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.BankAccountQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PaymentInstrumentUnionCasesBuilder OnVaultCreditCard(Action<VaultCreditCardQueryBuilder> build)
+        public PaymentInstrumentUnionCasesBuilder OnVaultCreditCard(Action<ShopifySharp.GraphQL.QueryBuilders.Types.VaultCreditCardQueryBuilder> build)
         {
             var query = new Query<VaultCreditCard>("... on VaultCreditCard");
-            var queryBuilder = new VaultCreditCardQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.VaultCreditCardQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public PaymentInstrumentUnionCasesBuilder OnVaultPaypalBillingAgreement(Action<VaultPaypalBillingAgreementQueryBuilder> build)
+        public PaymentInstrumentUnionCasesBuilder OnVaultPaypalBillingAgreement(Action<ShopifySharp.GraphQL.QueryBuilders.Types.VaultPaypalBillingAgreementQueryBuilder> build)
         {
             var query = new Query<VaultPaypalBillingAgreement>("... on VaultPaypalBillingAgreement");
-            var queryBuilder = new VaultPaypalBillingAgreementQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.VaultPaypalBillingAgreementQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

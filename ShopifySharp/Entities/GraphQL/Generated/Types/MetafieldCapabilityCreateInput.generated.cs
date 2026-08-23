@@ -20,6 +20,18 @@ public record MetafieldCapabilityCreateInput : GraphQLInputObject<MetafieldCapab
     public MetafieldCapabilityAdminFilterableInput? adminFilterable { get; set; } = null;
 
     /// <summary>
+    /// The input for the analytics queryable capability.
+    /// </summary>
+    [JsonPropertyName("analyticsQueryable")]
+    public MetafieldCapabilityAnalyticsQueryableInput? analyticsQueryable { get; set; } = null;
+
+    /// <summary>
+    /// The input for updating the cart to order copyable capability.
+    /// </summary>
+    [JsonPropertyName("cartToOrderCopyable")]
+    public MetafieldCapabilityCartToOrderCopyableInput? cartToOrderCopyable { get; set; } = null;
+
+    /// <summary>
     /// The input for updating the smart collection condition capability.
     /// </summary>
     [JsonPropertyName("smartCollectionCondition")]

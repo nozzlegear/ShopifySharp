@@ -229,14 +229,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField("updatedAt");
             return this;
         }
-
-        public SubscriptionContractOperationQueryBuilder DeliveryMethod(Action<SubscriptionDeliveryMethodUnionCasesBuilder> build)
-        {
-            var query = new Query<SubscriptionDeliveryMethod>("deliveryMethod");
-            var unionBuilder = new SubscriptionDeliveryMethodUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

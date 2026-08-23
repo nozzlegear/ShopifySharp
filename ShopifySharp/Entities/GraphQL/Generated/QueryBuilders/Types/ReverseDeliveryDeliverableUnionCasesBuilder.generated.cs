@@ -26,10 +26,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public ReverseDeliveryDeliverableUnionCasesBuilder OnReverseDeliveryShippingDeliverable(Action<ReverseDeliveryShippingDeliverableQueryBuilder> build)
+        public ReverseDeliveryDeliverableUnionCasesBuilder OnReverseDeliveryShippingDeliverable(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryShippingDeliverableQueryBuilder> build)
         {
             var query = new Query<ReverseDeliveryShippingDeliverable>("... on ReverseDeliveryShippingDeliverable");
-            var queryBuilder = new ReverseDeliveryShippingDeliverableQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.ReverseDeliveryShippingDeliverableQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

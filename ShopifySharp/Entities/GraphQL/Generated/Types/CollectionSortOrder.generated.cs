@@ -16,6 +16,7 @@ public enum CollectionSortOrder
     ALPHA_ASC,
     ALPHA_DESC,
     BEST_SELLING,
+    MOST_RELEVANT,
     CREATED,
     CREATED_DESC,
     MANUAL,

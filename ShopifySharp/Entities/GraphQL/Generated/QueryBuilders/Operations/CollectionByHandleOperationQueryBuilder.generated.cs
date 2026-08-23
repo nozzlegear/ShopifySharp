@@ -268,6 +268,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
+        public CollectionByHandleOperationQueryBuilder SubCollectionEligibility(Action<ShopifySharp.GraphQL.QueryBuilders.Types.CollectionSubCollectionEligibilityQueryBuilder> build)
+        {
+            var query = new Query<CollectionSubCollectionEligibility>("subCollectionEligibility");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.CollectionSubCollectionEligibilityQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<CollectionSubCollectionEligibility>(query);
+            return this;
+        }
+
         public CollectionByHandleOperationQueryBuilder TemplateSuffix()
         {
             base.InnerQuery.AddField("templateSuffix");

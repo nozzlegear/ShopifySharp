@@ -30,6 +30,15 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
+        public EntitlementsTypeQueryBuilder B2b(Action<ShopifySharp.GraphQL.QueryBuilders.Types.B2BTypeQueryBuilder> build)
+        {
+            var query = new Query<B2BType>("b2b");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.B2BTypeQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField<B2BType>(query);
+            return this;
+        }
+
         public EntitlementsTypeQueryBuilder Markets(Action<ShopifySharp.GraphQL.QueryBuilders.Types.MarketsTypeQueryBuilder> build)
         {
             var query = new Query<MarketsType>("markets");

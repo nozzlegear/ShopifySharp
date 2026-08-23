@@ -14,6 +14,13 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 public record ProductResourceFeedbackInput : GraphQLInputObject<ProductResourceFeedbackInput>
 {
     /// <summary>
+    /// The ID of the channel that the feedback is for. Used to scope feedback to a
+    /// specific sales channel when the app has multiple channels.
+    /// </summary>
+    [JsonPropertyName("channelId")]
+    public string? channelId { get; set; } = null;
+
+    /// <summary>
     /// The date and time when the payload is constructed.
     /// Used to help determine whether incoming feedback is outdated compared to
     /// feedback already received, and if it should be ignored upon arrival.

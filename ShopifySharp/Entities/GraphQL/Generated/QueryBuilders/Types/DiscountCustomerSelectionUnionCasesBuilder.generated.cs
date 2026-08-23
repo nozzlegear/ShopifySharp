@@ -26,28 +26,37 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomerAll(Action<DiscountCustomerAllQueryBuilder> build)
+        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomerAll(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerAllQueryBuilder> build)
         {
             var query = new Query<DiscountCustomerAll>("... on DiscountCustomerAll");
-            var queryBuilder = new DiscountCustomerAllQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerAllQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomerSegments(Action<DiscountCustomerSegmentsQueryBuilder> build)
+        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomerSegments(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerSegmentsQueryBuilder> build)
         {
             var query = new Query<DiscountCustomerSegments>("... on DiscountCustomerSegments");
-            var queryBuilder = new DiscountCustomerSegmentsQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerSegmentsQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
         }
 
-        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomers(Action<DiscountCustomersQueryBuilder> build)
+        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomerSelectionUnknown(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerSelectionUnknownQueryBuilder> build)
+        {
+            var query = new Query<DiscountCustomerSelectionUnknown>("... on DiscountCustomerSelectionUnknown");
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomerSelectionUnknownQueryBuilder(query);
+            build.Invoke(queryBuilder);
+            base.InnerQuery.AddField(query);
+            return this;
+        }
+
+        public DiscountCustomerSelectionUnionCasesBuilder OnDiscountCustomers(Action<ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomersQueryBuilder> build)
         {
             var query = new Query<DiscountCustomers>("... on DiscountCustomers");
-            var queryBuilder = new DiscountCustomersQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.DiscountCustomersQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;

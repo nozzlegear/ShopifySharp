@@ -84,14 +84,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<SubscriptionContractConnection>(query);
             return this;
         }
-
-        public CustomerPaymentMethodOperationQueryBuilder Instrument(Action<CustomerPaymentInstrumentUnionCasesBuilder> build)
-        {
-            var query = new Query<CustomerPaymentInstrument>("instrument");
-            var unionBuilder = new CustomerPaymentInstrumentUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

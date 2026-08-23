@@ -86,6 +86,13 @@ public record ProductVariantSetInput : GraphQLInputObject<ProductVariantSetInput
     public decimal? price { get; set; } = null;
 
     /// <summary>
+    /// Indicates whether the product variant is created as published or unpublished.
+    /// This option is only available for new product variants.
+    /// </summary>
+    [JsonPropertyName("published")]
+    public bool? published { get; set; } = null;
+
+    /// <summary>
     /// Whether a product variant requires components. The default value is `false`.
     /// If `true`, then the product variant can only be purchased as a parent bundle with components and it will be omitted
     /// from channels that don't support bundles.

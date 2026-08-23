@@ -105,4 +105,12 @@ public record CustomerInput : GraphQLInputObject<CustomerInput>
     /// </summary>
     [JsonPropertyName("taxExemptions")]
     public ICollection<TaxExemption>? taxExemptions { get; set; } = null;
+
+    /// <summary>
+    /// The marketing consent information when the customer consented to receiving marketing
+    ///         material by WhatsApp. The `phone` field is required when creating a customer with WhatsApp
+    ///         marketing consent information.
+    /// </summary>
+    [JsonPropertyName("whatsAppMarketingConsent")]
+    public CustomerMarketingConsentInput? whatsAppMarketingConsent { get; set; } = null;
 }

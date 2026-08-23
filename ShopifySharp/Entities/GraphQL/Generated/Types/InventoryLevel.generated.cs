@@ -40,6 +40,12 @@ public record InventoryLevel : IGraphQLObject, INode
     public string? id { get; set; } = null;
 
     /// <summary>
+    /// Whether the inventory level is active.
+    /// </summary>
+    [JsonPropertyName("isActive")]
+    public bool? isActive { get; set; } = null;
+
+    /// <summary>
     /// Inventory item associated with the inventory level.
     /// </summary>
     [JsonPropertyName("item")]
@@ -62,6 +68,7 @@ public record InventoryLevel : IGraphQLObject, INode
     /// Scheduled changes for the requested quantity names.
     /// </summary>
     [JsonPropertyName("scheduledChanges")]
+    [Obsolete("Scheduled changes will be phased out in a future version.")]
     public InventoryScheduledChangeConnection? scheduledChanges { get; set; } = null;
 
     /// <summary>

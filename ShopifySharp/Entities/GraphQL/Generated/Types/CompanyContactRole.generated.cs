@@ -20,8 +20,7 @@ public record CompanyContactRole : IGraphQLObject, INode
     public string? id { get; set; } = null;
 
     /// <summary>
-    /// The name of a role.
-    /// For example, `admin` or `buyer`.
+    /// The name of a role. For example, `admin` or `buyer`.
     /// </summary>
     [JsonPropertyName("name")]
     public string? name { get; set; } = null;

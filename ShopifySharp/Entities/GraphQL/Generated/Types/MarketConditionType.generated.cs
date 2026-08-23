@@ -16,4 +16,5 @@ public enum MarketConditionType
     REGION,
     LOCATION,
     COMPANY_LOCATION,
+    CHANNEL,
 }

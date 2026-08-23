@@ -20,6 +20,7 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 [JsonDerivedType(typeof(Link), typeDiscriminator: "Link")]
 [JsonDerivedType(typeof(MediaImage), typeDiscriminator: "MediaImage")]
 [JsonDerivedType(typeof(Menu), typeDiscriminator: "Menu")]
+[JsonDerivedType(typeof(Metafield), typeDiscriminator: "Metafield")]
 [JsonDerivedType(typeof(OnlineStoreTheme), typeDiscriminator: "OnlineStoreTheme")]
 [JsonDerivedType(typeof(Page), typeDiscriminator: "Page")]
 [JsonDerivedType(typeof(Product), typeDiscriminator: "Product")]

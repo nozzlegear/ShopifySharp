@@ -58,6 +58,12 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
             return this;
         }
 
+        public ProductVariantConnectionArgumentsBuilder CollectionId(string? collectionId)
+        {
+            base.InnerQuery.AddArgument("collectionId", collectionId);
+            return this;
+        }
+
         public ProductVariantConnectionArgumentsBuilder Query(string? query)
         {
             base.InnerQuery.AddArgument("query", query);

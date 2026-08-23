@@ -91,6 +91,7 @@ public record Shop : IGraphQLUnionCase, IGraphQLObject, IHasMetafieldDefinitions
     /// List of all channel definitions associated with a shop.
     /// </summary>
     [JsonPropertyName("channelDefinitionsForInstalledChannels")]
+    [Obsolete("Use [`QueryRoot.orderAttributionDefinitions`](https://shopify.dev/docs/api/admin-graphql/latest/queries/orderAttributionDefinitions) and select `id`, `handle`, `displayName`, and `icon` instead.")]
     public ICollection<AvailableChannelDefinitionsByChannel>? channelDefinitionsForInstalledChannels { get; set; } = null;
 
     /// <summary>

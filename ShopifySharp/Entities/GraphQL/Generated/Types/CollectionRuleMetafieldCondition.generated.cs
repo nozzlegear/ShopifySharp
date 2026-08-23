@@ -9,7 +9,7 @@ using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
 
 /// <summary>
-/// Identifies a metafield definition used as a rule for the smart collection.
+/// Identifies a metafield definition used as a rule for the collection.
 /// </summary>
 public record CollectionRuleMetafieldCondition : IGraphQLUnionCase, IGraphQLObject
 {

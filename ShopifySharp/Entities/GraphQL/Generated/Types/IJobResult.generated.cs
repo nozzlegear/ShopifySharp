@@ -13,6 +13,8 @@ using ShopifySharp.Infrastructure.Serialization.Json;
 /// </summary>
 [JsonPolymorphic(TypeDiscriminatorPropertyName = "__typename")]
 [JsonDerivedType(typeof(CustomerSegmentMembersQuery), typeDiscriminator: "CustomerSegmentMembersQuery")]
+[JsonDerivedType(typeof(OrderCreateMandatePaymentJobResult), typeDiscriminator: "OrderCreateMandatePaymentJobResult")]
+[JsonDerivedType(typeof(ShippingLabelPurchaseResult), typeDiscriminator: "ShippingLabelPurchaseResult")]
 public interface IJobResult : IGraphQLObject
 {
     /// <summary>

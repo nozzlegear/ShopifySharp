@@ -41,15 +41,6 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             return this;
         }
 
-        public PublishableUnpublishToCurrentChannelOperationQueryBuilder Publishable(Action<ShopifySharp.GraphQL.QueryBuilders.Types.PublishableQueryBuilder> build)
-        {
-            var query = new Query<IPublishable>("publishable");
-            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.PublishableQueryBuilder(query);
-            build.Invoke(queryBuilder);
-            base.InnerQuery.AddField<IPublishable>(query);
-            return this;
-        }
-
         public PublishableUnpublishToCurrentChannelOperationQueryBuilder Shop(Action<ShopifySharp.GraphQL.QueryBuilders.Types.ShopQueryBuilder> build)
         {
             var query = new Query<Shop>("shop");

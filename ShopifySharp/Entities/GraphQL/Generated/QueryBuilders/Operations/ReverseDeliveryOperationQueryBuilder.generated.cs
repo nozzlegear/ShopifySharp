@@ -63,14 +63,5 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Operations
             base.InnerQuery.AddField<ReverseFulfillmentOrder>(query);
             return this;
         }
-
-        public ReverseDeliveryOperationQueryBuilder Deliverable(Action<ReverseDeliveryDeliverableUnionCasesBuilder> build)
-        {
-            var query = new Query<ReverseDeliveryDeliverable>("deliverable");
-            var unionBuilder = new ReverseDeliveryDeliverableUnionCasesBuilder(query);
-            build.Invoke(unionBuilder);
-            base.InnerQuery.AddUnionCase(query);
-            return this;
-        }
     }
 }

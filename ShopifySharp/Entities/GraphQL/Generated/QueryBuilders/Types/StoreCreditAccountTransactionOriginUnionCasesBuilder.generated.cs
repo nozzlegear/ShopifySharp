@@ -26,10 +26,10 @@ namespace ShopifySharp.GraphQL.QueryBuilders.Types
         {
         }
 
-        public StoreCreditAccountTransactionOriginUnionCasesBuilder OnOrderTransaction(Action<OrderTransactionQueryBuilder> build)
+        public StoreCreditAccountTransactionOriginUnionCasesBuilder OnOrderTransaction(Action<ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionQueryBuilder> build)
         {
             var query = new Query<OrderTransaction>("... on OrderTransaction");
-            var queryBuilder = new OrderTransactionQueryBuilder(query);
+            var queryBuilder = new ShopifySharp.GraphQL.QueryBuilders.Types.OrderTransactionQueryBuilder(query);
             build.Invoke(queryBuilder);
             base.InnerQuery.AddField(query);
             return this;
