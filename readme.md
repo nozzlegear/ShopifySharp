@@ -49,7 +49,8 @@ Shopify versions their API, meaning new features are locked behind newer version
 
 | ShopifySharp version  | Shopify API version |
 |-----------------------|---------------------|
-| **6.26.0 and above.** | 2026-01             |
+| **6.29.0 and above.** | 2026-07             |
+| 6.26.0 - 6.28.0       | 2026-01             |
 | 6.25.3 - 6.25.4       | 2025-07             |
 | 6.20.0 - 6.25.2       | 2024-10             |
 | 6.18.0 - 6.19.0       | 2024-07             |
