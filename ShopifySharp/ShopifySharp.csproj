@@ -14,7 +14,8 @@
     <OutputPath>bin/ParserTemp/</OutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <Description>ShopifySharp is a C# and .NET library that helps developers easily authenticate with and manage Shopify stores.</Description>
+    <Description>A .NET library that helps developers easily authenticate with and manage Shopify stores using Shopify's GraphQL and Rest APIs.</Description>
+    <PackageIcon>shopifysharp-logo-nuget.png</PackageIcon>
     <Authors>Nozzlegear</Authors>
     <Copyright>Nozzlegear Software</Copyright>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
@@ -27,6 +28,7 @@
   <ItemGroup>
     <None Include="../readme.md" Pack="true" PackagePath="." />
     <None Include="../attributions.md" Pack="true" PackagePath="." />
+    <None Include="../assets/shopifysharp-logo-nuget.png" Pack="true" PackagePath="." />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" />

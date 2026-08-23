@@ -17,9 +17,11 @@
     <RepositoryUrl>https://github.com/nozzlegear/shopifysharp</RepositoryUrl>
     <PackageTags>Shopify;Ecommerce;DependencyInjection;DI</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>shopifysharp-logo-nuget.png</PackageIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Include="README.md" Pack="true" PackagePath="." />
+    <None Include="../assets/shopifysharp-logo-nuget.png" Pack="true" PackagePath="." />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ShopifySharp\ShopifySharp.csproj" Version="[6.22.0,)" />
