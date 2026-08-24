@@ -7,7 +7,7 @@ public class UsageChargeTests
 {
     UsageChargeService Service { get; } = new UsageChargeService(Utils.MyShopifyUrl, Utils.AccessToken);
 
-    UsageChargeTests()
+    public UsageChargeTests()
     {
         Service.SetExecutionPolicy(new LeakyBucketExecutionPolicy());
     }
@@ -39,6 +39,6 @@ public class UsageChargeTests
     [Fact(Skip = "Usage charges cannot be tested with a private application.")]
     public void Deletes_Charges()
     {
-        // Can't be tested.    
+        // Can't be tested.
     }
 }

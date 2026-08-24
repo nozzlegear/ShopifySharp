@@ -8,6 +8,8 @@
         <IsPackable>false</IsPackable>
         <LangVersion>latest</LangVersion>
         <NoWarn>$(NoWarn);CS8629;CS0618</NoWarn>
+        <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+        <TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
     </PropertyGroup>
 
     <ItemGroup>
@@ -23,6 +25,7 @@
         <PackageReference Include="xunit.v3" />
         <PackageReference Include="Xunit.Combinatorial"/>
         <PackageReference Include="xunit.runner.visualstudio"/>
+        <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
     </ItemGroup>
 
     <ItemGroup>

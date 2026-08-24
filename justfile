@@ -172,12 +172,12 @@ _test-dnf useSopsEnvFile project:
     dotnet test \
         -c "{{config}}" \
         -f "{{netFramework}}" \
+        --project {{project}} \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=DotNetFramework.{{project}}.trx" \
+        --report-trx --report-trx-filename "DotNetFramework.{{project}}.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + quote(sops_env_file) } else { "" } }} \
-        --filter "Category=DotNetFramework" \
-        {{project}}
+        --filter "Category=DotNetFramework"
     @echo ""
     @echo ".NET Framework tests in {{project}} passed."
 
@@ -193,10 +193,10 @@ test-di:
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
+        --project "ShopifySharp.Extensions.DependencyInjection.Tests" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=ShopifySharp.Extensions.DependencyInjection.trx" \
-        --results-directory "TestResults" \
-        "ShopifySharp.Extensions.DependencyInjection.Tests/ShopifySharp.Extensions.DependencyInjection.Tests.csproj"
+        --report-trx --report-trx-filename "ShopifySharp.Extensions.DependencyInjection.trx" \
+        --results-directory "TestResults"
     @echo ""
     @echo "ShopifySharp.Extensions.DependencyInjection tests passed."
 
@@ -209,12 +209,12 @@ test-integration useSopsEnvFile="false" testFilter="":
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
+        --project "ShopifySharp.Tests.Integration" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=ShopifySharp.Integration.Tests.trx" \
+        --report-trx --report-trx-filename "ShopifySharp.Integration.Tests.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
-        {{ if testFilter != "" { "--filter '" + testFilter + "'" } else { "" } }} \
-        "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
+        {{ if testFilter != "" { "--filter '" + testFilter + "'" } else { "" } }}
     @echo ""
     @echo "Integration tests passed."
 
@@ -225,12 +225,12 @@ test-query-builder-integration useSopsEnvFile="false":
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
+        --project "ShopifySharp.Tests.Integration" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=ShopifySharp.GraphQL.QueryBuilders.Integrations.Tests.trx" \
+        --report-trx --report-trx-filename "ShopifySharp.GraphQL.QueryBuilders.Integrations.Tests.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
-        --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}" \
-        "ShopifySharp.Tests.Integration/ShopifySharp.Tests.Integration.csproj"
+        --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}"
 
 # Run tests on the GraphQL query builders.
 [group("test")]
@@ -240,11 +240,11 @@ test-query-builders:
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
+        --project "ShopifySharp.Tests" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=ShopifySharp.GraphQL.QueryBuilders.Tests.trx" \
+        --report-trx --report-trx-filename "ShopifySharp.GraphQL.QueryBuilders.Tests.trx" \
         --results-directory "TestResults" \
-        --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}" \
-        "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+        --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}"
 
     @echo ""
     @echo "Query builder tests passed."
@@ -256,11 +256,11 @@ test-graphql-parser:
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
+        --project "ShopifySharp.GraphQL.Parser.Tests/ShopifySharp.GraphQL.Parser.Tests.fsproj" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=ShopifySharp.GraphQL.Parser.Tests.trx" \
+        --report-trx --report-trx-filename "ShopifySharp.GraphQL.Parser.Tests.trx" \
         --results-directory "TestResults" \
-        --filter "Category!=DotNetFramework" \
-        "ShopifySharp.GraphQL.Parser.Tests/ShopifySharp.GraphQL.Parser.Tests.fsproj"
+        --filter "Category!=DotNetFramework"
     @echo ""
     @echo "ShopifySharp.GraphQL.Parser tests passed."
 
@@ -271,11 +271,11 @@ test-main-project:
     dotnet test \
         -c "{{config}}" \
         -f "{{netCoreApp}}" \
+        --project "ShopifySharp.Tests" \
         --verbosity "{{verbosity}}" \
-        --logger "trx;LogFileName=ShopifySharp.Tests.trx" \
+        --report-trx --report-trx-filename "ShopifySharp.Tests.trx" \
         --results-directory "TestResults" \
-        --filter "Category!=DotNetFramework" \
-        "ShopifySharp.Tests/ShopifySharp.Tests.csproj"
+        --filter "Category!=DotNetFramework"
     @echo ""
     @echo "Main project tests passed."
 

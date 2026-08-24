@@ -368,8 +368,8 @@ type ParserPipelineTests() =
 
         // The interface cases builder should exist with OnCustomFont and OnShopifyFont
         let interfaceCasesBuilder = Assert.typeExists "ShopifySharp.GraphQL.QueryBuilders.Types.FontInterfaceCasesBuilder" assembly
-        Assert.hasMethod "OnCustomFont" interfaceCasesBuilder
-        Assert.hasMethod "OnShopifyFont" interfaceCasesBuilder
+        Assert.hasMethod "OnCustomFont" interfaceCasesBuilder |> ignore
+        Assert.hasMethod "OnShopifyFont" interfaceCasesBuilder |> ignore
 
     [<Fact>]
     member _.``Case 2: When a field returns an interface, the interface cases builder generates OnConcreteType methods for each implementor``() =
@@ -401,5 +401,5 @@ type ParserPipelineTests() =
         // Assert — the interface cases builder for Node should exist with OnXxx methods
         let nodeInterfaceCasesBuilder =
             Assert.typeExists "ShopifySharp.GraphQL.QueryBuilders.Operations.NodeInterfaceCasesBuilder" assembly
-        Assert.hasMethod "OnShop" nodeInterfaceCasesBuilder
-        Assert.hasMethod "OnProduct" nodeInterfaceCasesBuilder
+        Assert.hasMethod "OnShop" nodeInterfaceCasesBuilder |> ignore
+        Assert.hasMethod "OnProduct" nodeInterfaceCasesBuilder |> ignore

@@ -197,6 +197,8 @@ public class ExponentialRetryPolicyTests
     [Fact(Timeout = 1000)]
     public async Task Run_ShouldHandleNullMaxRetries()
     {
+        var ct = TestContext.Current.CancellationToken;
+
         // Setup
         const int expectedIterations = 20;
         var policy = SetupPolicy(x =>
@@ -221,7 +223,7 @@ public class ExponentialRetryPolicyTests
             .Returns(true);
 
         // Act
-        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, ct);
 
         // Assert
         await act.Should().ThrowAsync<TestException>();
@@ -277,6 +279,8 @@ public class ExponentialRetryPolicyTests
     [Fact(Timeout = 1000)]
     public async Task Run_ShouldIncreaseDelayBetweenRetriesUntilItReachesMaximumDelayBetweenRetries_ThenUseMaximumDelayBetweenRetries()
     {
+        var ct = TestContext.Current.CancellationToken;
+
         // Setup
         const int backoffInMilliseconds = 50;
         const int expectedIterationsAfterReachingMaximum = 3;
@@ -308,7 +312,7 @@ public class ExponentialRetryPolicyTests
             });
 
         // Act
-        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, CancellationToken.None);
+        var act = () => policy.Run(_cloneableRequestMessage, _executeRequest, ct);
 
         // Assert
         await act.Should().ThrowAsync<TestException>();
