@@ -1,0 +1,50 @@
+---
+title: "Handling Shopify's API rate limit"
+description: "Using the Handling Shopify's API rate limit service in ShopifySharp"
+---
+
+The Shopify API allows for an average of 2 API calls per second, with a burst limit of up to 40 API calls. Once you hit that 40 burst limit, Shopify will return a 429 Too Many Requests result. The limit is there to prevent you and thousands of other developers from overloading Shopify's servers by going hard in the paint with hundreds of requests every second. Unfortunately, it's pretty easy to write a `for` loop while trying to close a list of orders, and then start getting exceptions after closing the first 40.
+
+By default, ShopifySharp will **not** retry requests that get throttled by the rate limit, and instead this package will throw a `ShopifyRateLimitException` that you can catch and decide to retry:
+
+```cs
+foreach (var order in listOfOrders)
+{
+	try
+	{
+		await orderService.CloseAsync(order.Id.Value);
+	}
+	catch (ShopifyRateLimitException e)
+	{
+		//Wait for 10 seconds before trying again.
+		await Task.Delay(10000);
+
+		//If this throws an exception again, loop will break and the exception will be thrown.
+		await orderService.CloseAsync(order.Id.Value);
+	}
+}
+```
+
+## Using a Request Execution Policy
+
+Catching an exception is easy enough for one request, but it doesn't really scale very well. Luckily, ShopifySharp provides several [Request Execution Policies](/getting-started/policies/) which can be used to automatically handle Shopify's rate limit and retry the request. For instance, the `LeakyBucketExecutionPolicy` will catch rate limit errors and retry the request, all while reading and respecting Shopify's "leaky bucket" rate limit:
+
+```cs
+var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+
+var policy = new LeakyBucketExecutionPolicy();
+var graphService = new GraphService(credentials);
+
+graphService.SetExecutionPolicy(policy);
+
+var request = new GraphRequest
+{
+    Query = "query { shop { id } }",
+};
+
+var getShopResult = await graphService.PostAsync(graphRequest);
+```
+
+After configuring the service to use the policy, it will automatically catch those rate limit exceptions and retry the requests, all without having to write a single try/catch block.
+
+[Read more about Request Execution Policies here.](/getting-started/policies/)

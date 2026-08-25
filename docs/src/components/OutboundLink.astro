@@ -1,0 +1,36 @@
+---
+export type Props = {
+  href: string
+  target?: string
+  utmParams?: Record<string, string>
+}
+
+const { href, target, utmParams } = Astro.props
+
+// Append UTM params to href without clobbering existing querystring.
+const baseUtmParams: Record<string, string> = {
+  utm_campaign: "unsolicited_traffic",
+  utm_content: "external_link",
+  utm_medium: "web",
+  utm_source: "shopifysharp.net",
+}
+
+const allUtmParams = { ...baseUtmParams, ...utmParams }
+let finalHref = href
+try {
+  const url = new URL(href)
+  for (const [key, value] of Object.entries(allUtmParams)) {
+    url.searchParams.set(key, value)
+  }
+  finalHref = url.toString()
+} catch {
+  // If href isn't a valid URL (e.g. mailto:), leave it as-is
+}
+---
+<a href={finalHref}
+   target={target}
+   rel="noopener noreferrer"
+   data-umami-event="outbound-link-click"
+   data-umami-event-url={finalHref}>
+    <slot />
+</a>

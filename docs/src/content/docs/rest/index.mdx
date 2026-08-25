@@ -1,0 +1,54 @@
+---
+title: "Overview of ShopifySharp's support for the deprecated REST API"
+description: "The state of Shopify's REST API in ShopifySharp and why you should migrate to GraphQL"
+sidebar:
+    order: 0
+    title: "Overview and deprecation"
+---
+
+Most of the "service" classes in ShopifySharp are dedicated classes for Shopify's REST API, where each class deals with a single Shopify "entity" type. For example, the [WebhookService](./webhooks.mdx) contains all the REST API operations for webhooks, and the [EventService](./events.mdx) contains all of the operations for events, and so on.
+
+For a long time, the Shopify app developers managed with just the REST API, but it does have some drawbacks. Chiefly, Shopify's REST API never provided any method or strategy for letting us "double up" on requests, i.e. we couldn't get both a webhook and an event in the same request. With the REST API, if you wanted two objects, you sent two requests. That's an expensive drawback when it comes to Shopify applications, both for Shopify as the API operator and for us developers calling the API, because the data we need to fetch for our applications is rarely just *one* clean object.
+
+While GraphQL isn't perfect, it does fix that exact issue by giving us a way to combine queries for data into one single request. For example, what would have taken several requests to the REST API to fetch a *dashboard* view of unrelated resources (orders, products, shop information) can now be done in a single request using GraphQL:
+
+```graphql
+query DashboardData {
+  shop {
+    name
+    primaryDomain {
+      host
+    }
+  }
+
+  products(first: 10) {
+    nodes {
+      id
+      title
+      status
+    }
+  }
+
+  orders(first: 10, sortKey: CREATED_AT, reverse: true) {
+    nodes {
+      id
+      name
+      createdAt
+      displayFinancialStatus
+      displayFulfillmentStatus
+    }
+  }
+}
+```
+
+## Shopify's deprecated REST API
+
+Unfortunately, Shopify has now decided that the GraphQL API is so successful (or perhaps the thought of maintaining two APIs is so daunting) that they've made the unprecedented decision to **deprecate and eventually shut down their REST API**. While the full date of its removal is still a bit nebulous (some time in 2027, I believe), what's not nebulous is this: it *is* being removed. Furthermore, it's already a requirement that all new apps published to the Shopify App Store **must** use the GraphQL API. Existing apps are exempt from this rule, for now, but Shopify has historically not been shy about imposing new requirements on existing apps out of the blue.
+
+Bottom line: **Shopify wants us you to migrate your app off of the REST API before they permanently turn the API off**.
+
+## Status of ShopifySharp's REST API support
+
+So what does that mean for ShopifySharp? For now, I've committed to continuing support for the REST API service classes until Shopify turns off their REST API. The service classes compile, their integration tests pass, and they continue to function correctly in the face of all this. As long as the REST API keeps resolving for existing apps, I'll keep supporting the classes ShopifySharp has always supported. As endpoints and types are removed by Shopify ahead of the full removal of the API, I'll likewise deprecate remove the corresponding service classes and entity types from ShopifySharp.
+
+Also, it's important to note that, while the REST API is still "supported" in ShopifySharp, these services are **functionally deprecated** due to Shopify's own deprecation, and it's highly unlikely that I'll be adding more REST API service classes or entity types to ShopifySharp. As the maintainer of ShopifySharp, I strongly recommend that you begin migrating your usage from ShopifySharp's REST API service classes over to the [GraphService](../graphql/index.mdx) and the [fluent GraphQL query builders](). The writing is quite literally on the wall on this one.

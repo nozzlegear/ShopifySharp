@@ -12,6 +12,8 @@ query_builder_tests := "ProductQueryTests QueryBuilderTests QueryBuilderMutation
 config := "Release"
 # Dotnet verbosity
 verbosity := "minimal"
+# Path to the Astro docs site directory
+docs_dir := join(justfile_directory(), "docs")
 # Test frameworks
 netCoreApp := "net10.0"
 netFramework := "net472"
@@ -358,3 +360,42 @@ generate-factories:
 [group("encryption")]
 decrypt:
     sops decrypt env.encrypted.json
+
+# Run the Astro docs dev server (http://localhost:4321)
+[group("docs")]
+astro-dev-docs:
+    cd "{{docs_dir}}" && pnpm dev
+
+# Build the Astro docs site and start a local preview server
+[group("docs")]
+astro-preview-docs:
+    cd "{{docs_dir}}" && pnpm preview
+
+# Build the Astro docs site for production (outputs to docs/dist/)
+[group("docs")]
+astro-build-docs:
+    cd "{{docs_dir}}" && pnpm install && NODE_ENV=production pnpm build
+
+# Deploy the Astro docs site to the VPS via rsync over SSH
+[group("docs")]
+deploy-docs host="shopifysharp":
+    #!/usr/bin/env bash
+    set -euo pipefail
+
+    # Ensure the dist directory exists
+    if [ ! -d "{{docs_dir}}/dist" ]; then
+        echo "Error: Docs dist directory not found. Run 'just astro-build-docs' first."
+        exit 1
+    fi
+
+    # Rsync the dist files to the VPS
+    rsync \
+        -e 'ssh -o StrictHostKeyChecking=yes -o SendEnv=no' \
+        -avz \
+        --exclude ".DS_Store" \
+        --exclude ".env*" \
+        --exclude ".secret*" \
+        --exclude ".git" \
+        --delete \
+        "{{ docs_dir }}/dist/" \
+        "{{ host }}:."

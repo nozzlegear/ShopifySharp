@@ -1,3 +1,0 @@
-[submodule "docs/wiki"]
-	path = docs/wiki
-	url = https://github.com/nozzlegear/ShopifySharp.wiki.git

@@ -4,7 +4,7 @@ on:
   push:
     branches: [ master ]
     paths-ignore:
-      - 'docs/wiki'
+      - 'docs/**'
       - '.gitmodules'
       - '.github/**'
       - '.graphql-schemas/**'

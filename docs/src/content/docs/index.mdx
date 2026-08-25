@@ -1,0 +1,81 @@
+---
+title: "Get started with ShopifySharp"
+description: "A .NET library for Shopify's GraphQL and REST APIs"
+---
+import { Aside } from '@astrojs/starlight/components'
+import OutboundLink from '../../components/OutboundLink.astro';
+
+ShopifySharp is a .NET library that helps developers like you build custom Shopify apps using C#, .NET and GraphQL. It handles the tricky parts of OAuth, authentication and request validation for you, so you can quickly get up and running with Shopify's API.
+
+This package supports Shopify's GraphQL API, along with the (now deprecated) Rest API. For the GraphQL API, types are pre-generated from Shopify's GraphQL schema and provided as serialization/deserialization targets for your queries and mutations. The library also provides fully-typed **fluent query builders** for every query and mutation in Shopify's schema, built-in **request execution policies to handle Shopify's API rate limits**, and an optional companion library to support **dependency injection**.
+
+ShopifySharp supports .NET 10, .NET Standard 2.0 and .NET Framework 4.7.2.
+
+## Installation
+
+Install the <OutboundLink href="https://www.nuget.org/packages/ShopifySharp">ShopifySharp NuGet package</OutboundLink>:
+
+```shell title="Install via dotnet CLI"
+dotnet add package ShopifySharp
+```
+
+And optionally install the [Dependency Injection package](/getting-started/dependency-injection/):
+
+```shell title="Install via dotnet CLI"
+dotnet add package ShopifySharp.Extensions.DependencyInjection
+```
+
+## Quick Start
+
+```cs title="Calling Shopify's GraphQL API"
+var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+var service = new GraphService(credentials);
+
+var request = new GraphRequest
+{
+    Query = """
+        query listProducts($limit: Int!, $query: String!) {
+            products(first: $limit, query: $query) {
+                pageInfo {
+                    startCursor
+                    endCursor
+                    hasNextPage
+                    hasPreviousPage
+                }
+                nodes {
+                    id
+                    title
+                    handle
+                    hasOnlyDefaultVariant
+                    variantsCount {
+                        count
+                    }
+                }
+            }
+        }
+    """,
+    Variables = new Dictionary<string, object>
+    {
+        {"limit", 3},
+        {"query", "status:" + ProductStatus.ACTIVE}
+    }
+};
+
+var listProductsResult = await graphService.PostAsync<ListProductsResult>(graphRequest);
+```
+
+## Documentation
+
+Not sure where to start? Here's what I recommend:
+
+- [OAuth integration, authorization and request authentication](/getting-started/authentication-and-authorization/)
+- [Public vs Custom Apps](/getting-started/public-vs-custom-apps/)
+- [Handling Shopify's API rate limit](/getting-started/api-rate-limits/)
+- [Request Execution Policies](/getting-started/policies/)
+- [Dependency Injection](/getting-started/dependency-injection/)
+- [Shopify API versioning support](/getting-started/shopify-api-versioning/)
+- [Frequently Asked Questions](/getting-started/faq/)
+
+<Aside type="tip">
+All documentation on this website was written by a mere human practicing the bygone ritual of ink oblation – no LLM is permitted to worship at my altar to the minuscule and the majuscule.
+</Aside>

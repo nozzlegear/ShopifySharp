@@ -1,0 +1,74 @@
+---
+title: "Product Images"
+description: "Using the Product Images service in ShopifySharp"
+---
+
+import { Aside } from '@astrojs/starlight/components'
+import OutboundLink from '../../../components/OutboundLink.astro';
+
+
+<Aside type="caution">
+All public Shopify apps (i.e. those published on the Shopify App Store) are <OutboundLink href="https://shopify.dev/docs/apps/build/graphql/migrate/new-product-model">required to switch over to using the GraphQL product API by February 1st</OutboundLink>. All custom apps are required to switch by April 1st.
+[Go here for a migration guide on using ShopifySharp's **GraphService** to query and mutate Shopify's GraphQL API.](/graphql)
+</Aside>
+
+Product Images represent the various different images for a product. All product images are tied to an owner product, and therefore you'll need to pass that product's id to each product image method.
+
+### Creating a product image
+
+```cs
+var service = new ProductImageService(myShopifyUrl, shopAccessToken);
+var image = await service.CreateAsync(productId, new ProductImage()
+{
+    Metafields = new List<MetaField>()
+    {
+        new MetaField()
+        {
+            Key = "alt",
+            Value = "new alt tag content",
+            ValueType = "string",
+            Namespace = "tags"
+        }
+    },
+    Src = "https://placekitten.com/200/300"
+});
+```
+
+### Getting a product image
+
+```cs
+var service = new ProductImageService(myShopifyUrl, shopAccessToken);
+var image = await service.GetAsync(productId, imageId);
+```
+
+### Counting product images
+
+```cs
+var service = new ProductImageService(myShopifyUrl, shopAccessToken);
+var count = await service.CountAsync(productId);
+```
+
+### Listing product images
+
+```cs
+var service = new ProductImageService(myShopifyUrl, shopAccessToken);
+var images = await service.ListAsync(productId);
+```
+
+### Updating a product image
+
+```cs
+var service = new ProductImageService(myShopifyUrl, shopAccessToken);
+var image = await service.UpdateAsync(productId, imageId, new Image()
+{
+    Position = 2
+});
+```
+
+### Deleting a product image
+
+```cs
+var service = new ProductImageService(myShopifyUrl, shopAccessToken);
+
+await service.DeleteAsync(productId, imageId);
+```

@@ -1,0 +1,59 @@
+---
+import EditLink from 'virtual:starlight/components/EditLink';
+import LastUpdated from 'virtual:starlight/components/LastUpdated';
+import Pagination from 'virtual:starlight/components/Pagination';
+import OutboundLink from './OutboundLink.astro';
+---
+
+<footer class="sl-flex">
+	<div class="sponsor-notice sl-flex">
+		<p>
+			Are you using ShopifySharp in production? <OutboundLink href="https://github.com/sponsors/nozzlegear">Sponsor the project on GitHub</OutboundLink>,
+            {" "}<OutboundLink href="https://www.paypal.biz/nozzlegear">donate via PayPal</OutboundLink>,
+            {" "}or <OutboundLink href="https://gum.co/shopify-development-handbook">buy a copy of The Shopify Development Handbook</OutboundLink>
+            {" "}to support current and future development!
+		</p>
+	</div>
+
+	<div class="meta sl-flex">
+		<EditLink />
+		<LastUpdated />
+	</div>
+	<Pagination />
+
+</footer>
+
+<style>
+	footer {
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+	.sponsor-notice {
+		justify-content: center;
+		margin-top: 3rem;
+		padding: 0.75rem 1rem;
+		border-radius: 0.5rem;
+		background: var(--sl-color-gray-7);
+		font-size: var(--sl-text-sm);
+		text-align: center;
+		color: var(--sl-color-gray-3);
+	}
+	.sponsor-notice a {
+		color: var(--sl-color-text-accent);
+		text-decoration: none;
+	}
+	.sponsor-notice a:hover {
+		text-decoration: underline;
+	}
+	.meta {
+		gap: 0.75rem 3rem;
+		justify-content: space-between;
+		flex-wrap: wrap;
+		margin-top: 3rem;
+		font-size: var(--sl-text-sm);
+		color: var(--sl-color-gray-3);
+	}
+	.meta > :global(p:only-child) {
+		margin-inline-start: auto;
+	}
+</style>

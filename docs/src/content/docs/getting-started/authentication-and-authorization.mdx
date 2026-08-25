@@ -1,0 +1,178 @@
+---
+title: "OAuth integration, authorization and request authentication"
+description: "Generate access tokens with OAuth, authorize app installs, and authenticate requests for a more secure Shopify app integration"
+---
+import { Aside } from '@astrojs/starlight/components'
+import OutboundLink from '../../../components/OutboundLink.astro';
+
+ShopifySharp provides several utilities for working with Shopify's OAuth installation and authorization flow, along with validating that requests coming from a Shopify store or webhook are authentic. It also includes a couple of custom utility methods to make building apps for the Shopify App Store a bit more convenient.
+
+### Ensure a given URL is a valid \*.myshopify.com URL
+
+This is a convenience method that validates whether a given URL is a valid Shopify API domain (the Shopify API is hosted on each individual shop rather than at once central URL). It's great for ensuring you don't redirect a user to an incorrect URL when you need them to authorize your app installation, and is ideally used in conjunction with `AuthorizationService.BuildAuthorizationUrl`.
+
+ShopifySharp will call the given URL and check for an `X-ShopId` header in the response. That header is present on all Shopify shops and it's existence signals that the URL is indeed a Shopify URL.
+
+```c#
+string urlFromUser = "https://example.myshopify.com";
+bool isValidDomain = await AuthorizationService.IsValidShopDomainAsync(urlFromUser);
+```
+
+<Aside type="caution">
+Shopify does not document this "feature", and it may break at any time. Use at your own discretion. Be aware that it's possible for a malicious site to fake the `X-ShopId` header, which would make this method return `true`.
+</Aside>
+
+<Aside type="caution">
+This method only works with the `*.myshopify.com`-style Shopify domains. If a user has a custom domain for their Shopify shop (such as `example-store.com`) and they enter that instead, this method will return `false` due to a quirk in how Shopify redirects requests to the Shopify admin API.
+</Aside>
+
+### Build an OAuth authorization URL
+
+To get an access token from your user, you need to build an OAuth URL and then redirect the user to it, where they'll be prompted to confirm the installation of your app on their Shopify store.
+
+```c#
+//This is the user's store URL.
+string usersMyShopifyUrl = "https://example.myshopify.com";
+
+// A URL to redirect the user to after they've confirmed app installation.
+// This URL is required, and must be listed in your app's shopify.app.toml config file.
+// It's case-sensitive too!
+string redirectUrl = "https://example.com/my/redirect/url";
+
+//An array of the Shopify access scopes your application needs to run.
+var scopes = new List<AuthorizationScope>()
+{
+    AuthorizationScope.ReadCustomers,
+    AuthorizationScope.WriteCustomers
+};
+
+//Or, use an array of string permissions
+var scopes = new List<string>()
+{
+    "read_customers",
+    "write_customers"
+}
+
+//You can find your API key over at <OutboundLink href="https://shopify.dev/tutorials/authenticate-a-private-app-with-shopify-admin">https://shopify.dev/tutorials/authenticate-a-private-app-with-shopify-admin</OutboundLink>
+string shopifyApiKey = "YourShopifyApiKey";
+
+//All AuthorizationService methods are static.
+Uri authUrl = AuthorizationService.BuildAuthorizationUrl(scopes, usersMyShopifyUrl, shopifyApiKey, redirectUrl);
+```
+
+<Aside type="note">
+Shopify might call your API key a "Client ID" – these are the same thing. We use the term "API Key" in ShopifySharp, only because that's what Shopify called it when the ShopifySharp project was first started.
+</Aside>
+
+### Authorize an installation and generate an access token
+
+Once you've sent a user to the authorization URL and they've confirmed your app installation, they'll be redirected
+back to your application at either the default app URL, or the redirect URL you passed in when building the
+authorization URL.
+
+The access token you receive after authorizing should be stored in your database. You'll need it to access the
+shop's resources (e.g. orders, customers, fulfillments, etc.)
+
+```c#
+//The querystring will have several parameters you need for authorization.
+string code = Request.QueryString["code"];
+string myShopifyUrl = Request.QueryString["shop"];
+
+// Note: DO NOT ADD THIS VALUE TO GIT OR VERSION CONTROL!
+// This is only an example!
+string shopifySecretKey = "YourShopifySecretKey";
+
+string accessToken = await AuthorizationService.Authorize(code, myShopifyUrl, shopifyApiKey, shopifySecretKey);
+```
+
+<Aside type="note">
+Shopify might call your Secret key a "Client Secret"; once again, these are the same thing and you can use your Client Secret anywhere you see Secret Key in ShopifySharp. We use the term "Secret Key" for the same reason we use the term "API Key" – it's what Shopify called them when the ShopifySharp project was starting out.
+</Aside>
+
+### Determine if a request is authentic
+
+Any (non-webhook, non-proxy-page) request coming from Shopify will have a querystring parameter called 'hmac' that you can use
+to verify that the request is authentic. This signature is a hash of all querystring parameters and your app's
+secret key.
+
+Pass the entire querystring to `AuthorizationService` to verify the request.
+
+```c#
+var qs = Request.QueryString;
+
+if(AuthorizationService.IsAuthenticRequest(qs, shopifySecretKey))
+{
+    //Request is authentic.
+}
+else
+{
+    //Request is not authentic and should not be acted on.
+}
+```
+
+### Determine if a proxy page request is authentic
+
+Nearly identical to authenticating normal requests, a proxy page request only differs in the way the HMAC is generated. All proxy page requests coming from Shopify will have a querystring parameter named `hmac` that you can use to verify the request. This signature is a hash of all querystring parameters and your app's secret key.
+
+```cs
+var qs = Request.QueryString;
+
+if(AuthorizationService.IsAuthenticProxyRequest(qs, shopifySecretKey))
+{
+    //Request is authentic.
+}
+else
+{
+    //Request is not authentic and should not be acted on.
+}
+```
+
+### Determine if a webhook request is authentic
+
+Any webhook request coming from Shopify will have a header called `X-Shopify-Hmac-SHA256` that you can use
+to verify that the webhook is authentic. The header is a hash of the entire request body and your app's
+secret key.
+
+Pass the entire header collection and the request's input stream to `AuthorizationService` to verify
+the request.
+
+```c#
+NameValueCollection requestHeaders = Request.Headers;
+Stream inputStream = Request.InputStream;
+
+if(AuthorizationService.IsAuthenticWebhook(requestHeaders, inputStream, shopifySecretKey))
+{
+    //Webhook is authentic.
+}
+else
+{
+    //Webhook is not authentic and should not be acted on.
+}
+```
+
+You can also pass in the request body as a string, rather than using the input stream. However, the request
+body string **needs to be identical to the way it was sent from Shopify**. If it has been modified the verification will fail -- even if just one space is in the wrong place.
+
+```c#
+NameValueCollection requestHeaders = Request.Headers;
+string requestBody = null;
+
+//Reset the input stream. MVC controllers often read the stream to determine which parameters to pass to an action.
+Request.InputStream.Position = 0;
+
+//Read the stream into a string
+using(StreamReader reader = new StreamReader(Request.InputStream))
+{
+    requestBody = await reader.ReadToEndAsync();
+}
+
+if(AuthorizationService.IsAuthenticWebhook(requestHeaders, requestBody, shopifySecretKey))
+{
+    //Webhook is authentic.
+}
+else
+{
+    //Webhook is not authentic and should not be acted on.
+}
+
+```

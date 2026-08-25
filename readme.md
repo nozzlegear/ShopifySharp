@@ -6,13 +6,17 @@
 
 ShopifySharp is a .NET library that helps developers build custom Shopify apps using C#, .NET and GraphQL. It also handles the tricky parts of authentication and validation for you, so you can quickly get up and running with Shopify using this library.
 
+# Documentation
+
+You can find the full documentation for ShopifySharp and its utility packages at [shopifysharp.net](https://www.shopifysharp.net?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp). All documentation was written by a mere human practicing the bygone ritual of ink oblation – no LLM is permitted to worship at my altar to the minuscule and the majuscule.
+
 ### Migrating to GraphQL using ShopifySharp's GraphService
 
-Already using ShopifySharp and wondering how to migrate from Shopify's REST API to their GraphQL API? [Head over to the wiki page](https://github.com/nozzlegear/shopifysharp/wiki/graphql) where we've got a dedicated page using ShopifySharp's GraphService to send queries and mutations to Shopify.
+Already using ShopifySharp and wondering how to migrate from Shopify's REST API to their GraphQL API? [Head over to the dedicated docs page](https://www.shopifysharp.net/graphql?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp) which has a guide for using ShopifySharp's GraphService to send queries and mutations to Shopify.
 
 # The Shopify Development Handbook
 
-[![Learn how to build rock-solid Shopify apps with C# and ASP.NET](https://i.imgur.com/9GgDjK0.png)](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
+[![Learn how to build rock-solid Shopify apps with C# and ASP.NET](https://i.imgur.com/9GgDjK0.png)](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp&utm_campaign=handbook&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp)
 
 Building an app or integration for the Shopify store is hard work. There are a ton of things you need to keep in mind when stitching together all of the API calls, redirect URLs and app settings that you'll need to use.
 
@@ -30,18 +34,18 @@ You're going to be asking yourself all of these questions when you try to build 
 
 It's difficult to find blog posts or tutorials about building Shopify apps, and downright impossible if you're trying to build them with C# and ASP.NET. Shopify's own partner blog puts a huge focus on designing themes over building real, functional apps, and their API docs only go so far if you don't know what you're looking for.
 
-[The Shopify Development Handbook](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp) is a premium educational course that distills the experience of building Shopify applications and integrations into one concise and comprehensive course.
+[The Shopify Development Handbook](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp&utm_campaign=handbook&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp) is a premium educational course that distills the experience of building Shopify applications and integrations into one concise and comprehensive course.
 
-[Click here to learn more about The Shopify Development Handbook, **and get a FREE sample chapter** on integrating a merchant's Shopify store with your app.](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp)
+[Click here to learn more about The Shopify Development Handbook, **and get a FREE sample chapter** on integrating a merchant's Shopify store with your app.](https://nozzlegear.com/shopify-development-handbook?ref=ShopifySharp&utm_campaign=handbook&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp)
 
 # Installation
 
-ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/). You can install it with the dotnet command line:
+ShopifySharp is [available on NuGet](https://www.nuget.org/packages/ShopifySharp/?utm_campaign=shopifysharp&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp). You can install it with the dotnet command line:
 
 | Package                                                                                                                   | Installation                                                     | Documentation                                                                               |
 |---------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------|---------------------------------------------------------------------------------------------|
-| [ShopifySharp](https://www.nuget.org/packages/ShopifySharp)                                                               | `dotnet add package shopifysharp`                                | [Click here.](https://github.com/nozzlegear/ShopifySharp/wiki)                              |
-| [ShopifySharp.Extensions.DependencyInjection](https://www.nuget.org/packages/ShopifySharp.Extensions.DependencyInjection) | `dotnet add package shopifysharp.extensions.dependencyinjection` | [Click here.](./ShopifySharp.Extensions.DependencyInjection/README.md)                      |
+| [ShopifySharp](https://www.nuget.org/packages/ShopifySharp/?utm_campaign=shopifysharp&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp)                                                               | `dotnet add package shopifysharp`                                | [Click here.](https://www.shopifysharp.net?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp)                              |
+| [ShopifySharp.Extensions.DependencyInjection](https://www.nuget.org/packages/ShopifySharp.Extensions.DependencyInjection?utm_campaign=shopifysharp&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp) | `dotnet add package shopifysharp.extensions.dependencyinjection` | [Click here.](https://shopifysharp.net/dependency-injection/?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp)                      |
 
 # Shopify API version support
 
@@ -67,17 +71,13 @@ Shopify versions their API, meaning new features are locked behind newer version
 | 5.0.0 - 5.5.0         | 2019-10             |
 | 4.x and below         | None, unsupported   |
 
-The oldest version of .NET Framework we can support is [whichever version is supported by .NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions).
+The oldest version of .NET Framework we can support is [whichever version is supported by .NET Standard 2.0](https://learn.microsoft.com/en-us/dotnet/standard/net-standard?tabs=net-standard-2-0#net-standard-versions&utm_campaign=unsolicited_traffic&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp).
 
-Check the [package's documentation](./ShopifySharp.Extensions.DependencyInjection/README.md) for more information.
+Check the [package's documentation](https://shopifysharp.net/dependency-injection/?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp) for more information.
 
 # A work-in-progress
 
 I first started working on ShopifySharp because .NET developers need a fully-featured library for interacting with Shopify and building Shopify apps, which didn't exist several years ago. My goal is to eventually reach 100% compatibility with the Shopify API, but, with that said, Shopify is constantly adding new APIs and altering old ones. I try my best to keep up with them, but I tend to prioritize the support of new APIs by how much I need them in my own Shopify apps.
-
-# Documentation
-
-Click the link here to be brought to all of the documentation: [ShopifySharp Wiki](https://github.com/nozzlegear/ShopifySharp/wiki)
 
 # Contributing to ShopifySharp
 
