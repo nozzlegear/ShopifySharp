@@ -24,6 +24,10 @@ export default defineConfig({
       social: [
           { icon: "github", label: "GitHub", href: 'https://github.com/nozzlegear/shopifysharp' }
       ],
+      customCss: [
+        './src/styles/fonts.css',
+        './src/styles/custom.css',
+      ],
       head: [
         {
           tag: 'link',

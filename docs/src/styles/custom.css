@@ -1,0 +1,8 @@
+:root {
+  --sl-font: "Nebula Sans", sans-serif;
+  --sl-font-mono: "Ubuntu Mono", monospace;
+}
+
+@view-transition {
+  navigation: auto;
+}
