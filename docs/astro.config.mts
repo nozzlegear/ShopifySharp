@@ -55,7 +55,9 @@ export default defineConfig({
           items: [{ autogenerate: { "directory": "graphql" } }]
         },
         {
-          label: 'Rest API [Deprecated]',
+          label: 'Rest API',
+          collapsed: true,
+          badge: { text: 'Deprecated', variant: 'caution' },
           items: [
             {
               autogenerate: {
