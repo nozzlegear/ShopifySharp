@@ -1,0 +1,35 @@
+#nullable enable
+namespace ShopifySharp.Utilities;
+
+public record CycleOfflineAccessTokenOptions
+{
+    /// The store's *.myshopify.com url.
+    public
+#if NET6_0_OR_GREATER
+    required
+#endif
+    string ShopDomain { get; set; } = null!;
+
+    /// Your app's public Client ID, also known as its public API key.
+    public
+#if NET6_0_OR_GREATER
+    required
+#endif
+	string ClientId { get; set; } = null!;
+
+    /// Your app's Client Secret, also known as its secret API key.
+    public
+#if NET6_0_OR_GREATER
+    required
+#endif
+	string ClientSecret { get; set; } = null!;
+
+    /// The app's legacy, permanent offline access token. This is the
+    /// token that will be cycled to an expiring offline access token,
+    /// invalidating the legacy token.
+    public
+#if NET6_0_OR_GREATER
+    required
+#endif
+	string AccessToken { get; set; } = null!;
+}

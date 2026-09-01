@@ -9,6 +9,7 @@ using ShopifySharp.Entities;
 using ShopifySharp.Enums;
 using ShopifySharp.Infrastructure;
 using ShopifySharp.Infrastructure.Serialization.Json;
+using ShopifySharp.Tests.Fixtures;
 using ShopifySharp.Tests.TestClasses;
 using ShopifySharp.Utilities;
 
@@ -17,12 +18,13 @@ namespace ShopifySharp.Tests.Utilities;
 [TestSubject(typeof(ShopifyOauthUtility))]
 [Trait("Category", "ShopifyOauthUtility")]
 [Collection("ShopifyOauthUtility")]
-public class ShopifyOauthUtilityTests
+public class ShopifyOauthUtilityTests : IClassFixture<VerifyFixture>
 {
     private const string ShopDomain = "example.myshopify.com";
     private const string RedirectUrl = "https://example.com/app";
     private const string ClientId = "some-client-id";
 
+    private readonly VerifySettings _verifySettings;
     private readonly IShopifyDomainUtility _shopifyDomainUtility = A.Fake<IShopifyDomainUtility>(x => x.Wrapping(new ShopifyDomainUtility()).CallsBaseMethods());
     private readonly IJsonSerializer _jsonSerializer = new SystemJsonSerializer(Serializer.RestSerializerOptions);
     private readonly IServiceProvider _serviceProvider = A.Fake<IServiceProvider>(x => x.Strict());
@@ -31,8 +33,10 @@ public class ShopifyOauthUtilityTests
 
     private readonly ShopifyOauthUtility _sut;
 
-    public ShopifyOauthUtilityTests()
+    public ShopifyOauthUtilityTests(VerifyFixture verifyFixture)
     {
+        _verifySettings = verifyFixture.Settings;
+
         var httpClientFactory = new FakeHttpClientFactory(_httpClient);
 
         A.CallTo(() => _serviceProvider.GetService(typeof(IShopifyDomainUtility)))
@@ -1101,6 +1105,111 @@ public class ShopifyOauthUtilityTests
 
         callToClient.MustHaveHappened(3, Times.Exactly);
         A.CallTo(() => _httpClient.Dispose()).MustNotHaveHappened();
+    }
+
+    #endregion
+
+    #region CycleOfflineAccessTokenAsync tests
+
+    [Fact]
+    public async Task CycleOfflineAccessTokenAsync_ShouldSendTokenExchangeGrantAndParseTokenMetadata()
+    {
+        // Setup
+        const int expiresIn = 120;
+        const int refreshTokenExpiresIn = 3600;
+        const string accessToken = "some-access-token";
+        const string refreshToken = "some-refresh-token";
+        const string permanentToken = "some-permanent-offline-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{accessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}},
+                "refresh_token": "{{refreshToken}}",
+                "refresh_token_expires_in": {{refreshTokenExpiresIn}}
+              }
+              """;
+        var result = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+        string? requestContent = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Invokes(async call => {
+                capturedRequest = call.GetArgument<HttpRequestMessage>(0);
+                requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
+            })
+            .Returns(result);
+
+        // Act
+        var authorizationResult = await _sut.CycleOfflineAccessTokenAsync(new CycleOfflineAccessTokenOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessToken = permanentToken
+        }, TestContext.Current.CancellationToken);
+
+        // Assert
+        capturedRequest.Should().NotBeNull();
+        capturedRequest!.RequestUri.Should().Be(new Uri("https://example.myshopify.com/admin/oauth/access_token"));
+
+        await Verify(new { requestContent, authorizationResult }, _verifySettings);
+    }
+
+    [Fact]
+    public async Task CycleOfflineAccessTokenAsync_WhenAnErrorIsReturned_ShouldThrow()
+    {
+        // Setup
+        const HttpStatusCode expectedStatusCode = HttpStatusCode.BadRequest;
+        const string expectedErrorMessage = "some-error-message";
+        const string json = $$"""{ "error": "{{expectedErrorMessage}}" }""";
+        var result = Utils.MakeHttpResponseMessage(json, x => x.StatusCode = expectedStatusCode);
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Returns(result);
+
+        // Act
+        var act = async () => await _sut.CycleOfflineAccessTokenAsync(new CycleOfflineAccessTokenOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessToken = "some-permanent-offline-token"
+        });
+
+        // Assert
+        var exn = await act.Should().ThrowAsync<ShopifyHttpException>()
+            .WithMessage("(400 Bad Request) " + expectedErrorMessage);
+        exn.Which.HttpStatusCode.Should().Be(expectedStatusCode);
+    }
+
+    [Fact]
+    public async Task CycleOfflineAccessTokenAsync_WhenSubjectTokenIsInvalid_ShouldThrow()
+    {
+        // Setup
+        const HttpStatusCode expectedStatusCode = HttpStatusCode.BadRequest;
+        const string expectedErrorMessage = "invalid_subject_token";
+        const string json = $$"""{ "error": "{{expectedErrorMessage}}" }""";
+        var result = Utils.MakeHttpResponseMessage(json, x => x.StatusCode = expectedStatusCode);
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Returns(result);
+
+        // Act
+        var act = async () => await _sut.CycleOfflineAccessTokenAsync(new CycleOfflineAccessTokenOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessToken = "some-permanent-offline-token"
+        });
+
+        // Assert
+        var exn = await act.Should().ThrowAsync<ShopifyHttpException>()
+            .WithMessage("(400 Bad Request) " + expectedErrorMessage);
+        exn.Which.HttpStatusCode.Should().Be(expectedStatusCode);
     }
 
     #endregion

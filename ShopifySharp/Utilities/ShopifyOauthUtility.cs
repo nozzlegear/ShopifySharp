@@ -140,6 +140,15 @@ public interface IShopifyOauthUtility
     /// <param name="cancellationToken">Cancellation token.</param>
     /// <exception cref="ShopifyInvalidRefreshTokenException">Thrown when the authorization result's refresh token has expired or does not contain a refresh token.</exception>
     Task<AuthorizationResult> RefreshOfflineAccessTokenIfStaleAsync(AuthorizationResult currentResult, RefreshOfflineAccessTokenIfStaleOptions options, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Cycles a legacy, permanent offline access token to an expiring offline access token. This is an irreversible action.
+    /// Shopify will invalidate the legacy offline token and return a new, expiring offline token in the same transaction.
+    /// For more info, see https://shopify.dev/docs/apps/build/authentication-authorization/migrate-to-expiring-offline-access-tokens#cycle-existing-tokens-without-waiting-for-a-merchant
+    /// </summary>
+    /// <param name="options">Options for cycling the access token.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<AuthorizationResult> CycleOfflineAccessTokenAsync(CycleOfflineAccessTokenOptions options, CancellationToken cancellationToken = default);
 }
 
 public class ShopifyOauthUtility: IShopifyOauthUtility
@@ -335,7 +344,36 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
     }
 
     /// <inheritdoc />
-    public async Task<AuthorizationResult?> RefreshOfflineAccessTokenIfStaleAsync(
+    public async Task<AuthorizationResult> CycleOfflineAccessTokenAsync(
+        CycleOfflineAccessTokenOptions options,
+        CancellationToken cancellationToken = default
+    )
+    {
+        var ub = new UriBuilder(_domainUtility.BuildShopDomainUri(options.ShopDomain))
+        {
+            Path = "admin/oauth/access_token"
+        };
+        // This uses RFC 8693 to cycle a permanent offline access token to an expiring offline access token
+        //
+        // RFC 8693: https://www.rfc-editor.org/rfc/rfc8693.html
+        // Shopify docs: https://shopify.dev/docs/apps/build/authentication-authorization/migrate-to-expiring-offline-access-tokens#cycle-existing-tokens-without-waiting-for-a-merchant
+        using var content = new JsonContent(new
+        {
+            client_id = options.ClientId,
+            client_secret = options.ClientSecret,
+            grant_type = "urn:ietf:params:oauth:grant-type:token-exchange",
+            subject_token = options.AccessToken,
+            subject_token_type = "urn:shopify:params:oauth:token-type:offline-access-token",
+            requested_token_type = "urn:shopify:params:oauth:token-type:offline-access-token",
+            expiring = 1
+        });
+        using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
+
+        return await SendRequestAndParseAuthorizationResultAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<AuthorizationResult> RefreshOfflineAccessTokenIfStaleAsync(
         RefreshOfflineAccessTokenIfStaleOptions options,
         CancellationToken cancellationToken = default
     )
