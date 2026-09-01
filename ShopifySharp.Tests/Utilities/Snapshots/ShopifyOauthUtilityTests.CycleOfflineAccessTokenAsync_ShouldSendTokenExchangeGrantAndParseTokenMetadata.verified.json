@@ -1,0 +1,15 @@
+﻿{
+  "requestContent": "{\"client_id\":\"some-client-id\",\"client_secret\":\"some-client-secret\",\"grant_type\":\"urn:ietf:params:oauth:grant-type:token-exchange\",\"subject_token\":\"some-permanent-offline-token\",\"subject_token_type\":\"urn:shopify:params:oauth:token-type:offline-access-token\",\"requested_token_type\":\"urn:shopify:params:oauth:token-type:offline-access-token\",\"expiring\":1}",
+  "authorizationResult": {
+    "AccessToken": "some-access-token",
+    "Type": "ExpiringOffline",
+    "ExpiresIn": "00:02:00",
+    "RefreshToken": "some-refresh-token",
+    "RefreshTokenExpiresIn": "01:00:00",
+    "IssuedAtUtc": "DateTimeOffset_1",
+    "AccessTokenExpiresAtUtc": "DateTimeOffset_2",
+    "RefreshTokenExpiresAtUtc": "DateTimeOffset_3",
+    "HasRefreshToken": true,
+    "IsOnlineAccess": false
+  }
+}
