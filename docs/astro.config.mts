@@ -1,6 +1,6 @@
 import { defineConfig } from 'astro/config';
 import starlight from '@astrojs/starlight';
-
+import starlightLinksValidator from 'starlight-links-validator';
 export default defineConfig({
   site: 'https://shopifysharp.net',
   server: {
@@ -9,6 +9,7 @@ export default defineConfig({
   output: 'static',
   integrations: [
     starlight({
+      plugins: [starlightLinksValidator()],
       title: 'ShopifySharp',
       description: "A .NET library that helps developers easily authenticate with and manage Shopify stores using Shopify's GraphQL and Rest APIs.",
       logo: {
