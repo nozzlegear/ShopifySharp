@@ -232,3 +232,6 @@ appsettings.local.json
 
 # Ignore the .graphql schema
 graphql.schema.graphql
+
+# Ignore obsidian vaults
+.obsidian
