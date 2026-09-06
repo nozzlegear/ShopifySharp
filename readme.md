@@ -81,4 +81,17 @@ I first started working on ShopifySharp because .NET developers need a fully-fea
 
 # Contributing to ShopifySharp
 
-Check out our [contribution guide](https://github.com/nozzlegear/ShopifySharp/blob/master/docs/contribution-guide.md) for guidance on contributing new features, services, classes and bugfixes to ShopifySharp! The guide also contains details on how to set up and run ShopifySharp's test suite.
+Check out our [contribution guide](https://shopifysharp.net/development/contribution-guide/?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp) for guidance on contributing new features, services, classes and bugfixes to ShopifySharp! The guide also contains details on how to set up and run ShopifySharp's test suite.
+
+# Licensing
+
+### Packages and code
+
+The ShopifySharp and ShopifySharp.Extensions.DependencyInjection packages on Nuget are licensed under the **MIT License**. In addition, all code in the ShopifySharp projects on Github is licensed under the MIT License unless otherwise noted.
+
+### Documentation Website and Content Licenses
+
+The ShopifySharp documentation website ([shopifysharp.net](https://shopifysharp.net?utm_campaign=documentation&utm_content=external_link&utm_medium=web&utm_source=github_nozzlegear_shopifysharp)) is licensed under the **Mozilla Public License 2.0 (MPL 2.0)**, except for the following:
+
+- Code examples and samples are licensed under the **MIT License**.
+- Documentation content itself (the text and explanations in the docs) is licensed under **Creative Commons Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)**.
