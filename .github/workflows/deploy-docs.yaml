@@ -1,0 +1,68 @@
+name: Deploy Documentation Site
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'docs/**'
+  workflow_dispatch:
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  build:
+    name: "Build documentation site"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+    - name: Setup justfile
+      uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
+      with:
+        tool: just@1.46.0
+
+    - name: Checkout branch
+      uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        ref: ${{ github.ref }}
+        persist-credentials: false
+
+    - name: Setup pnpm
+      uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66dd77 # v4.1.0
+      with:
+        version: 12.3.4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a # v3
+      with:
+        node-version: 26
+
+    - name: Build documentation site
+      run: just astro-build-docs
+
+    - name: Upload documentation site
+      uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+      with:
+        name: docs-dist
+        if-no-files-found: error
+        path: |
+          docs/dist/**/*
+
+    - name: Setup SSH
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+        SSH_HOST_KEY: ${{ secrets.SSH_HOST_KEY }}
+      run: |
+        install -m 700 -d ~/.ssh
+        install -m 600 /dev/null ~/.ssh/id_rsa
+        printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
+        printf '%s %s %s\n' "$SSH_HOST" "ecdsa-sha2-nistp256" "$SSH_HOST_KEY" >> ~/.ssh/known_hosts
+
+    - name: Deploy documentation site
+      run: just deploy-docs "${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"

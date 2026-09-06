@@ -18,14 +18,13 @@ docs_dir := join(justfile_directory(), "docs")
 netCoreApp := "net10.0"
 netFramework := "net472"
 
-
 default:
     just --list
 
 [private]
 [script]
 _buildCliProject:
-    if [ ! -d "{{cli_project}}/bin/Release" ]; then
+    if [ ! -d "{{ cli_project }}/bin/Release" ]; then
         dotnet build --configuration Release ./ShopifySharp.GraphQL.Parser.CLI/
     fi
 
@@ -33,60 +32,60 @@ _buildCliProject:
 [private]
 _buildAndPack project revision outputDir:
     dotnet pack \
-        -c "{{config}}" \
-        --version-suffix "{{revision}}" \
-        -o "{{outputDir}}" \
-        --verbosity "{{verbosity}}" \
-        "{{project}}"
+        -c "{{ config }}" \
+        --version-suffix "{{ revision }}" \
+        -o "{{ outputDir }}" \
+        --verbosity "{{ verbosity }}" \
+        "{{ project }}"
     dotnet pack \
-        -c "{{config}}" \
-        -o "{{outputDir}}" \
-        --verbosity "{{verbosity}}" \
-        "{{project}}"
+        -c "{{ config }}" \
+        -o "{{ outputDir }}" \
+        --verbosity "{{ verbosity }}" \
+        "{{ project }}"
 
 [private]
 _cleanGraphEntities:
-    rm -r "{{graph_entities}}"
+    rm -r "{{ graph_entities }}"
 
 # Clean generated files
 [group("graphql")]
 clean:
-    git clean -df "{{graph_entities}}"
+    git clean -df "{{ graph_entities }}"
     # git checkout doesn't work in jj changesets, so we use jj restore if jj is present, falling back to git checkout
-    jj restore "{{graph_entities}}" 2>/dev/null || git checkout "{{graph_entities}}"
+    jj restore "{{ graph_entities }}" 2>/dev/null || git checkout "{{ graph_entities }}"
 
 # Regenerates GraphQL types from the graphql.schema.graphql file
-[group("graphql")]
 [arg("noBuild", long="no-build", value="1")]
+[group("graphql")]
 regenerate schemaFile="graphql.schema.graphql" noBuild="false": clean _cleanGraphEntities _buildCliProject
-    dotnet run {{if noBuild == "1" {"--no-build"} else { "" } }} \
+    dotnet run {{ if noBuild == "1" { "--no-build" } else { "" } }} \
         --configuration Release \
-        --project "{{cli_project}}" \
+        --project "{{ cli_project }}" \
         -- \
         generate \
         --nullable true \
         --casing camel \
-        -t "{{graph_entities}}/Types" \
-        -b "{{graph_entities}}/QueryBuilders" \
+        -t "{{ graph_entities }}/Types" \
+        -b "{{ graph_entities }}/QueryBuilders" \
         "{{ schemaFile }}"
 
 # Regenerates GraphQL types and then builds the ShopifySharp project to ensure they're valid
-[group("graphql")]
 [arg("noBuild", long="no-build", value="1")]
+[group("graphql")]
 regenerate-and-build schemaFile="graphql.schema.graphql" noBuild="false": clean (regenerate schemaFile noBuild)
     dotnet build --configuration Release "./ShopifySharp/"
 
-[group("graphql")]
 [arg("version", long="api-version")]
 [arg("domain", long)]
-[arg("token", long)]
 [arg("output", long)]
+[arg("token", long)]
 [arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+[group("graphql")]
 download-graphql-schema version domain="" token="" output="" useSopsEnvFile="false": _buildCliProject
     #!/usr/bin/env bash
     set -euo pipefail
 
-    if [ "{{useSopsEnvFile}}" != "true" ] && { [ -z "{{domain}}" ] || [ -z "{{token}}" ]; }; then
+    if [ "{{ useSopsEnvFile }}" != "true" ] && { [ -z "{{ domain }}" ] || [ -z "{{ token }}" ]; }; then
         echo "Error: Either use --use-sops-env-file or provide both --domain and --token."
         exit 1
     fi
@@ -94,32 +93,32 @@ download-graphql-schema version domain="" token="" output="" useSopsEnvFile="fal
     output_file="{{ if output == "" { version + ".schema.json" } else { output } }}"
     dotnet run --no-build \
         --configuration Release \
-        --project "{{cli_project}}" \
+        --project "{{ cli_project }}" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
         -- \
         download \
         -o "$output_file" \
-        --api-version "{{version}}" \
+        --api-version "{{ version }}" \
         {{ if domain != "" { "--domain \"" + domain + "\"" } else { "" } }} \
         {{ if token != "" { "--token \"" + token + "\"" } else { "" } }}
 
 # Converts a .json GraphQL schema to .graphql
-[group("graphql")]
 [arg("jsonSchemaFile", long="input")]
 [arg("graphqlSchemaFile", long="output")]
+[group("graphql")]
 convert-graphql-schema jsonSchemaFile graphqlSchemaFile:
-    npx --yes -- graphql-json-to-sdl@0.5.0 "{{jsonSchemaFile}}" "{{graphqlSchemaFile}}"
+    npx --yes -- graphql-json-to-sdl@0.5.0 "{{ jsonSchemaFile }}" "{{ graphqlSchemaFile }}"
 
 # Creates a pull request containing any changes to the graphql schema file and in the generated GraphQL types folder
-[group("graphql")]
-[script]
-[arg("token", long)]
 [arg("graphqlSchemaFile", long="graph-schema-file")]
 [arg("jsonSchemaFile", long="json-schema-file")]
+[arg("token", long)]
+[group("graphql")]
+[script]
 create-graphql-pr graphqlSchemaFile jsonSchemaFile token="":
     # Use --token if provided, otherwise fall back to GH_TOKEN from environment
-    if [ -n "{{token}}" ]; then
-        export GH_TOKEN="{{token}}"
+    if [ -n "{{ token }}" ]; then
+        export GH_TOKEN="{{ token }}"
     elif [ -z "${GH_TOKEN:-}" ]; then
         echo "Error: GitHub token not provided. Either pass --token or set GH_TOKEN environment variable."
         exit 1
@@ -131,8 +130,8 @@ create-graphql-pr graphqlSchemaFile jsonSchemaFile token="":
 
     git switch -C "$branch_name"
     git add ShopifySharp/Entities/GraphQL/Generated/
-    git add "{{graphqlSchemaFile}}"
-    git add "{{jsonSchemaFile}}"
+    git add "{{ graphqlSchemaFile }}"
+    git add "{{ jsonSchemaFile }}"
 
     if git diff --staged --quiet; then
         echo "No changes to commit"
@@ -146,12 +145,12 @@ create-graphql-pr graphqlSchemaFile jsonSchemaFile token="":
     git push origin "$branch_name"
 
     # Extract API version from schema filename (e.g., "graphql-schemas/2026-01.schema.graphql" -> "2026-01")
-    api_version=$(basename "{{graphqlSchemaFile}}" | sed 's/\.schema\.graphql$//')
+    api_version=$(basename "{{ graphqlSchemaFile }}" | sed 's/\.schema\.graphql$//')
 
     gh pr create \
         --title "Update GraphQL schema and generated types to API version $api_version" \
         --body "## Summary
-    - Added/updated GraphQL schema \`{{graphqlSchemaFile}}\`
+    - Added/updated GraphQL schema \`{{ graphqlSchemaFile }}\`
     - Cleaned output directory before generation
     - Updated GraphQL types generated from schema using ShopifySharp.GraphQL.Parser.CLI
 
@@ -162,30 +161,30 @@ create-graphql-pr graphqlSchemaFile jsonSchemaFile token="":
 # Build and pack projects for prerelease and release
 [group("build")]
 @build-and-pack runNumber outputDir:
-    echo "Building and packing projects with revision: {{runNumber}}"
-    echo "Output directory: {{outputDir}}"
+    echo "Building and packing projects with revision: {{ runNumber }}"
+    echo "Output directory: {{ outputDir }}"
 
     # TODO: only pack projects that have git changes? (Only if this is running in a workflow.)
-    just _buildAndPack "ShopifySharp/ShopifySharp.csproj" "b{{runNumber}}" "{{outputDir}}"
-    just _buildAndPack "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" "b{{runNumber}}" "{{outputDir}}"
+    just _buildAndPack "ShopifySharp/ShopifySharp.csproj" "b{{ runNumber }}" "{{ outputDir }}"
+    just _buildAndPack "ShopifySharp.Extensions.DependencyInjection/ShopifySharp.Extensions.DependencyInjection.csproj" "b{{ runNumber }}" "{{ outputDir }}"
 
 _test-dnf useSopsEnvFile project:
-    @echo "Testing .NET Framework tests in {{project}}..."
+    @echo "Testing .NET Framework tests in {{ project }}..."
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netFramework}}" \
-        --project {{project}} \
-        --verbosity "{{verbosity}}" \
-        --report-trx --report-trx-filename "DotNetFramework.{{project}}.trx" \
+        -c "{{ config }}" \
+        -f "{{ netFramework }}" \
+        --project {{ project }} \
+        --verbosity "{{ verbosity }}" \
+        --report-trx --report-trx-filename "DotNetFramework.{{ project }}.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + quote(sops_env_file) } else { "" } }} \
         --filter "Category=DotNetFramework"
     @echo ""
-    @echo ".NET Framework tests in {{project}} passed."
+    @echo ".NET Framework tests in {{ project }} passed."
 
 # Run .NET Framework unit tests
-[group("test")]
 [arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+[group("test")]
 test-dnf useSopsEnvFile="false": (_test-dnf useSopsEnvFile "ShopifySharp.Tests") (_test-dnf useSopsEnvFile "ShopifySharp.Tests.Integration")
 
 # Run tests on the DI project.
@@ -193,26 +192,26 @@ test-dnf useSopsEnvFile="false": (_test-dnf useSopsEnvFile "ShopifySharp.Tests")
 test-di:
     @echo "Testing ShopifySharp.Extensions.DependencyInjection..."
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netCoreApp}}" \
+        -c "{{ config }}" \
+        -f "{{ netCoreApp }}" \
         --project "ShopifySharp.Extensions.DependencyInjection.Tests" \
-        --verbosity "{{verbosity}}" \
+        --verbosity "{{ verbosity }}" \
         --report-trx --report-trx-filename "ShopifySharp.Extensions.DependencyInjection.trx" \
         --results-directory "TestResults"
     @echo ""
     @echo "ShopifySharp.Extensions.DependencyInjection tests passed."
 
 # Run integration tests.
-[group("test")]
-[arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
 [arg("testFilter", long="test-filter")]
+[arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+[group("test")]
 test-integration useSopsEnvFile="false" testFilter="":
     @echo "Testing integration project..."
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netCoreApp}}" \
+        -c "{{ config }}" \
+        -f "{{ netCoreApp }}" \
         --project "ShopifySharp.Tests.Integration" \
-        --verbosity "{{verbosity}}" \
+        --verbosity "{{ verbosity }}" \
         --report-trx --report-trx-filename "ShopifySharp.Integration.Tests.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
@@ -225,10 +224,10 @@ test-integration useSopsEnvFile="false" testFilter="":
 test-query-builder-integration useSopsEnvFile="false":
     @echo "Testing GraphQL query builder integrations..."
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netCoreApp}}" \
+        -c "{{ config }}" \
+        -f "{{ netCoreApp }}" \
         --project "ShopifySharp.Tests.Integration" \
-        --verbosity "{{verbosity}}" \
+        --verbosity "{{ verbosity }}" \
         --report-trx --report-trx-filename "ShopifySharp.GraphQL.QueryBuilders.Integrations.Tests.trx" \
         --results-directory "TestResults" \
         {{ if useSopsEnvFile == "true" { "--environment SOPS_ENV_FILE=" + sops_env_file } else { "" } }} \
@@ -240,10 +239,10 @@ test-query-builders:
     @echo "Testing GraphQL query builders..."
 
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netCoreApp}}" \
+        -c "{{ config }}" \
+        -f "{{ netCoreApp }}" \
         --project "ShopifySharp.Tests" \
-        --verbosity "{{verbosity}}" \
+        --verbosity "{{ verbosity }}" \
         --report-trx --report-trx-filename "ShopifySharp.GraphQL.QueryBuilders.Tests.trx" \
         --results-directory "TestResults" \
         --filter "FullyQualifiedName~{{ replace(query_builder_tests, " ", "|") }}"
@@ -256,10 +255,10 @@ test-query-builders:
 test-graphql-parser:
     @echo "Testing ShopifySharp.GraphQL.Parser..."
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netCoreApp}}" \
+        -c "{{ config }}" \
+        -f "{{ netCoreApp }}" \
         --project "ShopifySharp.GraphQL.Parser.Tests/ShopifySharp.GraphQL.Parser.Tests.fsproj" \
-        --verbosity "{{verbosity}}" \
+        --verbosity "{{ verbosity }}" \
         --report-trx --report-trx-filename "ShopifySharp.GraphQL.Parser.Tests.trx" \
         --results-directory "TestResults" \
         --filter "Category!=DotNetFramework"
@@ -271,10 +270,10 @@ test-graphql-parser:
 test-main-project:
     @echo "Testing main project..."
     dotnet test \
-        -c "{{config}}" \
-        -f "{{netCoreApp}}" \
+        -c "{{ config }}" \
+        -f "{{ netCoreApp }}" \
         --project "ShopifySharp.Tests" \
-        --verbosity "{{verbosity}}" \
+        --verbosity "{{ verbosity }}" \
         --report-trx --report-trx-filename "ShopifySharp.Tests.trx" \
         --results-directory "TestResults" \
         --filter "Category!=DotNetFramework"
@@ -282,8 +281,8 @@ test-main-project:
     @echo "Main project tests passed."
 
 # Run all tests (DI, GraphQL Parser, Integration, and Unit Tests)
-[group("test")]
 [arg("useSopsEnvFile", long="use-sops-env-file", value="true")]
+[group("test")]
 test-everything useSopsEnvFile="false": test-di test-graphql-parser (test-integration useSopsEnvFile) test-main-project
     @echo "All tests passed."
 
@@ -291,35 +290,35 @@ test-everything useSopsEnvFile="false": test-di test-graphql-parser (test-integr
 [group("release")]
 [script]
 set-package-version version packageId:
-    projectFile="{{packageId}}/{{packageId}}.csproj"
+    projectFile="{{ packageId }}/{{ packageId }}.csproj"
 
-    echo "Setting version {{version}} for {{packageId}}"
+    echo "Setting version {{ version }} for {{ packageId }}"
 
     # Requires the dotnet-setversion tool
-    setversion -p "{{version}}" "$projectFile"
+    setversion -p "{{ version }}" "$projectFile"
 
 # Publish packages to NuGet
 [group("release")]
 [script]
 publish-to-nuget releaseType nugetToken artifactsDir:
-    if [ "{{releaseType}}" = "--prerelease" ]; then
+    if [ "{{ releaseType }}" = "--prerelease" ]; then
         echo "Publishing prerelease packages to NuGet..."
         # Prerelease packages have a `-b*.nupkg` suffix
         dotnet nuget push \
             --skip-duplicate \
-            -k "{{nugetToken}}" \
+            -k "{{ nugetToken }}" \
             -s "https://api.nuget.org/v3/index.json" \
-            "{{artifactsDir}}"/*-b*.nupkg
-    elif [ "{{releaseType}}" = "--full-release" ]; then
+            "{{ artifactsDir }}"/*-b*.nupkg
+    elif [ "{{ releaseType }}" = "--full-release" ]; then
         echo "Publishing full release packages to NuGet..."
         # Full release packages don't have a suffix (i.e. exclude -b*.nupkg)
-        for package in "{{artifactsDir}}"/*.nupkg; do
+        for package in "{{ artifactsDir }}"/*.nupkg; do
             case "$package" in
                 *-b[0-9]*.nupkg) continue ;;
             esac
             dotnet nuget push \
                 --skip-duplicate \
-                -k "{{nugetToken}}" \
+                -k "{{ nugetToken }}" \
                 -s "https://api.nuget.org/v3/index.json" \
                 "$package"
         done
@@ -364,17 +363,17 @@ decrypt:
 # Run the Astro docs dev server (http://localhost:4321)
 [group("docs")]
 astro-dev-docs:
-    cd "{{docs_dir}}" && pnpm dev
+    cd "{{ docs_dir }}" && pnpm dev
 
 # Build the Astro docs site and start a local preview server
 [group("docs")]
 astro-preview-docs:
-    cd "{{docs_dir}}" && pnpm preview
+    cd "{{ docs_dir }}" && pnpm preview
 
 # Build the Astro docs site for production (outputs to docs/dist/)
 [group("docs")]
 astro-build-docs:
-    cd "{{docs_dir}}" && pnpm install && NODE_ENV=production pnpm build
+    cd "{{ docs_dir }}" && pnpm install && NODE_ENV=production pnpm build
 
 # Deploy the Astro docs site to the VPS via rsync over SSH
 [group("docs")]
@@ -383,7 +382,7 @@ deploy-docs host="shopifysharp":
     set -euo pipefail
 
     # Ensure the dist directory exists
-    if [ ! -d "{{docs_dir}}/dist" ]; then
+    if [ ! -d "{{ docs_dir }}/dist" ]; then
         echo "Error: Docs dist directory not found. Run 'just astro-build-docs' first."
         exit 1
     fi
