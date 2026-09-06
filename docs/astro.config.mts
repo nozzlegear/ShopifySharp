@@ -16,6 +16,8 @@ export default defineConfig({
         src: './src/assets/shopifysharp-logo-no-text.svg',
         alt: 'ShopifySharp',
       },
+      // Favicon must be in the public/ directory
+      favicon: 'favicons/shopifysharp-logo-favicon.svg',
       components: {
         Footer: './src/components/Footer.astro',
       },
@@ -30,10 +32,6 @@ export default defineConfig({
         './src/styles/custom.css',
       ],
       head: [
-        {
-          tag: 'link',
-          attrs: { rel: 'icon', href: '/favicon.ico' },
-        },
         {
           tag: 'script',
           attrs: {
