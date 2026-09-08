@@ -16,6 +16,7 @@
     "astro": "^7.2.4"
   },
   "devDependencies": {
+    "sharp": "^0.35.4",
     "starlight-links-validator": "^0.25.3"
   }
 }
