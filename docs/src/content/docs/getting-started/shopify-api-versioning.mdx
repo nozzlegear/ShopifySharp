@@ -1,0 +1,70 @@
+---
+title: Shopify API versioning support
+description: How ShopifySharp supports Shopify's API versioning, and how you can override it to target a specific version of the Shopify API.
+---
+import { Aside } from '@astrojs/starlight/components'
+
+Shopify versions their API, meaning new features are locked behind newer versions of the API, and older versions of the API lose support and are eventually shut off. Due to the differences in ShopifySharp's SemVer versioning, and Shopify's date-based versioning, the following table should be consulted to determine which version of ShopifySharp supports which version of Shopify's API:
+
+| ShopifySharp version  | Shopify API version |
+|-----------------------|---------------------|
+| **6.29.0 and above.** | 2026-07             |
+| 6.26.0 - 6.28.0       | 2026-01             |
+| 6.25.3 - 6.25.4       | 2025-07             |
+| 6.20.0 - 6.25.2       | 2024-10             |
+| 6.18.0 - 6.19.0       | 2024-07             |
+| 6.15.0 - 6.17.0       | 2024-04             |
+| 6.13.0 - 6.14.1       | 2024-01             |
+| 6.3.0 - 6.12.2        | 2023-07             |
+| 6.0.1 - 6.2.0         | 2023-01             |
+| 5.19.0 - 5.19.1       | 2022-07             |
+| 5.16.0 - 5.18.11      | 2022-04             |
+| 5.14.0 - 5.15.0       | 2021-10             |
+| 5.11.0 - 5.13.1       | 2021-07             |
+| 5.8.0 - 5.10.0        | 2020-10             |
+| 5.6.0 - 5.7.0         | 2020-07             |
+| 5.0.0 - 5.5.0         | 2019-10             |
+| 4.x and below         | None, unsupported   |
+
+{/* NOTE: Keep this table in sync with ShopifySharp's readme.md */}
+
+## Overriding ShopifySharp's supported API version
+
+Want to use the latest version of ShopifySharp, but with an older version of Shopify's API? Or maybe you want to use the latest, cutting edge pre-release version of Shopify's API instead? You can do that for almost every service class in ShopifySharp, with one caveat: **the entity types and fluent query builders** are built specifically for the version of Shopify's API that ShopifySharp is targeting. Ensure that the types you're going to use will work with the API version you're targeting; or, even better, use custom types for deserializing instead.
+
+To override the targeted API version, some classes in ShopifySharp support passing the API version as a string directly to the constructor. The `GraphService` is one such class:
+
+```cs title="Pass a custom API version to the GraphService"
+var customApiVersion = "2027-01";
+var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+
+var graphService = new GraphService(credentials, customApiVersion);
+```
+
+Most classes can be extended to override their API version directly. For instance, you can override the API version used by the `WebhookService` class like so:
+
+```cs title="Override the WebhookService's API version"
+public class MyCustomWebhookService : WebhookService
+{
+  public override string APIVersion => "2027-01";
+}
+
+var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+var webhookService = new MyCustomWebhookService(credentials);
+```
+
+However, there are some classes that just don't support API versioning at all, because the upstream Shopify API endpoint they target doesn't support versioning. For example, the `AccessScopeService` does not support API versioning because it uses the OAuth endpoint, which cannot be versioned:
+
+```cs
+public class AccessScopeService : ShopifyService, IAccessScopeService
+{
+    // OAuth endpoints don't support versioning
+    public override bool SupportsAPIVersioning => false;
+	
+	// ...
+}
+```
+
+<Aside type="note">
+I'm working on standardizing how we pass custom API versions to ShopifySharp classes, along with adding support to the factory classes. Stay tuned!
+</Aside>
