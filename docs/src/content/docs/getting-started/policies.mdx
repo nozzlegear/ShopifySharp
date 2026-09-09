@@ -1,0 +1,309 @@
+---
+title: "Request Execution Policies"
+description: "Customize how ShopifySharp handles retries, rate limits and request execution"
+---
+import { Aside, Badge } from '@astrojs/starlight/components';
+import OutboundLink from '../../../components/OutboundLink.astro';
+
+All service classes and factories in ShopifySharp utilize what we call a **Request Execution Policy**, which controls how individual requests are, well, executed. We use these policies to implement various retry policies for [Shopify's API rate limits](/getting-started/api-rate-limits/), but they can also be used to implement custom request logging.
+
+ShopifySharp has **four** built-in Request Execution Policies:
+
+| Policy name | What it does |
+| ----------- | ------------ |
+| `DefaultRequestExecutionPolicy` | Executes the request once, has no special handling for request failures or API rate limits. **This is the default policy.** |
+| `RetryExecutionPolicy` | Retries the request on common HTTP errors like 503s and unexpected 429s, but with a fixed delay between requests and a configurable cap. |
+| `LeakyBucketExecutionPolicy` | Implements Shopify's leaky bucket rate limiting for the GraphQL and REST APIs, with foreground/background request prioritization. Will retry a request if it hits Shopify's rate limit. |
+| `ExponentialRetryPolicy` | Retries failed requests, including rate limit errors, with an exponential backoff and configurable cap. |
+
+ShopifySharp's default policy is the `DefaultRequestExecutionPolicy`, which will be used if you don't register any other policy.
+
+## Using a Policy
+
+There are three different ways you can configure the policy for a service in ShopifySharp:
+
+<h3>
+  <Badge text="Recommended" />
+  Via dependency injection
+</h3>
+
+If you're using the [ShopifySharp.Extensions.DependencyInjection](/getting-started/dependency-injection/) package, the easiest way to configure a Request Execution Policy is to register it with the `AddShopifySharpRequestExecutionPolicy<IPolicy>()` extension method:
+
+```cs
+// Register the policy as a singleton
+services.AddShopifySharpRequestExecutionPolicy<LeakyBucketExecutionPolicy>();
+
+// Register all service factories (they'll pick up the registered policy)
+services.AddShopifySharpServiceFactories();
+```
+
+You can also pass it to the `AddShopifySharp<IPolicy>()` extension method, which registers ShopifySharp's factories, utility classes, and your preferred policy:
+
+```cs
+services.AddShopifySharp<LeakyBucketExecutionPolicy>();
+```
+
+Once you've registered them, any service factory that you get from the DI container will automatically have the policy configured:
+
+```cs
+using ShopifySharp.Factories;
+
+public class MyCoolExampleClass(IGraphServiceFactory graphServiceFactory)
+{
+    public async Task DoSomethingInterestingAsync()
+    {
+        var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+        // This graphService is automatically configured to use the policy you set up via DI
+        var graphService = graphServiceFactory.Create(credentials);
+    }
+}
+```
+
+<Aside type="caution">
+The factories resolve whichever `IRequestExecutionPolicy` is registered in the DI container and apply it to every service they build. At the moment, it's not possible to configure ServiceFactory X to use Policy A, while ServiceFactory Y uses Policy B.
+</Aside>
+
+### Via the service factory
+
+If you're not using the DI package, you can still use the service factory pattern to configure your policy once by passing it into the factory's constructor. All subsequent service created by that instance of the factory will use the configured policy:
+
+```cs
+var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+
+// Configure the GraphServiceFactory to use a LeakyBucketExecutionPolicy
+var policy = new LeakyBucketExecutionPolicy();
+var factory = new GraphServiceFactory(policy);
+
+// This graphService is automatically configured to use the policy
+var graphService = graphServiceFactory.Create(credentials);
+```
+
+### Via the SetExecutionPolicy method
+
+You can set or change the request execution policy for a single service instance by using the `SetExecutionPolicy(IRequestExecutionPolicy)` method:
+
+```cs
+var credentials = new ShopifyApiCredentials("example.myshopify.com", "some-access-token");
+
+// Create a new GraphService instance and configure it to use the ExponentialRetryPolicy
+var policy = new ExponentialRetryPolicy(ExponentialRetryPolicyOptions.Default());
+var graphService = graphServiceFactory.Create(credentials);
+
+graphService.SetExecutionPolicy(policy);
+```
+
+Using this method is ephemeral – it only affects the instance you use it on, and only for the lifetime of that instance.
+
+## Default Request Execution Policy
+
+This is ShopifySharp's default policy, the one it uses when you haven't configured anything else. It sends the request once and returns the result without any retry logic or error handling.
+
+```cs
+var policy = new DefaultRequestExecutionPolicy();
+```
+
+## Retry Execution Policy
+
+This policy will retry failed requests when they return these HTTP errors:
+
+- 408 Request Timeout
+- 429 Too Many Requests
+- 500 Internal Server Error
+- 502 Bad Gateway
+- 503 Service Unavailable
+- 504 Gateway Timeout
+
+The policy does not respect Shopify's API rate limit, it just retries the request after a **fixed 500ms delay**. After repeated consecutive failures (defaults to **3** failures in a row), the policy will throw an exception.
+
+```cs
+var policy = new RetryExecutionPolicy();
+```
+
+You can configure how many consecutive retries should be attempted for failed requests before throwing, and whether the policy should retry when it receives an unexpected rate limit error (i.e. from a development store that has a lower API rate limit than production stores):
+
+```cs
+var maxRetriesBeforeThrow = 5;
+var shouldRetryUnexpectedRateLimitErrors = true;
+
+var policy = new RetryExecutionPolicy(maxRetriesBeforeThrow, shouldRetryUnexpectedRateLimitErrors);
+```
+
+You can also configure whether this policy will retry *all* HTTP 429 errors, or only those where Shopify explicitly indicates the request has hit the API rate limit:
+
+```cs
+var shouldOnlyRetryRateLimitErrors = false;
+
+var policy = new RetryExecutionPolicy(shouldOnlyRetryRateLimitErrors);
+```
+
+| Option | Default value |
+| ------ | ------------- |
+| `maxRetriesBeforeThrow` | `3` |
+| `shouldRetryUnexpectedRateLimitErrors` | `false` |
+| `shouldOnlyRetryRateLimitErrors` | `true` |
+
+---
+
+## Leaky Bucket Execution Policy
+
+This policy implements Shopify's <OutboundLink href="https://shopify.dev/api/usage/rate-limits">leaky bucket rate limiting</OutboundLink> for the GraphQL and Rest APIs. When using this policy, requests are queued and executed in a first in, first out (FIFO) order as the bucket's budget refills.
+
+```cs
+var policy = new LeakyBucketExecutionPolicy();
+```
+
+The Leaky Bucket Execution Policy's logic revolves around reading Shopify's API rate limit headers and determining when it can send a request to the Shopify API based on requests "leaking out" of the bucket. For this policy, each access token gets its own request bucket, so requests to one shop don't affect the speed of requests or delays for another shop.
+
+Just like the `RetryExecutionPolicy`, you can configure the maximum number of retries the policy should attempt before throwing an exception. The default here is **0**, which means it won't retry any error that isn't explicitly one of Shopify's API rate limit errors.
+
+Configure it like so:
+
+```cs
+var maxNonRateLimitRetriesBeforeThrow = 5;
+
+var policy = new LeakyBucketExecutionPolicy(maxNonRateLimitRetriesBeforeThrow);
+```
+
+Similarly, you can configure whether this policy will retry *all* HTTP 429 errors or just Shopify's explicit API rate limit errors:
+
+
+```cs
+var maxNonRateLimitRetriesBeforeThrow = 5;
+var shouldRetryUnexpectedRateLimitErrors = true;
+
+var policy = new LeakyBucketExecutionPolicy(maxNonRateLimitRetriesBeforeThrow, shouldRetryUnexpectedRateLimitErrors);
+```
+
+Unlike the `RetryExecutionPolicy`, this policy accepts an optional "context selector" delegate which you can use to configure whether a request should be prioritized for the foreground (the default) or for the background:
+
+```cs
+var maxNonRateLimitRetriesBeforeThrow = 5;
+var shouldRetryUnexpectedRateLimitErrors = true;
+var useBackgroundContext = () => RequestContext.Background;
+
+var policy = new LeakyBucketExecutionPolicy(maxNonRateLimitRetriesBeforeThrow, shouldRetryUnexpectedRateLimitErrors, useBackgroundContext);
+```
+
+Generally, you'd want to use the foreground priority when there are users waiting for the request to finish, and you'd use the background priority when the requests are running in low-priority background jobs.
+
+| Option | Default value |
+| ------ | ------------- |
+| `maxNonRateLimitRetriesBeforeThrow` | `0` |
+| `shouldRetryUnexpectedRateLimitErrors` | `false` |
+| `shouldOnlyRetryRateLimitErrors` | `() => RequestContext.Foreground` |
+
+---
+
+## Exponential Retry Policy
+
+This policy will retry failed requests with exponentially increasing delays, which you can configure via `ExponentialRetryPolicyOptions`:
+
+```cs
+var options = ExponentialRetryPolicyOptions.Default();
+options.FirstRetryIsImmediate = true;
+
+var policy = new ExponentialRetryPolicy(options);
+```
+
+The `ExponentialRetryPolicyOptions` type here gives you a lot of control over exactly how long the policy should wait between failures, how large the backoff is, and how where the cap is on that exponentiality.
+
+| Property | Description |
+| -------- | ----------- |
+| `FirstRetryIsImmediate` | Whether the first retry should be sent immediately, or after the initial delay. |
+| `InitialBackoffInMilliseconds` | The intitial delay for the exponential backoff. |
+| `MaximumDelayBetweenRetries` | The maximum amount of time that should pass between retries. This is effectively a cap on the exponential delay to prevent your app from waiting for the heat death of the universe before retrying a failed request. |
+| `MaximumRetriesBeforeRequestCancellation` | The maximum number of retries this policy will attempt before throwing an exception. Can be null. |
+| `MaximumDelayBeforeRequestCancellation` | The total amount of time the policy will wait before it throws an exception. Can be null. |
+
+You need to set one of either `MaximumRetriesBeforeRequestCancellation` or `MaximumDelayBeforeRequestCancellation`, or else the policy will throw an exception when you instantiate it. For convenience, ShopifySharp provides a `Default()` method to instantiate the options with our recommended values:
+
+```cs title="Default Exponential Retry Policy Options"
+var options = ExponentialRetryPolicyOptions.Default();
+```
+
+That gives you an instance of the options with these values:
+
+| Property | Default |
+| -------- | ------- |
+| `FirstRetryIsImmediate` | `false` |
+| `InitialBackoffInMilliseconds` | `100` |
+| `MaximumDelayBetweenRetries` | `1s` |
+| `MaximumRetriesBeforeRequestCancellation` | `10` |
+| `MaximumDelayBeforeRequestCancellation` | `5s` |
+
+Once options are configured, the policy calculates delays using this formula:
+
+```latex title="Exponential Retry delay formula"
+delay = 2^(try - 1) * InitialBackoffInMilliseconds
+```
+
+The delays are capped at `MaximumDelayBetweenRetries`. With the default options (`InitialBackoffInMilliseconds = 100`, `MaximumDelayBetweenRetries = 1s`), the delays for a failing request would look like this:
+
+| Try | Exponent | Delay (ms) |
+| --- | -------- | ---------- |
+| 1   | 0        | 100        |
+| 2   | 1        | 200        |
+| 3   | 2        | 400        |
+| 4   | 3        | 800        |
+| 5+  | capped   | 1,000      |
+
+## Implementing a custom Request Execution Policy
+
+Each policy implements the `IRequestExecutionPolicy`, which looks like this:
+
+```cs
+public interface IRequestExecutionPolicy
+{
+    Task<RequestResult<T>> Run<T>(
+        CloneableRequestMessage baseRequestMessage,
+        ExecuteRequestAsync<T> executeRequestAsync,
+        CancellationToken cancellationToken,
+        int? graphqlQueryCost = null);
+}
+```
+
+ShopifySharp calls the policy's `Run` method by passing in the request message that will be executed; a delegate which executes the actual HTTP request; and an optional GraphQL query cost hint. The policy needs to return a `RequestResult<T>` with the parsed response body, or throw a `ShopifyException` on failure.
+
+You can use this interface to create your own policies, or to wrap/compose existing policies. For example, you could create a policy that times the responsiveness of requests while using the `ExponentialRetryPolicy` to execute them:
+
+```cs
+public class TracingExecutionPolicy : IRequestExecutionPolicy
+{
+    private readonly IRequestExecutionPolicy _policy;
+    private readonly ITelemetry _telemetry;
+
+    public TracingExecutionPolicy(ExponentialRetryPolicy policy, ITelemetry telemetry)
+    {
+        _policy = policy;
+        _telemetry = telemetry;
+    }
+
+    public async Task<RequestResult<T>> Run<T>(
+        CloneableRequestMessage baseRequestMessage,
+        ExecuteRequestAsync<T> executeRequestAsync,
+        CancellationToken cancellationToken,
+        int? graphqlQueryCost = null)
+    {
+        var stopwatch = Stopwatch.StartNew();
+        try
+        {
+            var result = await _policy.Run(baseRequestMessage, executeRequestAsync, cancellationToken, graphqlQueryCost);
+            _telemetry.RecordSuccess(stopwatch.Elapsed);
+            return result;
+        }
+        catch (Exception ex)
+        {
+            _telemetry.RecordFailure(stopwatch.Elapsed, ex);
+            throw;
+        }
+    }
+}
+```
+
+And you'd use it the same way you use any other policy:
+
+```cs
+var exponentialRetryPolicy = new ExponentialRetryPolicy(ExponentialRetryPolicyOptions.Default());
+var tracingExecutionPolicy = new TracingExecutionPolicy(exponentialRetryPolicy, telemetry);
+var graphServiceFactory = new GraphServiceFactory(tracingExecutionPolicy);
+```
