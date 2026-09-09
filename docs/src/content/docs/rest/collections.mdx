@@ -1,4 +1,8 @@
 ---
+sidebar:
+    badge:
+        text: Deprecated
+        variant: caution
 title: "Collections"
 description: "Using the Collections service in ShopifySharp"
 ---
@@ -7,7 +11,7 @@ import { Aside } from '@astrojs/starlight/components'
 import OutboundLink from '../../../components/OutboundLink.astro';
 
 <Aside type="caution">
-All public Shopify apps (i.e. those published on the Shopify App Store) are <OutboundLink href="https://shopify.dev/docs/apps/build/graphql/migrate/new-product-model">required to switch over to using the GraphQL product API by February 1st</OutboundLink>. All custom apps are required to switch by April 1st.
+This service is deprecated and will be removed in a future version of ShopifySharp, as Shopify no longer supports its API endpoint. All public Shopify apps (i.e. those published on the Shopify App Store) were required to switch over to using the GraphQL product API by February 1, 2025. All custom apps were required to switch by April 1, 2025.
 [Go here for a migration guide on using ShopifySharp's **GraphService** to query and mutate Shopify's GraphQL API.](/graphql)
 </Aside>
 
