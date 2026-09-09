@@ -1,0 +1,39 @@
+---
+title: "Usage Charges"
+description: "Charging customers based on usage with capped amounts"
+---
+
+import OutboundLink from '../../../components/OutboundLink.astro';
+
+## Usage charges
+
+Shopify's Usage Charges let you set a capped amount on a recurring application charge, and only charge for usage. For example, you can create a charge that's capped at $100.00 per month, and then charge e.g. $1.00 for every 1000 emails your user sends using your app.
+
+To create a UsageCharge, you first need to create a RecurringCharge with a `CappedAmount` value and a `Terms` string. Your customers will see the terms when activating the recurring charge, so set it to something they can read like "\$1.00 per 1000 emails".
+
+### Create a usage charge
+
+```cs
+var service = new UsageChargeService(myShopifyUrl, shopAccessToken);
+
+string description = "Used 1000 emails";
+double price = 1.00;
+
+var usageCharge = await service.CreateAsync(recurringChargeId, description, price);
+```
+
+### Get a usage charge
+
+```cs
+var service = new UsageChargeService(myShopifyUrl, shopAccessToken);
+
+var usageCharge = await service.GetAsync(recurringChargeId, usageChargeId);
+```
+
+### List usage charges
+
+```cs
+var service = new UsageChargeService(myShopifyUrl, shopAccessToken);
+
+var usageCharges = await service.ListAsync(recurringChargeId);
+```

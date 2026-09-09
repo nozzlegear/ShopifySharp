@@ -1,0 +1,63 @@
+---
+title: "Recurring Application Charges"
+description: "Using the Recurring Charge service in ShopifySharp"
+---
+
+import OutboundLink from '../../../components/OutboundLink.astro';
+
+
+The Shopify billing API lets you create a recurring charge on a shop owner's account, letting them pay you for using your application. There are pros and cons to using the Shopify billing API versus a service like Stripe, BrainTree or PayPal.
+
+I've put together a small guide called **_Shopify Billing 101: A Developer's Guide To Getting Paid For Your Apps_**,
+and you can get for **free** by joining the mailing list for **_Mastering Shopify Development_** (a training course
+for building Shopify apps with C# and ASP.NET).
+
+<OutboundLink href="https://nozzlegear.com/landing/shopify-billing-101" utmParams={{ utm_campaign: "shopifysharp_guides" }}>Just head over here to get your free guide to the Shopify billing API.</OutboundLink>
+
+Note that recurring charges are activated immediately after a user accepts them. At one time it was necessary to activate the charge after it was accepted, but Shopify has changed this behavior and it's no longer required or possible.
+
+### Create a recurring charge
+
+```c#
+var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
+var charge = new RecurringCharge()
+{
+    Name = "Lorem Ipsum Plan",
+    Price = 12.34,
+    Test = true, //Marks this charge as a test, meaning it won't charge the shop owner.
+    TrialDays = 21
+}
+
+charge = await service.CreateAsync(charge);
+```
+
+### Retrieve a recurring charge
+
+```c#
+var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
+
+var charge = await service.GetAsync(chargeId);
+```
+
+### Listing recurring charges
+
+```c#
+var service = new RecurringChargeService(myShopifyUrl, shopAccessToken);
+
+IEnumerable<RecurringCharge> charges = await service.ListAsync();
+```
+
+### Deleting a charge
+
+Charges cannot be deleted unless they've been activated. Shopify automatically deletes pending charges
+after 48 hours pass without activation.
+
+```c#
+await service.DeleteAsync(chargeId);
+```
+
+## Related Documentation
+
+- [One-time Application Charges](/rest/charge/)
+- [Usage Charges](/rest/usage-charge/)
+
