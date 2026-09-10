@@ -1,0 +1,50 @@
+---
+title: "ShopifySharp 6.29.0 Release Notes"
+sidebar:
+  title: "ShopifySharp 6.29.0"
+---
+
+import OutboundLink from '../../../components/OutboundLink.astro';
+
+ShopifySharp 6.29.0 has been released and is now available on Nuget! It brings with it a new Shopify API version (**2026-07**); refreshed, rejuvenated and regenerated GraphQL types and fluent query builders; support for querying interfaces and operations that return interfaces using those query builders; some bug fixes; and, most importantly, support for Shopify's **Expiring Offline Access Tokens**.
+
+## Expiring offline access tokens
+
+If you're using ShopifySharp with a public app, this will be relevant to you. Shopify is requiring all public apps to migrate their permanent offline access tokens over to this new expiring offline access token type **by January 1st, 2027**. If you're using ShopifySharp with a public app, you are very likely using these permanent access tokens and will need to migrate.
+
+ShopifySharp 6.29.0 has added support for the new expiring token type (thanks to <OutboundLink href="https://github.com/GMatrixGames" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>@GMatrixGames</OutboundLink>), along with utility methods for refreshing the tokens when they expire. We've also added methods for migrating your permanent access tokens over to the new expiring access tokens, which you can start doing **right now**.
+
+[I've written up a migration guide here](/migration-guides/expiring-access-tokens-migration-guide/) which should cover everything you need to know about the new token type, and how to migrate your permanent offline tokens to the expiring offline tokens before January 1st, 2027.
+
+## Bug fixes
+
+This release includes a couple of bug fixes:
+
+- The JSON property name for `TaxLine.ChannelLiable` was fixed by <OutboundLink href="https://github.com/zac-schutt" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>@zac-schutt</OutboundLink> in <OutboundLink href="https://github.com/nozzlegear/ShopifySharp/pull/1255" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>#1255</OutboundLink>
+- An issue was fixed where the GraphQL serializer was improperly stripping types needed for GraphQL polymorphism.
+
+## GraphQL updates
+
+As mentioned above, ShopifySharp now targets version 2026-07 of Shopify's API, which means the GraphQL types and fluent query builders have all been regenerated to target the new API version as well. In addition, I've expanded the fluent query builder support so that it's now possible to query interfaces and operations that return interfaces – something that wasn't possible before this release. In practice, that means we can now use the `node(Id)` and `nodes([Id])` queries with the fluent query builders, to query arbitrary items from the GraphQL API:
+
+```cs
+var queryBuilder = new NodeOperationQueryBuilder()
+    .SetArguments(args => args.Id("gid://shopify/Order/1234567890"))
+    .Id()
+    .OnOrder(order => order
+        .Id()
+        .Name()
+    );
+```
+
+## New documentation website
+
+I've set up a new documentation website for ShopifySharp! Check it out at [shopifysharp.net](/) – I'm busy working on updating the docs, but I think I've got most of the "important" bits in a somewhat decent state. The biggest glaring omission (in my eyes) right now is a lack of any documentation on the fluent query builders, but I'm going to keep plugging away at it.
+
+One thing I want to point out: none of the documentation or guides are written with AI. I write it all by hand, for the love of the game.
+
+## ❤️ How to support ShopifySharp
+
+If you find ShopifySharp useful, please consider contributing to the project! If you'd like contribute financially, you can do so by <OutboundLink href="https://github.com/sponsors/nozzlegear" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>sponsoring the author here on Github</OutboundLink>, sending a <OutboundLink href="https://www.paypal.biz/nozzlegear" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>one-time contribution via PayPal</OutboundLink>, by <OutboundLink href="https://gum.co/shopify-development-handbook?ref=gh_release" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>purchasing a copy of The Shopify Development Handbook on Gumroad</OutboundLink>.
+
+**Full Changelog**: <OutboundLink href="https://github.com/nozzlegear/ShopifySharp/compare/ShopifySharp/6.28.0...ShopifySharp/6.29.0" utmParams={{ utm_campaign: "shopifysharp_6.29.0_release_notes" }}>https://github.com/nozzlegear/ShopifySharp/compare/ShopifySharp/6.28.0...ShopifySharp/6.29.0</OutboundLink>
