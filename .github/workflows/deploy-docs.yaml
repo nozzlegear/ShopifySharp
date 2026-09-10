@@ -16,6 +16,7 @@ permissions: {}
 jobs:
   build:
     name: "Build documentation site"
+    runs-on: ubuntu-latest
     environment: Documentation deployment environment
     permissions:
       contents: read
