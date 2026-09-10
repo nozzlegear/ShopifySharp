@@ -16,7 +16,7 @@ permissions: {}
 jobs:
   build:
     name: "Build documentation site"
-    runs-on: ubuntu-latest
+    environment: Documentation deployment environment
     permissions:
       contents: read
 
@@ -25,6 +25,19 @@ jobs:
       uses: taiki-e/install-action@67729d5c413db75907f0ad1e39bb04b9c868ff60 # v2.85.7
       with:
         tool: just@1.46.0
+
+    - name: Setup SSH
+      uses: burtek/setup-ssh@cd5d34ac7bad6529ab7ad43fa846ac0aaec87d32 # v1.0.2
+      with:
+        alias: "shopifysharp-docs"
+        user: "shopifysharp-deploy"
+        host: ${{ secrets.SSH_HOST }}
+        port: ${{ secrets.SSH_PORT }}
+        private_key: ${{ secrets.SSH_PRIVATE_KEY }}
+        known_hosts: ${{ secrets.SSH_HOST_KEY }}
+        key_filename: "id_rsa"
+        strict_host_key_checking: "yes"
+        test_connection: "false"
 
     - name: Checkout branch
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -45,7 +58,7 @@ jobs:
     - name: Build documentation site
       run: just astro-build-docs
 
-    - name: Upload documentation site
+    - name: Create documentation site artifact
       uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
       with:
         name: docs-dist
@@ -53,16 +66,5 @@ jobs:
         path: |
           docs/dist/**/*
 
-    - name: Setup SSH
-      env:
-        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        SSH_HOST: ${{ secrets.SSH_HOST }}
-        SSH_HOST_KEY: ${{ secrets.SSH_HOST_KEY }}
-      run: |
-        install -m 700 -d ~/.ssh
-        install -m 600 /dev/null ~/.ssh/id_rsa
-        printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/id_rsa
-        printf '%s %s %s\n' "$SSH_HOST" "ecdsa-sha2-nistp256" "$SSH_HOST_KEY" >> ~/.ssh/known_hosts
-
     - name: Deploy documentation site
-      run: just deploy-docs "${{ secrets.SSH_USERNAME }}@${{ secrets.SSH_HOST }}"
+      run: just deploy-docs

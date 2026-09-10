@@ -377,7 +377,7 @@ astro-build-docs:
 
 # Deploy the Astro docs site to the VPS via rsync over SSH
 [group("docs")]
-deploy-docs host="shopifysharp":
+deploy-docs:
     #!/usr/bin/env bash
     set -euo pipefail
 
@@ -397,4 +397,4 @@ deploy-docs host="shopifysharp":
         --exclude ".git" \
         --delete \
         "{{ docs_dir }}/dist/" \
-        "{{ host }}:."
+        "shopifysharp-deploy@shopifysharp-docs:."
