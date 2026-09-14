@@ -1384,23 +1384,32 @@ public class ShopifyOauthUtilityTests : IClassFixture<VerifyFixture>
     #region Refactored token type and guard tests
 
     [Fact]
-    public void ShopifyAccessTokenType_ShouldResolveCorrectly()
+    public void ShopifyAccessTokenType_Type_ShouldResolveAllCases()
     {
-        // Online access token
+        // Online access token – OnlineAccess takes priority over ExpiresIn
         var onlineToken = new AuthorizationResult("token", [])
         {
-            OnlineAccess = new OnlineAccessInfo()
+            OnlineAccess = new OnlineAccessInfo(),
+            ExpiresIn = TimeSpan.FromHours(24)
         };
         onlineToken.Type.Should().Be(ShopifyAccessTokenType.Online);
 
-        // Expiring offline access token
+        // Expiring offline access token – HasRefreshToken and ExpiresIn, no OnlineAccess
         var expiringOfflineToken = new AuthorizationResult("token", [])
         {
-            RefreshToken = "some-refresh-token"
+            RefreshToken = "some-refresh-token",
+            ExpiresIn = TimeSpan.FromHours(24)
         };
         expiringOfflineToken.Type.Should().Be(ShopifyAccessTokenType.ExpiringOffline);
 
-        // Legacy permanent offline access token
+        // Client credentials access token – ExpiresIn but no RefreshToken, no OnlineAccess
+        var clientCredentialsToken = new AuthorizationResult("token", [])
+        {
+            ExpiresIn = TimeSpan.FromHours(24)
+        };
+        clientCredentialsToken.Type.Should().Be(ShopifyAccessTokenType.ClientCredentials);
+
+        // Legacy permanent offline access token – neither OnlineAccess nor ExpiresIn
         var permanentOfflineToken = new AuthorizationResult("token", []);
         permanentOfflineToken.Type.Should().Be(ShopifyAccessTokenType.LegacyPermanentOffline);
     }
@@ -1463,6 +1472,28 @@ public class ShopifyOauthUtilityTests : IClassFixture<VerifyFixture>
 
         await act.Should().ThrowAsync<ShopifyInvalidRefreshTokenException>()
             .WithMessage("Legacy permanent offline access tokens do not expire*");
+    }
+
+    [Fact]
+    public async Task RefreshOfflineAccessTokenIfStaleAsync_WhenTokenIsClientCredentials_ShouldThrowImmediately()
+    {
+        var ccToken = new AuthorizationResult("token", [])
+        {
+            ExpiresIn = TimeSpan.FromHours(24)
+        };
+
+        var act = async () => await _sut.RefreshOfflineAccessTokenIfStaleAsync(ccToken, new RefreshOfflineAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret",
+            RefreshToken = ccToken.RefreshToken ?? string.Empty,
+            AccessTokenExpiresAtUtc = ccToken.AccessTokenExpiresAtUtc,
+            RefreshTokenExpiresAtUtc = ccToken.RefreshTokenExpiresAtUtc
+        });
+
+        await act.Should().ThrowAsync<ShopifyInvalidRefreshTokenException>()
+            .WithMessage("Client credentials access tokens cannot be refreshed programmatically*");
     }
 
     #endregion
@@ -1649,6 +1680,108 @@ public class ShopifyOauthUtilityTests : IClassFixture<VerifyFixture>
         result.RefreshToken.Should().Be(refreshedRefreshToken);
     }
 
+    #region GetClientCredentialsAccessTokenAsync
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenAsync_ShouldUseDomainUtilityFromDependencyInjection()
+    {
+        // Setup
+        const string expectedDomain = "cc-grant-domain-test";
+        var options = new ClientCredentialsAccessTokenOptions
+        {
+            ShopDomain = expectedDomain,
+            ClientId = "some-client-id",
+            ClientSecret = "some-client-secret"
+        };
+        var callToDomainUtil = A.CallTo(() => _shopifyDomainUtility.BuildShopDomainUri(expectedDomain));
+        callToDomainUtil.Throws<TestException>();
+
+        // Act
+        var act = async () => await _sut.GetClientCredentialsAccessTokenAsync(options);
+
+        // Assert
+        await act.Should().ThrowAsync<TestException>();
+        callToDomainUtil.MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenAsync_WhenSuccessful_ShouldReturnTokenWithExpiry()
+    {
+        // Setup
+        const int expiresIn = 86399; // ~24 hours as per Shopify
+        const string accessToken = "client-credentials-access-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{accessToken}}",
+                "scope": "read_products,write_orders",
+                "expires_in": {{expiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+        string? requestContent = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Invokes(async call => {
+                capturedRequest = call.GetArgument<HttpRequestMessage>(0);
+                requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
+            })
+            .Returns(response);
+
+        // Act
+        var authorizationResult = await _sut.GetClientCredentialsAccessTokenAsync(new ClientCredentialsAccessTokenOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret"
+        }, TestContext.Current.CancellationToken);
+
+        // Assert
+        authorizationResult.Should().NotBeNull();
+        authorizationResult.AccessToken.Should().Be(accessToken);
+        authorizationResult.ExpiresIn!.Value.TotalSeconds.Should().Be(expiresIn);
+        authorizationResult.GrantedScopes.Should().Equal("read_products", "write_orders");
+        authorizationResult.HasRefreshToken.Should().BeFalse();
+        authorizationResult.Type.Should().Be(ShopifyAccessTokenType.ClientCredentials);
+
+        // Verify request was form-encoded with correct grant_type
+        capturedRequest.Should().NotBeNull();
+        capturedRequest!.Method.Should().Be(HttpMethod.Post);
+        requestContent.Should().Contain("grant_type=client_credentials");
+        requestContent.Should().Contain($"client_id={ClientId}");
+        requestContent.Should().Contain("client_secret=some-secret");
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenAsync_WhenErrorResponse_ShouldThrow()
+    {
+        // Setup
+        var json =
+            //lang=json
+            """
+            {
+              "errors": "Invalid client credentials"
+            }
+            """;
+        var response = Utils.MakeHttpResponseMessage(json, x => x.StatusCode = System.Net.HttpStatusCode.Unauthorized);
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Returns(response);
+
+        // Act
+        var act = async () => await _sut.GetClientCredentialsAccessTokenAsync(new ClientCredentialsAccessTokenOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = "invalid-client-id",
+            ClientSecret = "invalid-secret"
+        }, TestContext.Current.CancellationToken);
+
+        // Assert
+        await act.Should().ThrowAsync<ShopifyHttpException>();
+    }
+
     #endregion
     public class FakeHttpClient : HttpClient, IDisposable
     {
@@ -1670,4 +1803,5 @@ public class ShopifyOauthUtilityTests : IClassFixture<VerifyFixture>
             return fakeClient;
         }
     }
+    #endregion
 }
