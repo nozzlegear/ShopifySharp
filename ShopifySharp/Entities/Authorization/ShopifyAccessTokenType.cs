@@ -17,5 +17,10 @@ public enum ShopifyAccessTokenType
     /// <summary>
     /// An online access token (per-user). Expires and cannot be refreshed programmatically; requires user interaction to renew.
     /// </summary>
-    Online
+    Online,
+
+    /// <summary>
+    /// A client credentials access token, used by custom apps. Expires and cannot be refreshed programmatically; must be obtained again via the Client Credentials Grant flow.
+    /// </summary>
+    ClientCredentials
 }

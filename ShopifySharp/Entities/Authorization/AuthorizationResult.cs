@@ -37,11 +37,19 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes, Ti
     public OnlineAccessInfo? OnlineAccess { get; set; }
 
     /// <summary>
-    /// Identifies whether this is a legacy permanent offline, expiring offline, or online access token.
+    /// Identifies whether this is a legacy permanent offline, expiring offline, online, or client credentials token.
     /// </summary>
+    /// <remarks>
+    /// Logic is as follows:
+    ///   Online tokens have a populated OnlineAccess object.
+    ///   ExpiringOffline tokens have a RefreshToken and an ExpiresIn value.
+    ///   ClientCredentials tokens do not have a RefreshToken, but do have an ExpiresIn value.
+    ///   LegacyPermanentOffline tokens have no OnlineAccess object, no RefreshToken, no ExpiresIn value.
+    /// </remarks>
     public ShopifyAccessTokenType Type =>
         OnlineAccess != null ? ShopifyAccessTokenType.Online :
-        HasRefreshToken ? ShopifyAccessTokenType.ExpiringOffline :
+        HasRefreshToken && ExpiresIn.HasValue ? ShopifyAccessTokenType.ExpiringOffline :
+        ExpiresIn.HasValue ? ShopifyAccessTokenType.ClientCredentials :
         ShopifyAccessTokenType.LegacyPermanentOffline;
 
     /// <summary>
@@ -153,6 +161,9 @@ public class AuthorizationResult(string accessToken, string[]? grantedScopes, Ti
         // Throw when given non-refreshable tokens
         if (Type == ShopifyAccessTokenType.Online)
             throw new ShopifyInvalidRefreshTokenException("Online access tokens cannot be refreshed programmatically.");
+
+        if (Type == ShopifyAccessTokenType.ClientCredentials)
+            throw new ShopifyInvalidRefreshTokenException("Client credentials access tokens cannot be refreshed programmatically.");
 
         if (Type == ShopifyAccessTokenType.LegacyPermanentOffline)
             throw new ShopifyInvalidRefreshTokenException("Legacy permanent offline access tokens do not expire and cannot be refreshed.");
