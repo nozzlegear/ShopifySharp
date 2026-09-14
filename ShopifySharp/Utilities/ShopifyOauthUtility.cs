@@ -405,7 +405,7 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
     }
 
     /// <inheritdoc />
-    public async Task<AuthorizationResult> RefreshOfflineAccessTokenIfStaleAsync(
+    public async Task<AuthorizationResult?> RefreshOfflineAccessTokenIfStaleAsync(
         RefreshOfflineAccessTokenIfStaleOptions options,
         CancellationToken cancellationToken = default
     )
