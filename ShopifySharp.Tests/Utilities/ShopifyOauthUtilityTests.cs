@@ -1783,6 +1783,225 @@ public class ShopifyOauthUtilityTests : IClassFixture<VerifyFixture>
     }
 
     #endregion
+
+    #region GetClientCredentialsAccessTokenIfStaleAsync tests
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenIfStaleAsync_WhenTokenIsStillValid_ShouldReturnTheCurrentAuthorizationResultWithoutRefreshing()
+    {
+        // Setup
+        var now = _fakeTimeProvider.GetUtcNow();
+        var existingToken = new AuthorizationResult("existing-access-token", [])
+        {
+            ExpiresIn = TimeSpan.FromHours(24),
+            IssuedAtUtc = now.AddMinutes(-1)
+        };
+
+        // Act
+        var result = await _sut.GetClientCredentialsAccessTokenIfStaleAsync(existingToken, new ClientCredentialsAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret"
+        }, TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().BeSameAs(existingToken);
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenIfStaleAsync_WhenTokenIsExpired_ShouldRefreshIt()
+    {
+        // Setup
+        const int expiresIn = 86399;
+        const string refreshedAccessToken = "client-credentials-access-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{refreshedAccessToken}}",
+                "scope": "read_products,write_orders",
+                "expires_in": {{expiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+        string? requestContent = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Invokes(async call => {
+                capturedRequest = call.GetArgument<HttpRequestMessage>(0);
+                requestContent = await capturedRequest!.Content!.ReadAsStringAsync();
+            })
+            .Returns(response);
+
+        var now = _fakeTimeProvider.GetUtcNow();
+        var existingToken = new AuthorizationResult("existing-access-token", [])
+        {
+            ExpiresIn = TimeSpan.FromMinutes(-5),
+            IssuedAtUtc = now.AddHours(-1)
+        };
+
+        // Act
+        var authorizationResult = await _sut.GetClientCredentialsAccessTokenIfStaleAsync(existingToken, new ClientCredentialsAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-secret"
+        }, TestContext.Current.CancellationToken);
+
+        // Assert
+        authorizationResult.Should().NotBeNull();
+        authorizationResult.Should().NotBeSameAs(existingToken);
+        authorizationResult.AccessToken.Should().Be(refreshedAccessToken);
+        authorizationResult.ExpiresIn!.Value.TotalSeconds.Should().Be(expiresIn);
+        authorizationResult.GrantedScopes.Should().Equal("read_products", "write_orders");
+        authorizationResult.HasRefreshToken.Should().BeFalse();
+        authorizationResult.Type.Should().Be(ShopifyAccessTokenType.ClientCredentials);
+        authorizationResult.AccessTokenExpiresAtUtc.Should().Be(authorizationResult.IssuedAtUtc + authorizationResult.ExpiresIn);
+
+        // Verify request was form-encoded with correct grant_type
+        capturedRequest.Should().NotBeNull();
+        capturedRequest!.Method.Should().Be(HttpMethod.Post);
+        requestContent.Should().Contain("grant_type=client_credentials");
+        requestContent.Should().Contain($"client_id={ClientId}");
+        requestContent.Should().Contain("client_secret=some-secret");
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenIfStaleAsync_BareData_WhenAccessTokenIsNotNearExpiry_ShouldReturnNull()
+    {
+        // Setup
+        var now = _fakeTimeProvider.GetUtcNow();
+        var options = new ClientCredentialsAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessTokenExpiresAtUtc = now.AddHours(1),
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(5)
+        };
+
+        // Act
+        var result = await _sut.GetClientCredentialsAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().BeNull();
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenIfStaleAsync_BareData_WhenAccessTokenIsNearExpiry_ShouldRefreshAndReturnNewResult()
+    {
+        // Setup
+        const int expiresIn = 86399;
+        const string accessToken = "client-credentials-access-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{accessToken}}",
+                "scope": "read_products,write_orders",
+                "expires_in": {{expiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+        HttpRequestMessage? capturedRequest = null;
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Invokes(async call => { capturedRequest = call.GetArgument<HttpRequestMessage>(0); })
+            .Returns(response);
+
+        var now = _fakeTimeProvider.GetUtcNow();
+        var options = new ClientCredentialsAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessTokenExpiresAtUtc = now.AddMinutes(5),
+            RefreshBeforeExpiry = TimeSpan.FromMinutes(10)
+        };
+
+        // Act
+        var result = await _sut.GetClientCredentialsAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.AccessToken.Should().Be(accessToken);
+        result.ExpiresIn!.Value.TotalSeconds.Should().Be(expiresIn);
+        result.GrantedScopes.Should().Equal("read_products", "write_orders");
+        result.HasRefreshToken.Should().BeFalse();
+        result.Type.Should().Be(ShopifyAccessTokenType.ClientCredentials);
+        result.AccessTokenExpiresAtUtc.Should().Be(result.IssuedAtUtc + result.ExpiresIn);
+
+        capturedRequest.Should().NotBeNull();
+        capturedRequest!.Method.Should().Be(HttpMethod.Post);
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenIfStaleAsync_BareData_WhenAccessTokenExpiryIsNull_ShouldReturnNull()
+    {
+        // Setup
+        var options = new ClientCredentialsAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessTokenExpiresAtUtc = null
+        };
+
+        // Act
+        var result = await _sut.GetClientCredentialsAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().BeNull();
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .MustNotHaveHappened();
+    }
+
+    [Fact]
+    public async Task GetClientCredentialsAccessTokenIfStaleAsync_BareData_WhenAccessTokenIsExpired_ShouldRefresh()
+    {
+        // Setup
+        const int expiresIn = 86399;
+        const string accessToken = "client-credentials-access-token";
+        var json =
+            //lang=json
+            $$"""
+              {
+                "access_token": "{{accessToken}}",
+                "scope": "",
+                "expires_in": {{expiresIn}}
+              }
+              """;
+        var response = Utils.MakeHttpResponseMessage(json);
+
+        A.CallTo(() => _httpClient.SendAsync(A<HttpRequestMessage>._, A<CancellationToken>._))
+            .Returns(response);
+
+        var now = _fakeTimeProvider.GetUtcNow();
+        var options = new ClientCredentialsAccessTokenIfStaleOptions
+        {
+            ShopDomain = ShopDomain,
+            ClientId = ClientId,
+            ClientSecret = "some-client-secret",
+            AccessTokenExpiresAtUtc = now.AddMinutes(-5),
+            RefreshBeforeExpiry = TimeSpan.Zero
+        };
+
+        // Act
+        var result = await _sut.GetClientCredentialsAccessTokenIfStaleAsync(options, TestContext.Current.CancellationToken);
+
+        // Assert
+        result.Should().NotBeNull();
+        result!.AccessToken.Should().Be(accessToken);
+    }
+
+    #endregion
+
     public class FakeHttpClient : HttpClient, IDisposable
     {
         public new virtual void Dispose()

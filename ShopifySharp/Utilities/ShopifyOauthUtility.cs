@@ -158,6 +158,24 @@ public interface IShopifyOauthUtility
     /// <param name="options">Options for obtaining the access token.</param>
     /// <param name="cancellationToken">Cancellation token.</param>
     Task<AuthorizationResult> GetClientCredentialsAccessTokenAsync(ClientCredentialsAccessTokenOptions options, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Obtains an access token using the Client Credentials Grant flow, unless the <c>AccessTokenExpiresAtUtc</c>
+    /// provided in <paramref name="options"/> indicates the current token is already expired or near expiry.
+    /// Returns <c>null</c> if no new token was required.
+    /// </summary>
+    /// <param name="options">Options for obtaining the access token.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<AuthorizationResult?> GetClientCredentialsAccessTokenIfStaleAsync(ClientCredentialsAccessTokenIfStaleOptions options, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// Obtains a new Client Credentials access token if the access token in the provided <see cref="AuthorizationResult"/> is expired or near expiry.
+    /// Returns the unchanged <see cref="AuthorizationResult"/> if no new token was required.
+    /// </summary>
+    /// <param name="currentResult">The current authorization result to evaluate for staleness.</param>
+    /// <param name="options">Options for obtaining the access token.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    Task<AuthorizationResult> GetClientCredentialsAccessTokenIfStaleAsync(AuthorizationResult currentResult, ClientCredentialsAccessTokenIfStaleOptions options, CancellationToken cancellationToken = default);
 }
 
 public class ShopifyOauthUtility: IShopifyOauthUtility
@@ -402,6 +420,53 @@ public class ShopifyOauthUtility: IShopifyOauthUtility
         using var request = new CloneableRequestMessage(ub.Uri, HttpMethod.Post, content);
 
         return await SendRequestAndParseAuthorizationResultAsync(request, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<AuthorizationResult?> GetClientCredentialsAccessTokenIfStaleAsync(
+        ClientCredentialsAccessTokenIfStaleOptions options,
+        CancellationToken cancellationToken = default
+    )
+    {
+        ArgumentNullException.ThrowIfNull(options);
+
+        var shouldRefresh = options.AccessTokenExpiresAtUtc.HasValue &&
+            _timeProvider.GetUtcNow() >= options.AccessTokenExpiresAtUtc.Value - options.RefreshBeforeExpiry;
+
+        if (!shouldRefresh)
+            return null;
+
+        return await GetClientCredentialsAccessTokenAsync(new ClientCredentialsAccessTokenOptions
+        {
+            ShopDomain = options.ShopDomain,
+            ClientId = options.ClientId,
+            ClientSecret = options.ClientSecret
+        }, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<AuthorizationResult> GetClientCredentialsAccessTokenIfStaleAsync(
+        AuthorizationResult currentResult,
+        ClientCredentialsAccessTokenIfStaleOptions options,
+        CancellationToken cancellationToken = default
+    )
+    {
+        ArgumentNullException.ThrowIfNull(currentResult);
+        ArgumentNullException.ThrowIfNull(options);
+
+        var expiresAtUtc = currentResult.AccessTokenExpiresAtUtc;
+        var shouldRefresh = expiresAtUtc.HasValue &&
+            _timeProvider.GetUtcNow() >= expiresAtUtc.Value - options.RefreshBeforeExpiry;
+
+        if (!shouldRefresh)
+            return currentResult;
+
+        return await GetClientCredentialsAccessTokenAsync(new ClientCredentialsAccessTokenOptions
+        {
+            ShopDomain = options.ShopDomain,
+            ClientId = options.ClientId,
+            ClientSecret = options.ClientSecret
+        }, cancellationToken);
     }
 
     /// <inheritdoc />
