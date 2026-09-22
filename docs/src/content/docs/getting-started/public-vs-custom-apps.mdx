@@ -17,13 +17,12 @@ All instances of `myShopifyUrl` refer to your users' `*.myshopify.com` URL (alth
 var service = new ProductService(myShopifyUrl, shopAccessToken);
 ```
 
-# Using ShopifySharp with a private Shopify app
+# Using ShopifySharp with a custom Shopify app
 
-ShopifySharp should work out of the box with your private Shopify application, all you need to do is replace the `shopAccessToken` with your private app's password when initializing a ShopifyService:
+ShopifySharp should work out of the box with any custom (aka private) Shopify application, all you need to do is replace the `shopAccessToken` with your private app's password when initializing a ShopifyService:
 
 ```cs
 var service = new ProductService(myShopifyUrl, privateAppPassword)
 ```
 
-If you just need an access token for a private Shopify app, or for running the tests in this library, refer
-to the **Tests** section below.
+To generate an access token for a custom Shopify app, read [Generating access tokens for custom Shopify apps](/getting-started/custom-app-access-tokens).
