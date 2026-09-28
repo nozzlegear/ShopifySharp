@@ -1,0 +1,19 @@
+---
+title: "ShopifySharp 6.30.0 Release Notes"
+sidebar:
+  title: "ShopifySharp 6.30.0"
+---
+
+ShopifySharp 6.30.0 has been published and is now available on NuGet! This is a wee release that adds support for creating client credential access tokens for custom apps, which Shopify requires for all custom apps (not public, app store apps). To create an access token for a custom app, call the `ShopifyOauthUtility.GetClientCredentialsAccessTokenAsync`[^1] method.
+
+These access tokens expire every 24 hours. [You can find the documentation for this new method, and how to check its expiration/guard against expiration errors here](https://shopifysharp.net/getting-started/custom-app-access-tokens/?utm_source=shopifysharp&utm_campaign=release_notes).
+
+[^1]: I recognize the incongruence of a custom app method being added to the ShopifyOauthUtility, when custom apps, by definition, can't use Oauth. 😛
+
+## ❤️ How to support ShopifySharp
+
+If you find ShopifySharp useful, please consider contributing to the project! If you'd like contribute financially, you can do so by [sponsoring the author here on Github](https://github.com/sponsors/nozzlegear?utm_source=shopifysharp&utm_campaign=release_notes), sending a [one-time contribution via PayPal](https://www.paypal.biz/nozzlegear?utm_source=shopifysharp&utm_campaign=release_notes), by [purchasing a copy of The Shopify Development Handbook on Gumroad](https://gum.co/shopify-development-handbook?ref=gh_release&utm_source=shopifysharp&utm_campaign=release_notes).
+
+---
+
+**Full Changelog**: https://github.com/nozzlegear/ShopifySharp/compare/ShopifySharp/6.29.0...6.30.0
